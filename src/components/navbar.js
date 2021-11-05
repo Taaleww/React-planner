@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
+import './base.css'
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
-      <nav className="bg-white max-w-">
-        <div className="max-w-full mx-auto px-16 sm:px-6 md:px-10 lg:px-16 shadow">
-          <div className="flex items-center justify-between h-16 ">
+      <nav className="bg-white">
+        <div className="max-w-full mx-auto shadow-sm pdbase">
+          <div className="flex items-center justify-between h-full my-0.5">
             <div className="w-full justify-between flex items-center">
               <div className="flex-shrink-0">
                 <a href="/">
                     <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                        className="h-11/12 w-11/12"
+                        src="img/logo.png"
                         alt="Home"
                     />
                 </a>
