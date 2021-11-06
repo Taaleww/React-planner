@@ -117,7 +117,7 @@ function MyProjects() {
                         </td>
                       </td>
                       <td class="px-10 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <td class="w-5 mr-2 transform hover:text-purple-500 hover:scale-110 ">
+                        <td class="w-5 mr-2 transform hover:text-red-500 hover:scale-110 ">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

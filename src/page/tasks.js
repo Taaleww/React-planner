@@ -43,27 +43,27 @@ function Tasks() {
                     <tr>
                       <th
                         scope="col"
-                        class="px-32 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        class="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         To Do
                       </th>
                       <th
                         scope="col"
-                        class="px-32 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        class="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         In Process
                       </th>
                       <th
                         scope="col"
-                        class="px-32 py-3  text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        class="px-32 py-3  text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Success
                       </th>
                     </tr>
                   </thead>
                   <td>
-                    <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9  ">
-                      <div class=" text-white flex items-center absolute rounded-full py-4 px-4 shadow bg-blue-500 left-4 -top-6">
+                    <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto  ">
+                      <div class=" m-auto text-white flex items-center absolute rounded-full py-4 px-4 shadow bg-blue-500 left-4 -top-6">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           class="h-8 w-8"
@@ -183,7 +183,7 @@ function Tasks() {
                   </td>
 
                   <td>
-                    <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9">
+                    <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto">
                       <div class=" text-white flex items-center absolute rounded-full py-4 px-4 shadow bg-yellow-500 left-4 -top-6">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -298,7 +298,7 @@ function Tasks() {
                   </td>
 
                   <td>
-                    <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow  mt-9">
+                    <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow  mt-9 m-auto">
                       <div class=" text-white flex items-center absolute rounded-full py-4 px-4 shadow  bg-green-500 left-4 -top-6">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
