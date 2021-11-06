@@ -13,6 +13,8 @@ function App() {
   return (
     <div className="App">
       <MyProjects/>
+      {/* <Navbar />
+      <Home /> */}
       {/* <Tasks /> */}
       {/* <DeleteTasks/>
      <DeleteProject/> */}
