@@ -1,8 +1,9 @@
-function DeleteProject() {
-  return (
-    <div className="DeleteProject font-mono">
+function DeleteProject({setShowDeleteProjectModalFromParent}){
+    return(
+        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none">
+       <div className="DeleteProject font-mono">
       <div class="absolute bg-black opacity-80 inset-0 z-0 "></div>
-      <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-60">
+      <div class="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0">
         <div class="">
           <div class="text-center p-5 flex-auto justify-center">
             <svg
@@ -24,7 +25,8 @@ function DeleteProject() {
             </p>
           </div>
           <div class="p-3  mt-2 text-center space-x-4 md:block">
-            <button class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+            <button class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
+            onClick={() => setShowDeleteProjectModalFromParent(false)}>
               Cancel
             </button>
             <button class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600">
@@ -34,7 +36,11 @@ function DeleteProject() {
         </div>
       </div>
     </div>
-  );
+
+       </div>
+        
+
+    );
 }
 
 export default DeleteProject;
