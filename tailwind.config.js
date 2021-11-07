@@ -7,13 +7,13 @@ module.exports = {
         'base': '#25273A',
         'white': '#FFFFFF',
       },
-      fontFamily: {
-        // 'sans': ['ui-sans-serif', 'system-ui', ...],
-        // 'serif': ['ui-serif', 'Georgia', ...],
-        // 'mono': ['ui-monospace', 'SFMono-Regular', ...],
-        'base': ['Quicksand'],
-       }
-      //extend: {},
+       fontFamily: {
+      //   // 'sans': ['ui-sans-serif', 'system-ui', ...],
+      //   // 'serif': ['ui-serif', 'Georgia', ...],
+         'mono': ['ui-monospace', 'SFMono-Regular'],
+          'base': ['Quicksand'],
+        },
+      extend: {},
     },
     variants: {
       extend: {},

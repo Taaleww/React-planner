@@ -1,16 +1,10 @@
-import './App.css';
-import Login from './components/loginform';
-import Home from './components/home';
-import Navbar from './components/navbar';
-import Register from './components/regisform';
+import "./App.css";
+import Home from "./components/home"
 
 function App() {
   return (
-    <div className="App font-base">
-      <Navbar />
-      {/* <Home /> */}
-      {/* <Login /> */}
-      <Register />
+    <div className="App">
+      <Home />
     </div>
   );
 }

@@ -6,7 +6,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
-      <nav className="bg-white">
+      <nav className="bg-white ">
         <div className="max-w-full mx-auto shadow-sm pdbase">
           <div className="flex items-center justify-between h-full my-0.5">
             <div className="w-full justify-between flex items-center">
