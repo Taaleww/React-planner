@@ -2,19 +2,11 @@ import "./tasks.css";
 import React from "react";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
-import EditTask from "../components/modal/edittask";
-import DeleteTask from "../components/modal/deletetask";
 
 function Tasks() {
   function changeStateModalFromChild(state) {
     setShowCreateTaskModal(state);
   }
-  // function changeStateEditModalFromChild(state) {
-  //   setShowEditTaskModal(state);
-  // }
-  // function changeStateDeleteModalFromChild(state) {
-  //   setShowDeleteTaskModal(state);
-  // }
   const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
   const [todoData, setTodoData] = React.useState([
     {
@@ -119,7 +111,7 @@ function Tasks() {
               type="button"
               onClick={() => setShowCreateTaskModal(true)}
             >
-              CREATE PROJECTS +
+              CREATE TASKS +
             </button>
           </div>
         </div>
