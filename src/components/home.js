@@ -1,17 +1,15 @@
 import React from "react";
 import './base.css'
-// import gif from '/img/Organizingprojects.gif'
-
 
 function Home() {
   return (
     <div className="pdbase">
       <div className="grid lg:grid-cols-2 2xl:grid-cols-5 py-16">
         <div className="py-12 max-w-md mx-auto sm:max-w-xl lg:py-24 lg:max-w-full xl:mr-0 2xl:col-span-2">
-          <div className="xl:max-w-xl">
+          <div className="pl-7 xl:max-w-xl">
             <img
               className="mt-6 rounded-lg shadow-xl sm:mt-8 sm:h-64 sm:w-full sm:object-cover object-center lg:hidden"
-              src="img/Organizingprojects.gif"
+              src="img/home.gif"
               alt="planning"
             />
             <h1 className="mt-6 text-2xl font-headline tracking-tight font-bold text-base sm:mt-8 sm:text-2xl lg:text-4xl xl:text-5xl">
@@ -35,7 +33,7 @@ function Home() {
         <div className="hidden relative lg:block 2xl:col-span-3">
           <img
             className="absolute inset-0 w-full h-full object-cover object-right"
-            src="img/Organizingprojects.gif"
+            src="img/home.gif"
             alt="Planning"
           />
         </div>
