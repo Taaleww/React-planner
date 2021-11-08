@@ -47,11 +47,7 @@ function ProjectItem({projectData}) {
             </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
-            {/* <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-              SUCESS
-            </span> */}
             <StatusTag status={projectData.status} />
-          
           </td>
           <td class="px-6 py-4 whitespace-nowrap ">
             <div class="text-sm text-gray-900">13 oct 2021</div>

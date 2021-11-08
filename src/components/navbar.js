@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
-import './base.css'
+import "./base.css";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,11 +12,28 @@ function Navbar() {
             <div className="w-full justify-between flex items-center">
               <div className="flex-shrink-0">
                 <a href="/">
-                    <img
+                  <img
                         className="h-11/12 w-11/12"
                         src="img/logo.png"
                         alt="Home"
                     />
+                  {/* <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                    
+                  </svg>
+                  <h1 class="font-mono font-bold ">CHIGO SOY MILK</h1>
+                  <h1 class="font-mono font-bold">PROJECT SCHUDULER</h1> */}
                 </a>
               </div>
               <div className="hidden md:block">
@@ -95,7 +112,10 @@ function Navbar() {
         >
           {(ref) => (
             <div className="md:hidden" id="mobile-menu">
-              <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3 font-bold">
+              <div
+                ref={ref}
+                className="px-2 pt-2 pb-3 space-y-1 sm:px-3 font-bold"
+              >
                 <a
                   href="/"
                   className="text-base hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-lg "
@@ -109,14 +129,13 @@ function Navbar() {
                 >
                   Log In
                 </a>
-
               </div>
             </div>
           )}
         </Transition>
       </nav>
 
-     {/* <main>
+      {/* <main>
             <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div className="px-4 py-6 sm:px-0">
                 <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>

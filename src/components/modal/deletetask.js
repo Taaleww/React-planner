@@ -1,6 +1,3 @@
-import { ReactComponent as TrashSvg } from "../../assets/icons/trash.svg";
-import { ReactComponent as PenSvg } from "../../assets/icons/pen.svg";
-
 function DeleteTask({ setShowDeleteTaskModalFromParent }) {
   return (
     <>
