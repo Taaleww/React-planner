@@ -7,6 +7,7 @@ import { ReactComponent as DoneSvg } from "../assets/icons/done.svg";
 import { ReactComponent as DateSvg } from "../assets/icons/date.svg";
 import EditTask from "../components/modal/edittask";
 import DeleteTask from "../components/modal/deletetask";
+import InfoTask from "../components/modal/infotask";
 import "./base.css";
 
 function HeaderIcon({ status }) {
@@ -48,26 +49,36 @@ function TaskItem({ taskData }) {
   function changeStateDeleteModalFromChild(state) {
     setShowDeleteTaskModal(state);
   }
+  function changeStateInfoModalFromChild(state) {
+    setShowInfoTaskModal(state);
+  }
   const [showEditTaskModal, setShowEditTaskModal] = React.useState(false);
   const [showDeleteTaskModal, setShowDeleteTaskModal] = React.useState(false);
+  const [showInfoTaskModal, setShowInfoTaskModal] = React.useState(false);
 
   return (
     <>
       <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto cursor-move">
         <HeaderIcon status={taskData.status} />
         <div class="mt-8 ">
-          <p class="text-xl font-semibold my-2">{taskData.title}</p>
-          <div class="flex spßace-x-2 text-gray-400 text-sm my-3">
+          <button class="" onClick={() => {
+                  setShowInfoTaskModal(true);
+                }}>
+            <p class="text-xl font-semibold my-2 cursor-pointer ">
+              {taskData.title}
+            </p>
+          </button>
+          <div class="flex space-x-2 text-gray-400 text-sm my-3">
             <DateSvg />
-            <p>Date : 3 oct 2021</p>
+            <p>Date : 5 oct 2021</p>
           </div>
           <div class="flex space-x-2 text-gray-400 text-sm my-3">
             <DateSvg />
             <p>Due Date : 5 oct 2021</p>
           </div>
-          <div class="flex space-x-2 text-gray-400 text-sm my-3">
+          {/* <div class="flex space-x-2 text-gray-400 text-sm my-3">
             <p> Description : {taskData.description}</p>
-          </div>
+          </div> */}
           <td class="px-0 py-0 whitespace-nowrap">
             <StatusTag status={taskData.status} />
           </td>
@@ -116,6 +127,11 @@ function TaskItem({ taskData }) {
       {showDeleteTaskModal ? (
         <DeleteTask
           setShowDeleteTaskModalFromParent={changeStateDeleteModalFromChild}
+        />
+      ) : null} 
+      {showInfoTaskModal ? (
+        <InfoTask
+        setShowInfoTaskModalFromParent={changeStateInfoModalFromChild}
         />
       ) : null}
     </>

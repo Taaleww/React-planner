@@ -23,7 +23,7 @@ function EditProject({setShowEditProjectModalFromParent}){
                   />
                 </svg>
 
-                <h2 class="text-xl font-bold py-4 ">Edit Task?</h2>
+                <h2 class="text-xl font-bold py-4 ">Edit Project?</h2>
               </div>
               <div class="space-y-4">
                 <label
@@ -36,7 +36,7 @@ function EditProject({setShowEditProjectModalFromParent}){
                 <input
                   type="text"
                   placeholder="Task Name"
-                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
+                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300 "
                 />
                 <label
                   class="block text-gray-700 text-sm font-normal mb-2 "
@@ -48,7 +48,7 @@ function EditProject({setShowEditProjectModalFromParent}){
                 <input
                   type="text"
                   placeholder="Description"
-                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
+                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300 "
                 />
               </div>
 

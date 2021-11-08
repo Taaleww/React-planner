@@ -6,6 +6,7 @@ import Tasks from "./page/tasks";
 import Navbar from "./components/navbar";
 import Login from "./components/loginform";
 import Regis from "./components/regisform";
+import InfoTask from "./components/modal/infotask";
 import NotFound from "./page/notfound";
 import { Router, Route, browserHistory } from "react-router";
 import "./index.css";
@@ -19,6 +20,7 @@ ReactDOM.render(
         <Route path="/tasks" component={Tasks} />
         <Route path="/login" component={Login} />
         <Route path="/regis" component={Regis} />
+        <Route path="/infotask" component={InfoTask} />
         <Route path="*" component={NotFound} />
     </Router>
   </>,

@@ -2,12 +2,18 @@ import "./tasks.css";
 import React from "react";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
+import AddMember from "../components/modal/addmember";
 
 function Tasks() {
   function changeStateModalFromChild(state) {
     setShowCreateTaskModal(state);
   }
+
+  function changeStateAddMemberModalFromChild(state) {
+    setShowAddMemberModal(state);
+  }
   const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
+  const [showAddMemberModal, setShowAddMemberModal] = React.useState(false);
   const [todoData, setTodoData] = React.useState([
     {
       title: "Backend",
@@ -97,6 +103,7 @@ function Tasks() {
             <button
               class="bg-gradient-to-r from-pink-400 to-purple-400 text-white hover:text-indigo-900 rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
               type="button"
+              onClick={() => setShowAddMemberModal(true)}
             >
               + ADD MEMBERS
             </button>
@@ -175,6 +182,14 @@ function Tasks() {
         <>
           <CreateTasks
             setShowCreateTaskModalFromParent={changeStateModalFromChild}
+          />
+        </>
+      ) : null}
+
+      {showAddMemberModal ? (
+        <>
+          <AddMember
+            setShowAddMemberModalFromParent={changeStateAddMemberModalFromChild}
           />
         </>
       ) : null}

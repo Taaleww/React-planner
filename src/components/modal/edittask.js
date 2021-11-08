@@ -36,7 +36,7 @@ function EditTask({ setShowEditTaskModalFromParent }) {
                 <input
                   type="text"
                   placeholder="Task Name"
-                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
+                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300 "
                 />
                 <label
                   class="block text-gray-700 text-sm font-normal mb-2 "
@@ -48,7 +48,7 @@ function EditTask({ setShowEditTaskModalFromParent }) {
                 <input
                   type="date"
                   placeholder="Start Date"
-                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
+                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300 "
                 />
                 <label
                   class="block text-gray-700 text-sm font-normal mb-2 "
@@ -60,7 +60,7 @@ function EditTask({ setShowEditTaskModalFromParent }) {
                 <input
                   type="date"
                   placeholder="Due Date"
-                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
+                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300 "
                 />
                 <label
                   class="block text-gray-700 text-sm font-normal mb-2 "
@@ -72,7 +72,7 @@ function EditTask({ setShowEditTaskModalFromParent }) {
                 <input
                   type="text"
                   placeholder="Description"
-                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
+                  class="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300 "
                 />
               </div>
 
