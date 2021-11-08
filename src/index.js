@@ -4,6 +4,8 @@ import App from "./App";
 import MyProjects from "./page/myprojects";
 import Tasks from "./page/tasks";
 import Navbar from "./components/navbar";
+import Login from "./components/loginform";
+import Regis from "./components/regisform";
 import NotFound from "./page/notfound";
 import { Router, Route, browserHistory } from "react-router";
 import "./index.css";
@@ -15,6 +17,8 @@ ReactDOM.render(
         <Route path="/" component={App} />
         <Route path="/myprojects" component={MyProjects} />
         <Route path="/tasks" component={Tasks} />
+        <Route path="/login" component={Login} />
+        <Route path="/regis" component={Regis} />
         <Route path="*" component={NotFound} />
     </Router>
   </>,
