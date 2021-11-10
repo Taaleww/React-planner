@@ -41,7 +41,7 @@ function Register(){
                                 <label for="cfpassword" className="block text-base font-semibold">Comfirm Password</label>
                                 <input type="cfpassword" name="cfpassword" id="cfpassword" placeholder = "*****************" className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 " required />
                             </div>
-                            <div class="flex items-center">
+                            <div className="flex items-center">
                                 <input id="terms-and-privacy" name="terms-and-privacy" type="checkbox" className="border-gray-300 rounded-full text-indigo-600 focus:ring-indigo-500" />
                                 <label for="terms-and-privacy" className="ml-2 block text-sm text-gray-900"
                                     >I agree to the

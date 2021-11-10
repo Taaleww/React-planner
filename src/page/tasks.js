@@ -1,5 +1,5 @@
-import "./tasks.css";
 import React from "react";
+import { Link } from "react-router";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
 import AddMember from "../components/modal/addmember";
@@ -92,29 +92,36 @@ function Tasks() {
       members: [1, 2, 3],
     },
   ]);
+  // const entities = {
+  //   columnOrder: [todoData.status, inProgressData.status,successData.status],
+  //   columns: {
+  //     [todoData.status]: Todo,
+  //     [inProgressData.status]: InProgress,
+  //     [successData.status]: Success
+  //   },
+  //   tasks: taskMap
+  // }
   return (
     <>
+    {/* title */}
       <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono ">
-        <div class="flex flex-wrap items-center">
-          <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-base text-blueGray-700">Tasks</h3>
+        <div className="flex flex-wrap items-center">
+          <div className="relative w-full px-4 max-w-full flex-grow flex-1 flex flex-row ">
+            <h3 className="font-semibold text-base px-4 ">
+              <Link to="/myprojects">My Projects</Link>
+            </h3>
+            <h3 className="font-semibold text-base ">/ Tasks</h3>
           </div>
-          <div class="relative w-full px-4 max-w-3 flex-grow flex-1 text-right">
+          <div className="relative w-full px-4 max-w-3 flex-grow flex-1 text-right">
             <button
-              class="bg-gradient-to-r from-pink-400 to-purple-400 text-white hover:text-indigo-900 rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
+              className="bg-gray-800  text-white hover:shadow-lg rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
               type="button"
               onClick={() => setShowAddMemberModal(true)}
             >
               + ADD MEMBERS
             </button>
             <button
-              class="bg-gradient-to-r from-purple-400 to-blue-400 text-white hover:text-indigo-900 rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
-              type="button"
-            >
-              SHARE LINK
-            </button>
-            <button
-              class="bg-gradient-to-r from-green-300 to-blue-400 text-white hover:text-indigo-900 rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
+              className="bg-gray-800  text-white hover:shadow-lg rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
               type="button"
               onClick={() => setShowCreateTaskModal(true)}
             >
@@ -123,34 +130,35 @@ function Tasks() {
           </div>
         </div>
 
-        <div className="Titleasks font-mono font-bold">
-          <div class="flex flex-col mb-6">
-            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 mt-6">
-                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table class="min-w-full divide-x divide-gray-500 divide-opacity-50 divide-dashed">
-                    <thead class="bg-gray-800">
+        <div className="Titleasks font-mono font-bold px-4">
+          <div className="flex flex-col mb-6">
+            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 mt-6">
+                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                  <table className="min-w-full divide-x divide-gray-500 divide-opacity-50 divide-dashed">
+                    <thead className="bg-gray-800">
                       <tr>
                         <th
                           scope="col"
-                          class="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
+                          className="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                         >
                           To Do
                         </th>
                         <th
                           scope="col"
-                          class="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
+                          className="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                         >
                           In Progress
                         </th>
                         <th
                           scope="col"
-                          class="px-32 py-3  text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
+                          className="px-32 py-3  text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                         >
                           Success
                         </th>
                       </tr>
                     </thead>
+                    {/* content */}
                     {/* To do */}
                     <td>
                       {todoData.map((data) => {
@@ -164,7 +172,7 @@ function Tasks() {
                         return <TaskItem taskData={data} />;
                       })}
                     </td>
-
+                    {/* success */}
                     <td>
                       {successData.map((data) => {
                         return <TaskItem taskData={data} />;
@@ -177,7 +185,7 @@ function Tasks() {
           </div>
         </div>
       </div>
-
+       {/* modal  */}
       {showCreateTaskModal ? (
         <>
           <CreateTasks

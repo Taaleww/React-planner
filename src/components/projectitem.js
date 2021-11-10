@@ -1,99 +1,136 @@
 import { Link } from "react-router";
 import React from "react";
+import { ReactComponent as ViewSvg } from "../assets/icons/view.svg";
 import { ReactComponent as TrashSvg } from "../assets/icons/trash.svg";
 import { ReactComponent as PenSvg } from "../assets/icons/pen.svg";
+import InfoProject from "../components/modal/infoproject";
 import EditProject from "../components/modal/editproject";
 import DeleteProject from "../components/modal/deleteproject";
 
-
-
 function StatusTag({ status }) {
-     if (status === "In Progress") {
-      return (
-        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-          {status}
-        </span>
-      );
-    } else if (status === "Success") {
-      return (
-        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-          {status}
-        </span>
-      );
-    }
+  if (status === "In Progress") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+        In Progress
+      </span>
+    );
+  } else if (status === "Success") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+        Success
+      </span>
+    );
+  } else {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+        Error
+      </span>
+    );
   }
+}
 
-function ProjectItem({projectData}) {
+function ProjectItem({ projectData }) {
+  function dateTranform(date) {
+    const newDate = new Date(date).toString().split(" ");
+    const completeDate = newDate[2] + " " + newDate[1] + " " + newDate[3];
+    return completeDate;
+  }
+  function changeStateInfoProjectModalFromChild(state) {
+    setShowInfoProjectModal(state);
+  }
   function changeStateEditModalFromChild(state) {
     setShowEditProjectModal(state);
   }
   function changeStateDeleteModalFromChild(state) {
     setShowDeleteProjectModal(state);
   }
+
+  const [showInfoProjectModal, setShowInfoProjectModal] = React.useState(false);
   const [showEditProjectModal, setShowEditProjectModal] = React.useState(false);
   const [showDeleteProjectModal, setShowDeleteProjectModal] =
     React.useState(false);
 
   return (
     <>
-      <tbody class="bg-white divide-y divide-gray-200">
+      <tbody className="bg-white divide-y divide-gray-200">
         <tr>
-          <td class="px-6 py-4 whitespace-nowrap  ">
-            <div class="text-sm text-gray-900 ">13 oct 2021</div>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900 ">
+              {dateTranform(projectData.createDate)}
+            </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="text-sm text-gray-900">
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-gray-900">
               <Link to="/tasks">{projectData.title}</Link>
             </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td className="px-6 py-4 whitespace-nowrap">
             <StatusTag status={projectData.status} />
           </td>
-          <td class="px-6 py-4 whitespace-nowrap ">
-            <div class="text-sm text-gray-900">13 oct 2021</div>
+          <td className="px-6 py-4 whitespace-nowrap ">
+            <div className="text-sm text-gray-900">
+              {dateTranform(projectData.dueDate)}
+            </div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap ">
-            <td class="py-3 px-6 text-center">
-              <div class="flex items-center justify-center">
+          <td className="px-6 py-4 whitespace-nowrap ">
+            <div className="text-sm text-gray-900">{projectData.members}</div>
+          </td>
+
+          {/* <td className="px-6 py-4 whitespace-nowrap ">
+            <div className="py-3 px-6 text-center">
+              <div className="flex items-center justify-center">
                 <img
-                  class="w-6 h-6 rounded-full border-gray-200 border transform hover:scale-125"
+                  className="w-6 h-6 rounded-full border-gray-200 border transform hover:scale-125"
                   src="https://randomuser.me/api/portraits/men/1.jpg"
                   alt=""
                 />
                 <img
-                  class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125"
+                  className="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125"
                   src="https://randomuser.me/api/portraits/women/2.jpg"
                   alt=""
                 />
                 <img
-                  class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125"
+                  className="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125"
                   src="https://randomuser.me/api/portraits/men/3.jpg"
                   alt=""
                 />
               </div>
-            </td>
-          </td>
-          <td class="px-10 py-4 whitespace-nowrap text-sm text-gray-500">
-            <td class="w-5 mr-2 transform hover:text-purple-500 hover:scale-110 ">
-              <PenSvg
-                class="cursor-pointer"
-                onClick={() => {
-                  setShowEditProjectModal(true);
-                }}
-              />
-            </td>
-            <td class="px-2 py-4 whitespace-nowrap "></td>
-            <td class="w-5 mr-2 transform hover:text-red-500 hover:scale-110">
-              <TrashSvg
-                class="cursor-pointer"
-                onClick={() => {
-                  setShowDeleteProjectModal(true);
-                }}
-              />
-            </td>
+            </div>
+          </td> */}
+          <td class="py-2 px-6 whitespace-nowrap text-center">
+            <div class="flex item-left justify-center">
+              <div class="w-4 mr-4 transform hover:text-purple-500 hover:scale-110">
+                <ViewSvg className="cursor-pointer" 
+                 onClick={() => {
+                  setShowInfoProjectModal(true);
+                }}/>
+              </div>
+              <div class="w-4 mr-4 transform hover:text-yellow-500 hover:scale-110">
+                <PenSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowEditProjectModal(true);
+                  }}
+                />
+              </div>
+              <div class="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
+                <TrashSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowDeleteProjectModal(true);
+                  }}
+                />
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
+
+      {showInfoProjectModal ? (
+        <InfoProject
+        setShowInfoProjectModalFromParent={changeStateInfoProjectModalFromChild}
+        />
+      ) : null}
 
       {showEditProjectModal ? (
         <EditProject

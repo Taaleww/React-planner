@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactComponent as ViewSvg } from "../assets/icons/view.svg";
 import { ReactComponent as TrashSvg } from "../assets/icons/trash.svg";
 import { ReactComponent as PenSvg } from "../assets/icons/pen.svg";
 import { ReactComponent as TodoSvg } from "../assets/icons/todo.svg";
@@ -23,19 +24,19 @@ function HeaderIcon({ status }) {
 function StatusTag({ status }) {
   if (status === "To do") {
     return (
-      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         {status}
       </span>
     );
   } else if (status === "In Progress") {
     return (
-      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         {status}
       </span>
     );
   } else if (status === "Success") {
     return (
-      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         {status}
       </span>
     );
@@ -58,63 +59,52 @@ function TaskItem({ taskData }) {
 
   return (
     <>
-      <div class="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto cursor-move">
+      <div className="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto cursor-move">
         <HeaderIcon status={taskData.status} />
-        <div class="mt-8 ">
-          <button class="" onClick={() => {
+        <div className="mt-8 ">
+          <button className="" onClick={() => {
                   setShowInfoTaskModal(true);
                 }}>
-            <p class="text-xl font-semibold my-2 cursor-pointer ">
+            <p className="text-xl font-semibold my-2 cursor-pointer ">
               {taskData.title}
             </p>
           </button>
-          <div class="flex space-x-2 text-gray-400 text-sm my-3">
+          <div className="flex space-x-2 text-gray-400 text-sm my-3">
             <DateSvg />
             <p>Date : 5 oct 2021</p>
           </div>
-          <div class="flex space-x-2 text-gray-400 text-sm my-3">
+          <div className="flex space-x-2 text-gray-400 text-sm my-3">
             <DateSvg />
             <p>Due Date : 5 oct 2021</p>
           </div>
-          {/* <div class="flex space-x-2 text-gray-400 text-sm my-3">
-            <p> Description : {taskData.description}</p>
-          </div> */}
-          <td class="px-0 py-0 whitespace-nowrap">
+          <td className="px-0 py-0 whitespace-nowrap">
             <StatusTag status={taskData.status} />
           </td>
-          <br></br>
-          <div class="border-t-2 "></div>
-
-          <div class="flex justify-between">
-            <div class="my-2">
-              <p class="font-semibold text-base mb-2">Team Member</p>
-              <div class="flex space-x-2">
-                <img
-                  src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                  class="w-6 h-6 rounded-full"
-                  alt=""
+          <td class="px-8 py-0 whitespace-nowrap text-center align-center">
+            <div class="flex item-left justify-center">
+              <div class="w-4 mr-4 transform hover:text-purple-500 hover:scale-110">
+                <ViewSvg className="cursor-pointer" 
+                 onClick={() => {
+                  setShowInfoTaskModal(true);
+                }}/>
+              </div>
+              <div class="w-4 mr-4 transform hover:text-yellow-500 hover:scale-110">
+                <PenSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowEditTaskModal(true);
+                  }}
+                />
+              </div>
+              <div class="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
+                <TrashSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowDeleteTaskModal(true);
+                  }}
                 />
               </div>
             </div>
-          </div>
-          <td class="px-16 py-0 whitespace-nowrap text-sm text-gray-500 align-center">
-            <td class="w-5 mr-2 transform hover:text-purple-500 hover:scale-110 ">
-              <PenSvg
-                class="cursor-pointer"
-                onClick={() => {
-                  setShowEditTaskModal(true);
-                }}
-              />
-            </td>
-            <td class="px-2 py-0 whitespace-nowrap "></td>
-            <td class="w-5 mr-2 transform hover:text-red-500 hover:scale-110">
-              <TrashSvg
-                class="cursor-pointer"
-                onClick={() => {
-                  setShowDeleteTaskModal(true);
-                }}
-              />
-            </td>
           </td>
         </div>
       </div>
