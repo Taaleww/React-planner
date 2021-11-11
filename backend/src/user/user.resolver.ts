@@ -24,7 +24,7 @@ export class UserResolver {
   }
 
   @Query(() => User, { name: 'email' })
-  findByEmail(@Args('email') email: string) {
+  findByEmail(@Args('email', { type: () => String }) email: string) {
     return this.userService.findByEmail(email);
   }
 

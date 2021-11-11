@@ -15,8 +15,8 @@ export class AuthService {
 
         //then check if it's correct password
         if(user && passwordMatch){
-                const {email, firstname, lastname, job, department, organization} = user;
-                return user; //
+                const {password, ...rest} = user;
+                return rest; //
         }else {
             throw new ForbiddenError('Incorrect pasword');
         }
