@@ -1,5 +1,7 @@
 import "./myprojects.css";
 import React, { useState } from "react";
+// import gql from "graphql-tag";
+// import { useQuery, useMutation } from "@apollo/client";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
 
@@ -8,6 +10,16 @@ function MyProjects() {
   function changeStateCreateModalFromChild(state) {
     setShowCreateProjectModal(state);
   }
+//   const myProjects = gql`
+//   query Project {
+//     Project {
+//       id
+//       description
+//       created_at
+//       updated_at
+//     }
+//   }
+// `;
   const [myProjects, setData] = useState([
     {
       id: 0,
@@ -16,24 +28,35 @@ function MyProjects() {
       dueDate: "2021-11-06",
       description: "this is test description",
       status: "Success",
-      members: ['one@mail.com','two@mail.com'],
-    }
+      members: ["one@mail.com", "two@mail.com"],
+    },
   ]);
 
-  function addProject(title,createDate,dueDate,description,members){
+  function deleteProject(target) {
+    console.log('TEST: ', target);
+    const newList = myProjects.map((data) => {
+      if(!(data.id === target)) {
+        return data;
+      }
+    })
+    console.log(newList);
+    setData(newList);
+  }
+
+  function addProject(title, createDate, dueDate, description, members) {
     const status = "In Progress";
     const id = myProjects.length;
-    const newProject={
+    const newProject = {
       id,
       title,
       createDate: new Date(createDate),
       dueDate: new Date(dueDate),
       description,
       status,
-      members
+      members,
     };
-    setData([newProject,...myProjects]);
-    setShowCreateProjectModal(false)
+    setData([newProject, ...myProjects]);
+    setShowCreateProjectModal(false);
   }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
@@ -105,7 +128,7 @@ function MyProjects() {
                     </tr>
                   </thead>
                   {myProjects.map((data) => {
-                    return <ProjectItem projectData={data} key={data.id}/>;
+                    return <ProjectItem projectData={data} deleteProject={deleteProject} key={data.id} />;
                   })}
                 </table>
               </div>

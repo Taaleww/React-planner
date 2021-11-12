@@ -13,23 +13,23 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
               </div>
               <div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p className="text-gray-600">Task Name</p>
+                  <p className="text-gray-600 mr-48">Task Name</p>
                   <p>Jane Doe</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p className="text-gray-600">Date</p>
+                  <p className="text-gray-600 mr-48">Date</p>
                   <p>Product Manager</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p className="text-gray-600">Due Date</p>
+                  <p className="text-gray-600 mr-48">Due Date</p>
                   <p>Janedoe@gmail.com</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p className="text-gray-600">Status</p>
+                  <p className="text-gray-600 mr-48">Status</p>
                   <p>$ 12000</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p className="text-gray-600">Descriptions</p>
+                  <p className="text-gray-600 mr-48">Descriptions</p>
                   <p>
                     Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
                     incididunt cillum culpa consequat. Excepteur qui ipsum

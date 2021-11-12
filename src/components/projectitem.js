@@ -29,7 +29,7 @@ function StatusTag({ status }) {
   }
 }
 
-function ProjectItem({ projectData }) {
+function ProjectItem({ projectData, deleteProject }) {
   function dateTranform(date) {
     const newDate = new Date(date).toString().split(" ");
     const completeDate = newDate[2] + " " + newDate[1] + " " + newDate[3];
@@ -73,7 +73,7 @@ function ProjectItem({ projectData }) {
             </div>
           </td>
           <td className="px-6 py-4 whitespace-nowrap ">
-            <div className="text-sm text-gray-900">{projectData.members}</div>
+            <div className="text-sm text-gray-900">{projectData.members.join(',')}</div>
           </td>
 
           {/* <td className="px-6 py-4 whitespace-nowrap ">
@@ -129,6 +129,7 @@ function ProjectItem({ projectData }) {
       {showInfoProjectModal ? (
         <InfoProject
         setShowInfoProjectModalFromParent={changeStateInfoProjectModalFromChild}
+        projectData={projectData}
         />
       ) : null}
 
@@ -141,6 +142,8 @@ function ProjectItem({ projectData }) {
       {showDeleteProjectModal ? (
         <DeleteProject
           setShowDeleteProjectModalFromParent={changeStateDeleteModalFromChild}
+          projectData={projectData}
+          deleteProject={deleteProject}
         />
       ) : null}
     </>

@@ -17,7 +17,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
     setTitle(event.target.value);
   }
   function onChangeDate(event) {
-    setDate(event.target.value);
+    setDate(event.target.value); 
   }
   function onChangeDueDate(event) {
     setDueDate(event.target.value);
