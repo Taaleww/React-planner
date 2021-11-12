@@ -11,6 +11,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import graphql_config from './config/graphql.config';
 import typeorm_config from './config/orm.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import typeorm_config from './config/orm.config';
     TaskModule,
     AssignModule,
     EpicModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

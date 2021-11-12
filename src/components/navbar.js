@@ -13,7 +13,7 @@ function Navbar() {
               <div className="flex-shrink-0">
                 <a href="/">
                   <img
-                        className="h-11/12 w-11/12"
+                        className="h-10/12 w-10/12"
                         src="img/logo.png"
                         alt="Home"
                     />
@@ -39,15 +39,15 @@ function Navbar() {
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4 font-base font-bold">
                   <a
-                    href="/"
-                    className="text-base hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-lg "
+                    href="/regis"
+                    className="text-base hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base "
                   >
                     Sign Up
                   </a>
 
                   <a
-                    href="/"
-                    className="text-base hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-lg "
+                    href="/login"
+                    className="text-base hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base "
                   >
                     Log In
                   </a>
@@ -118,14 +118,14 @@ function Navbar() {
               >
                 <a
                   href="/"
-                  className="text-base hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-lg "
+                  className="text-base hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base"
                 >
                   Sign Up
                 </a>
 
                 <a
                   href="/"
-                  className="text-base hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-lg"
+                  className="text-base hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base"
                 >
                   Log In
                 </a>

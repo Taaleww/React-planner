@@ -4,7 +4,10 @@
 
 type Project {
   projectid: Int!
+  projectname: String!
   taskid: Int!
+  startdate: DateTime
+  duedate: DateTime
   description: String!
   created_at: DateTime!
   updated_at: DateTime!
@@ -82,6 +85,7 @@ type Query {
   project(id: Int!): Project!
   myproject(id: Int!): Myproject!
   user(id: Int!): User!
+  email(email: String!): User!
   tasks: [Task!]!
   task(id: Int!): Task!
   assign(id: Int!): Assign!
@@ -110,14 +114,16 @@ type Mutation {
 }
 
 input CreateProjectInput {
-  projectid: String!
-  taskid: String!
+  projectname: String!
+  startdate: DateTime
+  duetdate: DateTime
   description: String!
 }
 
 input UpdateProjectInput {
-  projectid: String
-  taskid: String
+  projectname: String
+  startdate: DateTime
+  duetdate: DateTime
   description: String
   id: Int!
 }
