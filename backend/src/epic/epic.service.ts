@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateEpicInput } from './dto/create-epic.input';
 import { UpdateEpicInput } from './dto/update-epic.input';
+import { Epic } from './entities/epic.entity';
 
 @Injectable()
 export class EpicService {
-  create(createEpicInput: CreateEpicInput) {
-    return 'This action adds a new epic';
+  constructor(
+    @InjectRepository(Epic)
+    private epicRepository: Repository<Epic>,
+  ) {}
+  async create(createEpicInput: CreateEpicInput): Promise<Epic> {
+    const task = await this.epicRepository.findOne({
+      epicname: createEpicInput.epicname,
+    });
+    const newEpic = this.epicRepository.create(createEpicInput);
+    return await this.epicRepository.save(newEpic);
   }
 
-  findAll() {
-    return `This action returns all epic`;
+  async findAll(): Promise<Epic[]> {
+    return await this.epicRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} epic`;
+  async findOne(id: number): Promise<Epic> {
+    return await this.epicRepository.findOneOrFail({
+      where: { epicid: id },
+    });
   }
 
-  update(id: number, updateEpicInput: UpdateEpicInput) {
-    return `This action updates a #${id} epic`;
+  async update(id: number, updateEpicInput: UpdateEpicInput): Promise<Epic> {
+    const epic = await this.epicRepository.findOne(id);
+    const update = Object.assign(epic, updateEpicInput);
+    return await this.epicRepository.save(update);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} epic`;
+  async remove(id: number): Promise<string> {
+    const task = await this.epicRepository.findOne(id);
+    await this.epicRepository.delete(id)
+    return 'Delete Success';
   }
 }

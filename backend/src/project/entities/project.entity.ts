@@ -1,11 +1,12 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Epic } from 'src/epic/entities/epic.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class Project {
 
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn()
   @Field(() => Int)
   projectid: number;
 
@@ -13,9 +14,23 @@ export class Project {
   @Field()
   projectname: string;
 
+  // @Column()
+  // // @OneToMany(() => ProjectUserRole, (project_user_role) => project_user_role.project, { eager: true })
+  // // @Field(() => [ProjectUserRole])
+  // // myproject: ProjectUserRole[];
+  // @Field()
+  // projectUserRole: string;
+
   @Column()
-  @Field(() => Int)
-  taskid: number;
+  // @OneToMany(() => Epic, (epic) => epic.project, { eager: true })
+  // @Field(() => [Epic])
+  // epic: Epic[];
+  @Field()
+  epicid: string;
+
+  @Column()
+  @Field()
+  description: string;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
@@ -25,9 +40,9 @@ export class Project {
   @Field({ nullable: true })
   duedate?: Date;
 
-  @Column()
-  @Field()
-  description: string;
+  @Column({ type: 'date', nullable: true })
+  @Field({ nullable: true })
+  completedate?: Date;
 
   @CreateDateColumn()
   @Field()
@@ -36,6 +51,7 @@ export class Project {
   @UpdateDateColumn()
   @Field()
   updated_at: Date;
+  
 }
 
 

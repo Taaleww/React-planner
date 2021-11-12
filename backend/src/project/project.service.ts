@@ -10,11 +10,10 @@ export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-  ){}
-
+  ) {}
   async create(createProjectInput: CreateProjectInput): Promise<Project> {
     const project = await this.projectRepository.findOne({
-      projectname: createProjectInput.projectname
+      projectname: createProjectInput.projectname,
     });
     const newProject = this.projectRepository.create(createProjectInput);
     return await this.projectRepository.save(newProject);
@@ -26,7 +25,7 @@ export class ProjectService {
 
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
-      where: { projectid: id},
+      where: { taskid: id },
     });
   }
 
@@ -37,7 +36,7 @@ export class ProjectService {
   }
 
   async remove(id: number): Promise<string> {
-    const project = await this.projectRepository.findOne(id);
+    const task = await this.projectRepository.findOne(id);
     await this.projectRepository.delete(id)
     return 'Delete Success';
   }

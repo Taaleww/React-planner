@@ -5,21 +5,22 @@ import { IsDate } from 'class-validator';
 @InputType()
 export class CreateEpicInput {
   @Field()
-  epicid: string;
+  epicname: string;
 
-  @Field()
-  epictitle: string;
+  @Field(() => Int)
+  taskid: number;
 
-  @Field()
-  taskid: string;
+  // @IsDate(}
+  @Field({nullable: true})
+  startdate?: Date;
 
-  @IsDate()
-  @Field()
-  startdate: Date;
+  // @IsDate()
+  @Field({nullable: true})
+  duetdate?: Date;
 
-  @IsDate()
-  @Field()
-  duedate: Date;
+  // @IsDate()
+  @Field({nullable: true})
+  completedate?: Date;
   
 }
 

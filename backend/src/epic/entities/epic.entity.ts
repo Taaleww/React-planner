@@ -5,7 +5,6 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity()
 @ObjectType()
 export class Epic {
-
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   epicid: number;
@@ -14,13 +13,21 @@ export class Epic {
   @Field(() => Int)
   taskid: number;
 
-  @Column({type: 'date'})
+  @Column()
   @Field()
-  startdate: Date;
+  epicname: string;
 
-  @Column({type: 'date'})
-  @Field()
-  duedate: Date;
+  @Column({ type: 'date', nullable: true })
+  @Field({ nullable: true })
+  startdate?: Date;
+
+  @Column({ type: 'date', nullable: true })
+  @Field({ nullable: true })
+  duedate?: Date;
+
+  @Column({ type: 'date', nullable: true })
+  @Field({ nullable: true })
+  completedate?: Date;
 
   @CreateDateColumn()
   @Field()
@@ -29,5 +36,6 @@ export class Epic {
   @UpdateDateColumn()
   @Field()
   updated_at: Date;
+
 }
 
