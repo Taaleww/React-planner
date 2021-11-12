@@ -1,77 +1,56 @@
 import "./myprojects.css";
-import React from "react";
+import React, { useState } from "react";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
-
-//  <link
-//   href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
-//   rel="stylesheet"
-//  ></link>; 
-
 
 
 function MyProjects() {
   function changeStateCreateModalFromChild(state) {
     setShowCreateProjectModal(state);
   }
-  const [myProjects, setData] = React.useState([
+  const [myProjects, setData] = useState([
     {
-      title: "Backend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone.",
+      id: 0,
+      title: "Test data",
+      createDate: "2021-11-06",
+      dueDate: "2021-11-06",
+      description: "this is test description",
       status: "Success",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Web design",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone2.",
-      status: "Success",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Frontend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone3.",
-      status: "In Progress",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Web design",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone2.",
-      status: "Success",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Frontend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone3.",
-      status: "In Progress",
-      members: [1, 2, 3],
-    },
+      members: ['one@mail.com','two@mail.com'],
+    }
   ]);
+
+  function addProject(title,createDate,dueDate,description,members){
+    const status = "In Progress";
+    const id = myProjects.length;
+    const newProject={
+      id,
+      title,
+      createDate: new Date(createDate),
+      dueDate: new Date(dueDate),
+      description,
+      status,
+      members
+    };
+    setData([newProject,...myProjects]);
+    setShowCreateProjectModal(false)
+  }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
     React.useState(false);
   return (
     <>
-      <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono ">
-        <div class="flex flex-wrap items-center">
-          <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-base text-blueGray-700">
+      <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono  ">
+        <div className="flex flex-wrap items-center">
+          <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+            <h3 className="font-semibold text-base text-blueGray-700">
               My Projects
             </h3>
           </div>
 
-          <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+          <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
             <button
-              class="bg-gradient-to-r from-green-300 to-blue-400 text-white hover:text-indigo-900 rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear"
+              className="bg-gray-800  text-white hover:shadow-lg rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear"
               type="button"
               onClick={() => setShowCreateProjectModal(true)}
             >
@@ -80,54 +59,54 @@ function MyProjects() {
           </div>
         </div>
 
-        <div class="flex flex-col mb-6">
-          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 mt-6">
-              <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200 ">
-                  <thead class="bg-gray-800">
+        <div className="flex flex-col mb-6 px-4">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 mt-6">
+              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200 ">
+                  <thead className="bg-gray-800">
                     <tr>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Date
                       </th>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Name
                       </th>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Status
                       </th>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Due date
                       </th>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Members
                       </th>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-white font-bold uppercase tracking-wider"
+                        className="px-6 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                       >
                         Actions
                       </th>
                     </tr>
                   </thead>
                   {myProjects.map((data) => {
-                        return <ProjectItem projectData={data} />;
-                      })}
+                    return <ProjectItem projectData={data} key={data.id}/>;
+                  })}
                 </table>
               </div>
             </div>
@@ -139,8 +118,10 @@ function MyProjects() {
       {showCreateProjectModal ? (
         <CreateProject
           setShowCreateProjectModalFromParent={changeStateCreateModalFromChild}
+          addProject={addProject}
         />
       ) : null}
+
     </>
   );
 }

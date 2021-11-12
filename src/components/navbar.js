@@ -19,7 +19,7 @@ function Navbar() {
                     />
                   {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-10 w-10"
+                    className="h-10 w-10"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -32,8 +32,8 @@ function Navbar() {
                     />
                     
                   </svg>
-                  <h1 class="font-mono font-bold ">CHIGO SOY MILK</h1>
-                  <h1 class="font-mono font-bold">PROJECT SCHUDULER</h1> */}
+                  <h1 className="font-mono font-bold ">CHIGO SOY MILK</h1>
+                  <h1 className="font-mono font-bold">PROJECT SCHUDULER</h1> */}
                 </a>
               </div>
               <div className="hidden md:block">

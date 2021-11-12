@@ -3,9 +3,9 @@ function Notfound() {
         <>
       <section>
 
-<div class="bg-white text-white">
-    <div class="flex h-screen">
-        <div class="m-auto text-center">
+<div className="bg-white text-white">
+    <div className="flex h-screen">
+        <div className="m-auto text-center">
             <div>
                 <svg width="631" height="379" viewBox="0 0 631 379" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0)">
@@ -183,10 +183,10 @@ function Notfound() {
                 </svg>
 
             </div>
-            <p class="text-sm md:text-base text-gray-700 p-2 mb-4">The stuff you were looking for doesn't exist
+            <p className="text-sm md:text-base text-gray-700 p-2 mb-4">The stuff you were looking for doesn't exist
             </p>
             <a href="/"
-                class="text-base bg-gray-700 hover:bg-gray-100 hover:text-gray-700  px-3 py-2 rounded-md text-lg">
+                className="text-base bg-gray-700 hover:bg-gray-100 hover:text-gray-700  px-3 py-2 rounded-md text-lg">
                 Retry</a>
         </div>
     </div>

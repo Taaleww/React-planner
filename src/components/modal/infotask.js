@@ -5,31 +5,31 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
         <div className="relative w-auto my-6 mx-auto max-w-3xl">
           {/*content*/}
-          <div class="min-h-screen flex items-center justify-center px-4 ">
-            <div class="max-w-4xl  bg-white w-full rounded-lg shadow-xl ">
-              <div class="p-4 border-b">
-                <h2 class="text-2xl ">Name Project</h2>
-                <p class="text-sm text-gray-500">Project planner</p>
+          <div className="min-h-screen flex items-center justify-center px-4 ">
+            <div className="max-w-4xl  bg-white w-full rounded-lg shadow-xl ">
+              <div className="p-4 border-b">
+                <h2 className="text-2xl ">Name Project</h2>
+                <p className="text-sm text-gray-500">Project planner</p>
               </div>
               <div>
-                <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p class="text-gray-600">Task Name</p>
+                <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                  <p className="text-gray-600">Task Name</p>
                   <p>Jane Doe</p>
                 </div>
-                <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p class="text-gray-600">Date</p>
+                <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                  <p className="text-gray-600">Date</p>
                   <p>Product Manager</p>
                 </div>
-                <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p class="text-gray-600">Due Date</p>
+                <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                  <p className="text-gray-600">Due Date</p>
                   <p>Janedoe@gmail.com</p>
                 </div>
-                <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p class="text-gray-600">Status</p>
+                <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                  <p className="text-gray-600">Status</p>
                   <p>$ 12000</p>
                 </div>
-                <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
-                  <p class="text-gray-600">Descriptions</p>
+                <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
+                  <p className="text-gray-600">Descriptions</p>
                   <p>
                     Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
                     incididunt cillum culpa consequat. Excepteur qui ipsum
@@ -38,14 +38,14 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
                     adipisicing reprehenderit deserunt qui eu.
                   </p>
                 </div>
-                <div class="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
-                  <p class="text-gray-600">Members</p>
-                  {/* <div class="space-y-2">
-              <div class="border-2 flex items-center p-2 rounded justify-between space-x-2">
-                <div class="space-x-2 truncate">
+                <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
+                  <p className="text-gray-600">Members</p>
+                  {/* <div className="space-y-2">
+              <div className="border-2 flex items-center p-2 rounded justify-between space-x-2">
+                <div className="space-x-2 truncate">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current inline text-gray-500"
+                    className="fill-current inline text-gray-500"
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
@@ -54,16 +54,16 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
                   </svg>
                   <span>resume_for_manager.pdf</span>
                 </div>
-                <a href="#" class="text-purple-700 hover:underline">
+                <a href="#" className="text-purple-700 hover:underline">
                   Download
                 </a>
               </div>
 
-              <div class="border-2 flex items-center p-2 rounded justify-between space-x-2">
-                <div class="space-x-2 truncate">
+              <div className="border-2 flex items-center p-2 rounded justify-between space-x-2">
+                <div className="space-x-2 truncate">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current inline text-gray-500"
+                    className="fill-current inline text-gray-500"
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
@@ -72,14 +72,14 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
                   </svg>
                   <span>resume_for_manager.pdf</span>
                 </div>
-                <a href="#" class="text-purple-700 hover:underline">
+                <a href="#" className="text-purple-700 hover:underline">
                   Download
                 </a>
               </div>
             </div> */}
                 </div>
-                <div class="p-3  mt-2 text-center space-x-4 md:block">
-                  <button class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
+                <div className="p-3  mt-2 text-center space-x-4 md:block">
+                  <button className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                   onClick={() => setShowInfoTaskModalFromParent(false)}
                   >
                     Close
