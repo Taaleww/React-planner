@@ -5,13 +5,25 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @ObjectType()
 export class Project {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   @Field(() => Int)
   projectid: number;
 
   @Column()
+  @Field()
+  projectname: string;
+
+  @Column()
   @Field(() => Int)
   taskid: number;
+
+  @Column({ type: 'date', nullable: true })
+  @Field({ nullable: true })
+  startdate?: Date;
+
+  @Column({ type: 'date', nullable: true })
+  @Field({ nullable: true })
+  duedate?: Date;
 
   @Column()
   @Field()

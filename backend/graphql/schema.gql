@@ -4,7 +4,10 @@
 
 type Project {
   projectid: Int!
+  projectname: String!
   taskid: Int!
+  startdate: DateTime
+  duedate: DateTime
   description: String!
   created_at: DateTime!
   updated_at: DateTime!
@@ -111,14 +114,16 @@ type Mutation {
 }
 
 input CreateProjectInput {
-  projectid: String!
-  taskid: String!
+  projectname: String!
+  startdate: DateTime
+  duetdate: DateTime
   description: String!
 }
 
 input UpdateProjectInput {
-  projectid: String
-  taskid: String
+  projectname: String
+  startdate: DateTime
+  duetdate: DateTime
   description: String
   id: Int!
 }
