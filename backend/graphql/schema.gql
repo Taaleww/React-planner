@@ -2,13 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Epic {
-  epicid: Int!
-  taskid: Int!
-  epicname: String!
-  startdate: DateTime
-  duedate: DateTime
-  completedate: DateTime
+type User {
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  job: String!
+  department: String!
+  organization: String!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -18,14 +19,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Project {
-  projectid: Int!
-  projectname: String!
-  epicid: String!
-  description: String!
-  startdate: DateTime
-  duedate: DateTime
-  completedate: DateTime
+type ProjectUserRole {
+  projectUserRoleid: Int!
+  user: User!
+  project_user_rolename: String!
+  project: Project!
+  role: Role!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -39,13 +38,24 @@ type User {
   job: String!
   department: String!
   organization: String!
+enum Role {
+  MANAGER
+  EMPLOYEE
+}
+
+type Assign {
+  id: Int!
+  task: Task!
+  person: String!
   created_at: DateTime!
   updated_at: DateTime!
 }
 
 type Task {
   taskid: Int!
+  project: Project!
   taskname: String!
+  assign: [Assign!]!
   role: Status!
   startdate: DateTime
   duedate: DateTime
@@ -62,12 +72,42 @@ enum Status {
   DONE
 }
 
-type Assign {
-  id: Int!
+type Project {
+  projectid: Int!
+  projectname: String!
+  role: projectStatus!
+  task: [Task!]!
+  projectUserRoleid: [ProjectUserRole!]!
+  description: String!
+  startdate: DateTime
+  duedate: DateTime
+  completedate: DateTime
+}
+
+enum projectStatus {
+  TODO
+  INPROGRESS
+  DONE
+}
+
+type Epic {
+  epicid: Int!
   taskid: Int!
-  person: String!
+  epicname: String!
+  startdate: DateTime
+  duedate: DateTime
+  completedate: DateTime
   created_at: DateTime!
   updated_at: DateTime!
+}
+
+type Test {
+  projectid: Int!
+  projectname: String!
+  description: String!
+  startdate: DateTime
+  duedate: DateTime
+  member: String!
 }
 
 type Query {
@@ -79,6 +119,7 @@ type Query {
   task(id: Int!): Task!
   assign(id: Int!): Assign!
   epic(id: Int!): Epic!
+  test(id: Int!): Test!
 }
 
 type Mutation {
@@ -97,10 +138,14 @@ type Mutation {
   createEpic(createEpicInput: CreateEpicInput!): Epic!
   updateEpic(updateEpicInput: UpdateEpicInput!): Epic!
   removeEpic(id: Int!): Epic!
+  createTest(createTestInput: CreateTestInput!): Test!
+  updateTest(updateTestInput: UpdateTestInput!): Test!
+  removeTest(id: Int!): Test!
 }
 
 input CreateProjectInput {
   projectname: String!
+  status: projectStatus!
   description: String!
   startdate: DateTime
   duetdate: DateTime
@@ -109,6 +154,7 @@ input CreateProjectInput {
 
 input UpdateProjectInput {
   projectname: String
+  status: projectStatus
   description: String
   startdate: DateTime
   duetdate: DateTime
@@ -160,10 +206,12 @@ input UpdateTaskInput {
 
 input CreateAssignInput {
   paerson: String!
+  taskid: Int!
 }
 
 input UpdateAssignInput {
   paerson: String
+  taskid: Int
   id: Int!
 }
 
@@ -181,5 +229,22 @@ input UpdateEpicInput {
   startdate: DateTime
   duetdate: DateTime
   completedate: DateTime
+  id: Int!
+}
+
+input CreateTestInput {
+  projectname: String!
+  description: String!
+  startdate: DateTime
+  duetdate: DateTime
+  member: String!
+}
+
+input UpdateTestInput {
+  projectname: String
+  description: String
+  startdate: DateTime
+  duetdate: DateTime
+  member: String
   id: Int!
 }

@@ -1,5 +1,5 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { PrimaryGeneratedColumn } from 'typeorm';
+import { InputType, Int, Field } from '@nestjs/graphql';import { PrimaryGeneratedColumn } from 'typeorm';
+import { Status } from '../entities/project.entity';
 
 @InputType()
 export class CreateProjectInput {
@@ -8,6 +8,9 @@ export class CreateProjectInput {
 
   @Field()
   projectname: string;
+
+  @Field(() => Status)
+  status: Status;
 
   @Field()
   description?: string;
