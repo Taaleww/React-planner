@@ -2,13 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Project {
-  projectid: Int!
-  projectname: String!
+type Epic {
+  epicid: Int!
   taskid: Int!
+  epicname: String!
   startdate: DateTime
   duedate: DateTime
-  description: String!
+  completedate: DateTime
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -18,18 +18,16 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Myproject {
-  myprojectid: Int!
-  userid: Int!
+type Project {
   projectid: Int!
-  role: Role!
+  projectname: String!
+  epicid: String!
+  description: String!
+  startdate: DateTime
+  duedate: DateTime
+  completedate: DateTime
   created_at: DateTime!
   updated_at: DateTime!
-}
-
-enum Role {
-  MANAGER
-  EMPLOYEE
 }
 
 type User {
@@ -72,18 +70,9 @@ type Assign {
   updated_at: DateTime!
 }
 
-type Epic {
-  epicid: Int!
-  taskid: Int!
-  startdate: DateTime!
-  duedate: DateTime!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
 type Query {
+  projects: [Project!]!
   project(id: Int!): Project!
-  myproject(id: Int!): Myproject!
   user(id: Int!): User!
   email(email: String!): User!
   tasks: [Task!]!
@@ -96,9 +85,6 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: Int!): Project!
-  createMyproject(createMyprojectInput: CreateMyprojectInput!): Myproject!
-  updateMyproject(updateMyprojectInput: UpdateMyprojectInput!): Myproject!
-  removeMyproject(id: Int!): Myproject!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
@@ -115,27 +101,18 @@ type Mutation {
 
 input CreateProjectInput {
   projectname: String!
+  description: String!
   startdate: DateTime
   duetdate: DateTime
-  description: String!
+  completedate: DateTime
 }
 
 input UpdateProjectInput {
   projectname: String
+  description: String
   startdate: DateTime
   duetdate: DateTime
-  description: String
-  id: Int!
-}
-
-input CreateMyprojectInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateMyprojectInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  completedate: DateTime
   id: Int!
 }
 
@@ -191,18 +168,18 @@ input UpdateAssignInput {
 }
 
 input CreateEpicInput {
-  epicid: String!
-  epictitle: String!
-  taskid: String!
-  startdate: DateTime!
-  duedate: DateTime!
+  epicname: String!
+  taskid: Int!
+  startdate: DateTime
+  duetdate: DateTime
+  completedate: DateTime
 }
 
 input UpdateEpicInput {
-  epicid: String
-  epictitle: String
-  taskid: String
+  epicname: String
+  taskid: Int
   startdate: DateTime
-  duedate: DateTime
+  duetdate: DateTime
+  completedate: DateTime
   id: Int!
 }

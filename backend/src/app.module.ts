@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProjectModule } from './project/project.module';
-import { MyprojectModule } from './myproject/myproject.module';
+// import { MyprojectModule } from './myproject/myproject.module';
 import { UserModule } from './user/user.module';
 import { TaskModule } from './task/task.module';
 import { AssignModule } from './assign/assign.module';
@@ -18,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
     GraphQLModule.forRoot(graphql_config),
     TypeOrmModule.forRoot(typeorm_config),
     ProjectModule,
-    MyprojectModule,
+    // MyprojectModule,
     UserModule,
     TaskModule,
     AssignModule,
