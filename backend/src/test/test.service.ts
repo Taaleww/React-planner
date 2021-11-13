@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateTestInput } from './dto/create-test.input';
 import { UpdateTestInput } from './dto/update-test.input';
+import { Test } from './entities/test.entity';
 
 @Injectable()
 export class TestService {
@@ -13,7 +13,7 @@ export class TestService {
   ) {}
   async create(createTestInput: CreateTestInput): Promise<Test> {
     const test = await this.testRepository.findOne({
-      testname: createTestInput.projectname,
+      projectname: createTestInput.projectname,
     });
     const newTest = this.testRepository.create(createTestInput);
     return await this.testRepository.save(newTest);

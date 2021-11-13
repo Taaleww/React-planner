@@ -1,10 +1,13 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { Assign } from 'src/assign/entities/assign.entity';
+import { Project } from 'src/project/entities/project.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
-  Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -24,9 +27,17 @@ export class Task {
   @Field(() => Int)
   taskid: number;
 
+  @ManyToOne(() => Project, (project) => project.task)
+  @Field(() => Project)
+  project: Project;
+
   @Column()
   @Field()
   taskname: string;
+
+  @OneToMany(() => Assign, (assign) => assign.task, { eager: true })
+  @Field(() => [Assign])
+  assign: Assign[];
 
   @Column({
     type: 'enum',

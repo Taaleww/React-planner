@@ -1,11 +1,27 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Epic } from 'src/epic/entities/epic.entity';
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
+import { Task } from 'src/task/entities/task.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+export enum Status {
+  TODO = 'todo',
+  INPROGRESS = 'inprogress',
+  DONE = 'done',
+}
+
+registerEnumType(Status, {
+  name: 'projectStatus',
+});
 
 @Entity()
 @ObjectType()
 export class Project {
-
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   projectid: number;
@@ -14,19 +30,25 @@ export class Project {
   @Field()
   projectname: string;
 
-  // @Column()
-  // // @OneToMany(() => ProjectUserRole, (project_user_role) => project_user_role.project, { eager: true })
-  // // @Field(() => [ProjectUserRole])
-  // // myproject: ProjectUserRole[];
-  // @Field()
-  // projectUserRole: string;
+  @Column({
+    type: 'enum',
+    enum: Status,
+    default: Status.TODO,
+  })
+  @Field(() => Status)
+  role: Status;
 
-  @Column()
-  // @OneToMany(() => Epic, (epic) => epic.project, { eager: true })
-  // @Field(() => [Epic])
-  // epic: Epic[];
-  @Field()
-  epicid: string;
+  @OneToMany(() => Task, (task) => task.project, { eager: true })
+  @Field(() => [Task])
+  task: Task[];
+
+  @OneToMany(
+    () => ProjectUserRole,
+    (projectUserRole) => projectUserRole.project,
+    { eager: true },
+  )
+  @Field(() => [ProjectUserRole])
+  projectUserRoleid: ProjectUserRole[];
 
   @Column()
   @Field()
@@ -43,15 +65,5 @@ export class Project {
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
   completedate?: Date;
-
-  @CreateDateColumn()
-  @Field()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  @Field()
-  updated_at: Date;
-  
+  static task: any;
 }
-
-
