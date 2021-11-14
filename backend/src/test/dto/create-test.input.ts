@@ -8,7 +8,7 @@ export class CreateTestInput {
   projectname: string;
 
   @Field()
-  description?: string;
+  description: string;
 
    // @IsDate(}
    @Field({nullable: true})

@@ -48,7 +48,7 @@ export class Project {
     { eager: true },
   )
   @Field(() => [ProjectUserRole])
-  projectUserRoleid: ProjectUserRole[];
+  projectUserRole: ProjectUserRole[];
 
   @Column()
   @Field()
