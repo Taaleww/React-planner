@@ -22,16 +22,12 @@ export class ProjectUserRole{
   @Field(() => Int)
   projectUserRoleid: number;
 
-  // @ManyToOne(() => User, (user) => user.myproject)
+  @ManyToOne(() => User, (user) => user.projectUserRole)
   @Field(() => User)
   user: User;
 
-  @Column()
-  @Field()
-  project_user_rolename: string;
 
-
-  // @ManyToOne(() => Project, (project) => project.myproject)
+  @ManyToOne(() => Project, (project) => project.projectUserRole)
   @Field(() => Project)
   project: Project;
 

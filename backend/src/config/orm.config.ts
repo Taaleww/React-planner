@@ -6,7 +6,7 @@ const typeorm_config: TypeOrmModuleOptions = {
   port: 3306,
   username: 'root',
   password: '',
-  database: 'project-planner',
+  database: 'project_planner',
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true,
 };

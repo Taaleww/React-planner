@@ -2,15 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  userid: Int!
-  email: String!
-  password: String!
-  firstname: String!
-  lastname: String!
-  job: String!
-  department: String!
-  organization: String!
+type Assign {
+  id: Int!
+  task: Task!
+  person: String!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -19,29 +14,6 @@ type User {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type ProjectUserRole {
-  projectUserRoleid: Int!
-  user: User!
-  project_user_rolename: String!
-  project: Project!
-  role: Role!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
-enum Role {
-  MANAGER
-  EMPLOYEE
-}
-
-type Assign {
-  id: Int!
-  task: Task!
-  person: String!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
 
 type Task {
   taskid: Int!
@@ -69,7 +41,7 @@ type Project {
   projectname: String!
   role: projectStatus!
   task: [Task!]!
-  projectUserRoleid: [ProjectUserRole!]!
+  projectUserRole: [ProjectUserRole!]!
   description: String!
   startdate: DateTime
   duedate: DateTime
@@ -80,6 +52,34 @@ enum projectStatus {
   TODO
   INPROGRESS
   DONE
+}
+
+type User {
+  userid: Int!
+  projectUserRole: [ProjectUserRole!]!
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  job: String!
+  department: String!
+  organization: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type ProjectUserRole {
+  projectUserRoleid: Int!
+  user: User!
+  project: Project!
+  role: Role!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+enum Role {
+  MANAGER
+  EMPLOYEE
 }
 
 type Epic {
@@ -105,6 +105,7 @@ type Test {
 type Query {
   projects: [Project!]!
   project(id: Int!): Project!
+  users: [User!]!
   user(id: Int!): User!
   email(email: String!): User!
   tasks: [Task!]!
@@ -115,7 +116,7 @@ type Query {
 }
 
 type Mutation {
-  createProject(createProjectInput: CreateProjectInput!): Project!
+  createProject(createProjectInput: CreateProjectInput!): [ProjectUserRole!]!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: Int!): Project!
   createUser(createUserInput: CreateUserInput!): User!
@@ -142,6 +143,7 @@ input CreateProjectInput {
   startdate: DateTime
   duetdate: DateTime
   completedate: DateTime
+  members: [String!]!
 }
 
 input UpdateProjectInput {
@@ -151,6 +153,7 @@ input UpdateProjectInput {
   startdate: DateTime
   duetdate: DateTime
   completedate: DateTime
+  members: [String!]
   id: Int!
 }
 

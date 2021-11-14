@@ -1,4 +1,5 @@
-import { InputType, Int, Field } from '@nestjs/graphql';import { PrimaryGeneratedColumn } from 'typeorm';
+import { InputType, Int, Field } from '@nestjs/graphql';
+import { PrimaryGeneratedColumn } from 'typeorm';
 import { Status } from '../entities/project.entity';
 
 @InputType()
@@ -15,16 +16,18 @@ export class CreateProjectInput {
   @Field()
   description?: string;
 
-   // @IsDate(}
-   @Field({nullable: true})
-   startdate?: Date;
- 
-   // @IsDate()
-   @Field({nullable: true})
-   duetdate?: Date;
- 
-   // @IsDate()
-   @Field({nullable: true})
-   completedate?: Date;
+  // @IsDate(}
+  @Field({ nullable: true })
+  startdate?: Date;
 
+  // @IsDate()
+  @Field({ nullable: true })
+  duetdate?: Date;
+
+  // @IsDate()
+  @Field({ nullable: true })
+  completedate?: Date;
+
+  @Field(() => [String])
+  members: string[];
 }

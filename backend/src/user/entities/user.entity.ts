@@ -1,8 +1,10 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,6 +19,10 @@ export class User {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   userid: number;
+
+  @OneToMany(() => ProjectUserRole, (projectUserRole) => projectUserRole.user, { eager: true })
+  @Field(() => [ProjectUserRole])
+  projectUserRole: ProjectUserRole[];
 
   @Column()
   @Field()
