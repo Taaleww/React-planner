@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 type User {
+  userid: Int!
   email: String!
   password: String!
   firstname: String!
@@ -29,15 +30,6 @@ type ProjectUserRole {
   updated_at: DateTime!
 }
 
-type User {
-  userid: Int!
-  email: String!
-  password: String!
-  firstname: String!
-  lastname: String!
-  job: String!
-  department: String!
-  organization: String!
 enum Role {
   MANAGER
   EMPLOYEE
