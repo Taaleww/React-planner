@@ -54,20 +54,6 @@ enum projectStatus {
   DONE
 }
 
-type User {
-  userid: Int!
-  projectUserRole: [ProjectUserRole!]!
-  email: String!
-  password: String!
-  firstname: String!
-  lastname: String!
-  job: String!
-  department: String!
-  organization: String!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
 type ProjectUserRole {
   projectUserRoleid: Int!
   user: User!
@@ -80,6 +66,20 @@ type ProjectUserRole {
 enum Role {
   MANAGER
   EMPLOYEE
+}
+
+type User {
+  userid: Int!
+  projectUserRole: [ProjectUserRole!]!
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  job: String!
+  department: String!
+  organization: String!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 type Epic {
