@@ -27,6 +27,6 @@ export class AuthService {
         }
 
         //if do not find user or password does not exist
-        //return null;
+        return null;
     }
 }
