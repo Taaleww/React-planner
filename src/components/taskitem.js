@@ -59,13 +59,13 @@ function TaskItem({ taskData }) {
 
   return (
     <>
-      <div className="Tasks relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto cursor-move">
+      <div className="Tasks relative bg-gray-800 py-6 px-6 rounded-3xl w-64 my-4 shadow mt-9 m-auto cursor-move text-white hover:bg-gray-700">
         <HeaderIcon status={taskData.status} />
         <div className="mt-8 ">
           <button className="" onClick={() => {
                   setShowInfoTaskModal(true);
                 }}>
-            <p className="text-xl font-semibold my-2 cursor-pointer ">
+            <p className="text-xl font-semibold my-2 cursor-pointer  ">
               {taskData.title}
             </p>
           </button>

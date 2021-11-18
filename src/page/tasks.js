@@ -104,13 +104,14 @@ function Tasks() {
   return (
     <>
     {/* title */}
-      <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono ">
+      <div className="MyProjects font-bold md:container md:mx-auto  font-mono ">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1 flex flex-row ">
-            <h3 className="font-semibold text-base px-4 ">
+            
+            <h3 className="font-semibold text-xl px-4 ">
               <Link to="/myprojects">My Projects</Link>
             </h3>
-            <h3 className="font-semibold text-base ">/ Tasks</h3>
+            <h3 className="font-semibold text-xl ">/ Tasks</h3>
           </div>
           <div className="relative w-full px-4 max-w-3 flex-grow flex-1 text-right">
             <button
@@ -142,8 +143,11 @@ function Tasks() {
                           scope="col"
                           className="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                         >
-                          To Do
+                         To do
+                          
+                          
                         </th>
+                        
                         <th
                           scope="col"
                           className="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
@@ -157,10 +161,11 @@ function Tasks() {
                           Success
                         </th>
                       </tr>
-                    </thead>
+                    </thead >
                     {/* content */}
                     {/* To do */}
-                    <td>
+                    <td >
+                  
                       {todoData.map((data) => {
                         return <TaskItem taskData={data} />;
                       })}

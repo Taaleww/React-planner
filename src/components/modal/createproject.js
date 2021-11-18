@@ -28,8 +28,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
 
   function onSubmit(event) {
     event.preventDefault();
+    // separate members by ,
     const members = rawMembers.split(",");
-
+    
     if (title && date && dueDate && description) {
       addProject(title, date, dueDate, description, members);
     }

@@ -22,6 +22,7 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/regis" component={Regis} />
         <Route path="/profile" component={Profile} />
+
         {/* <Route path="/infotask" component={InfoTask} /> */}
         <Route path="*" component={NotFound} />
     </Router>
