@@ -2,9 +2,9 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateAssignInput {
-    @Field()
-    paerson: string;
+  @Field(() => Int)
+  userId: number;
 
-    @Field(() => Int)
-  taskid: number;
-  }
+  @Field(() => Int)
+  taskId: number;
+}

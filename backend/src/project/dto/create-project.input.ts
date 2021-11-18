@@ -1,5 +1,4 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { PrimaryGeneratedColumn } from 'typeorm';
 import { Status } from '../entities/project.entity';
 
 @InputType()

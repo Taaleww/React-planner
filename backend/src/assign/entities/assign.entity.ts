@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Task } from 'src/task/entities/task.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -20,9 +22,9 @@ export class Assign {
   @Field(() => Task)
   task: Task;
 
-  @Column()
-  @Field()
-  person: string;
+  @ManyToOne(() => User, (user) => user.assign)
+  @Field(() => User)
+  user: User;
 
   @CreateDateColumn()
   @Field()

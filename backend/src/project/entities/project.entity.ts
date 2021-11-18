@@ -65,5 +65,5 @@ export class Project {
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
   completedate?: Date;
-  static task: any;
+  
 }

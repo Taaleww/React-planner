@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Assign } from 'src/assign/entities/assign.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import {
   Column,
@@ -23,6 +24,10 @@ export class User {
   @OneToMany(() => ProjectUserRole, (projectUserRole) => projectUserRole.user, { eager: true })
   @Field(() => [ProjectUserRole])
   projectUserRole: ProjectUserRole[];
+
+  @OneToMany(() => Assign, (assign) => assign.user, { eager: true })
+  @Field(() => [Assign])
+  assign: Assign[];
 
   @Column()
   @Field()
