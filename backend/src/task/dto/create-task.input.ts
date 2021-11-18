@@ -4,6 +4,12 @@ import { Status } from '../entities/task.entity';
 
 @InputType()
 export class CreateTaskInput {
+  @Field(() => Int)
+  projectid:number;
+
+  @Field(() => [Int])
+  userid: number[];
+
   @Field()
   taskname: string;
 
@@ -25,8 +31,7 @@ export class CreateTaskInput {
   @Field({nullable: true})
   description?: string;
 
-  @Field()
-  reporter: string;
+  
 }
 
 

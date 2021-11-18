@@ -6,7 +6,6 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { userInfo } from 'os';
 
 @Injectable()
 export class UserService {
@@ -38,11 +37,12 @@ export class UserService {
   }
   
   async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({email: email});
+    const user = await this.userRepository.find
+    ({email: email});
     if(!user){
       throw new ForbiddenError('User not found.');
     }
-    return user;
+    return ;
   }
 
 

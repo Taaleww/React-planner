@@ -4,33 +4,38 @@ import { UpdateProjectUserRole } from './dto/update-projectUserRolet.input';
 import { ProjectUserRole } from './entities/projectUserRole.entity';
 import { ProjectUserRoleService } from './projectUserRole.service';
 
-
 @Resolver(() => ProjectUserRole)
-export class project_user_roleResolver {
-  constructor(private readonly project_user_roleService: ProjectUserRoleService) {}
+export class projectUserRoleResvoler {
+  constructor(
+    private readonly projectUserRoleService: ProjectUserRoleService,
+  ) {}
 
   @Mutation(() => ProjectUserRole)
-  createproject_user_role(@Args('createproject_user_roleInput') input: CreateProjectUserRoleInput) {
-    return this.project_user_roleService.create(input);
+  createproject_user_role(
+    @Args('createproject_user_roleInput') input: CreateProjectUserRoleInput,
+  ) {
+    return this.projectUserRoleService.create(input);
   }
 
-  @Query(() => [ProjectUserRole], { name: 'Project_user_roles' })
+  @Query(() => [ProjectUserRole], { name: 'projectUserRoles' })
   findAll() {
-    return this.project_user_roleService.findAll();
+    return this.projectUserRoleService.findAll();
   }
 
-  @Query(() => ProjectUserRole, { name: 'Project_user_role' })
+  @Query(() => ProjectUserRole, { name: 'projectUserRole' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.project_user_roleService.findOne(id);
+    return this.projectUserRoleService.findOne(id);
   }
 
   @Mutation(() => ProjectUserRole)
-  updateproject_user_role(@Args('updateproject_user_roleInput') input: UpdateProjectUserRole) {
-    return this.project_user_roleService.update(input.id, input);
+  updateproject_user_role(
+    @Args('updateproject_user_roleInput') input: UpdateProjectUserRole,
+  ) {
+    return this.projectUserRoleService.update(input.id, input);
   }
 
   @Mutation(() => ProjectUserRole)
   removeproject_user_role(@Args('id', { type: () => Int }) id: number) {
-    return this.project_user_roleService.remove(id);
+    return this.projectUserRoleService.remove(id);
   }
 }

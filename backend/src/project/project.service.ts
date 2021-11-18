@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ForbiddenError } from 'apollo-server-errors';
 import {
   ProjectUserRole,
   Role,
@@ -50,13 +51,14 @@ export class ProjectService {
       relations: ['projectUserRole'],
     });
 
-    members.map(async (email) => {
-      console.log(email);
+    members.map(async (userid) => {
       const user = await this.userRepository.findOne({
-        where: { email: email },
+        where: { userid: userid },
         relations: ['projectUserRole'],
       });
-      console.log(user);
+      if (!userid) {
+        throw new ForbiddenError('Not have this user');
+      }
 
       const ProjectUserRoleInput = {
         projectid: project.projectid,
@@ -68,15 +70,11 @@ export class ProjectService {
         this.projectUserRoleRepository.create(ProjectUserRoleInput);
 
       user.projectUserRole.push(newProjectUserRole);
-
       project.projectUserRole.push(newProjectUserRole);
 
-      const temp = await this.projectUserRoleRepository.save(
-        newProjectUserRole,
-      );
+      await this.projectUserRoleRepository.save(newProjectUserRole);
       await this.projectRepository.save(project);
       await this.userRepository.save(user);
-      console.log(temp);
     });
 
     return await this.projectUserRoleRepository.find({
@@ -86,7 +84,17 @@ export class ProjectService {
   }
 
   async findAll(): Promise<Project[]> {
-    return await this.projectRepository.find();
+    return await this.projectRepository.find({
+      relations: ['project', 'user'],
+    });
+  }
+
+  async findByUser(id: number): Promise<ProjectUserRole[]> {
+    const project = await this.projectUserRoleRepository.find({
+      where: { user: id },
+      relations: ['project', 'user'],
+    });
+    return project;
   }
 
   async findOne(id: number): Promise<Project> {
