@@ -1,3 +1,4 @@
+import { element } from "prop-types";
 import React, {useState} from "react";
 import DetailItem from "../components/detailitem";
 
@@ -16,6 +17,10 @@ function Profile(){
                             style={{fill:"#F3DF95"}}>    
                             <path d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M16,16H7.995 C7.445,16,7,15.555,7,15.005v-0.011C7,14.445,7.445,14,7.995,14H14V5.995C14,5.445,14.445,5,14.995,5h0.011 C15.555,5,16,5.445,16,5.995V16z"></path>
                         </svg>
+    const project = [
+        {projectname:"Project System"},
+        {projectname:"BaeBaeBoo System"}
+    ]
     let sign;
     if (status === "SUCCESS") {
         sign = successSign;
@@ -37,7 +42,7 @@ function Profile(){
                                     alt="" />
                             </div>
                             <h1 className="uppercase text-gray-800 text-center font-bold text-2xl leading-8 my-3">Fullname Lastname</h1>
-                            <button className="block w-full my-3 p-2 text-center text-sm font-medium rounded-full text-white bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500">Manage Your Account</button>
+                            <a className="block w-full my-3 p-2 text-center text-sm font-medium rounded-full text-white bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500" href="/manage_account">Manage Your Account</a>
                         </div>
                         {/* End of profile image */}
                         {/* User infomation */}
@@ -99,11 +104,13 @@ function Profile(){
                             </div>
                             <div className="h-0.5 w-max sm:w-16 bg-green-200 mb-4"></div>
                             <div className="flex text-gray-700 text-sm mt-3 pl-4">
-                                <span>
-                                    <img className="h-5 w-5"
-                                        src="https://img.icons8.com/material/96/73EB95/brief--v1.png" />
-                                </span>
-                                <span className="pl-2"> Project System</span>
+                                {/* {project.map((element)=>{ */}
+                                    <span>
+                                        <img className="h-5 w-5"
+                                            src="https://img.icons8.com/material/96/73EB95/brief--v1.png" />
+                                    </span>
+                                    <span className="pl-2"> </span>
+                                {/* })} */}
                             </div>
                             <div className="text-xs text-gray-400 mt-4 text-right">
                                 <a className="hover:text-gray-300 hover:underline " href="/">View Full</a>

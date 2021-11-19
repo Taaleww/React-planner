@@ -3,16 +3,16 @@ import React from "react";
 function Login(){
     return (
         <div className="bg-gray-50 min-w-full min-h-full flex items-center justify-center px-10 py-14">
-                <div className="flex bg-white rounded-lg shadow-lg overflow-hidden m-7 w-full sm:max-w-md lg:max-w-4xl">
-                    <div className="content-center bg-gray-800 w-full hidden lg:block lg:w-1/2 bg-cover py-8"> 
-                    <img
-                        className="object-cover object-center"
-                        src="img/login.gif"
-                        alt="planning"
+                <div className="flex items-center bg-gray-800 rounded-lg shadow-lg overflow-hidden m-7 w-full sm:max-w-md lg:max-w-4xl">
+                    <div className="w-full min-h-full hidden lg:block lg:w-1/2"> 
+                        <img
+                            className="object-cover object-center"
+                            src="img/login.gif"
+                            alt="planning"
                         />
                     </div>
-                    <div className="w-full mt-6 mb-6 p-10 lg:w-1/2">
-                        <h1 className="text-2xl font-bold text-center pb-8">Login</h1>
+                    <div className="w-full bg-white p-10 lg:w-1/2">
+                        <h1 className="text-2xl font-bold text-center mt-7 pb-8">Login</h1>
                         <form novalidate="" action="" className="space-y-6 ng-untouched ng-pristine ng-valid">
                             <div className="space-y-1 text-sm">
                                 <label for="email" className="block text-base font-semibold">E-mail</label>
@@ -44,7 +44,7 @@ function Login(){
                                 </svg>
                             </button>
                         </div> */}
-                        <p className="text-xs text-center mt-5 sm:px-6 text-gray-400">Don't have an account?
+                        <p className="text-xs text-center mt-5 mb-8 sm:px-6 text-gray-400">Don't have an account?
                             <a href="/" className="underline text-indigo-500 hover:text-indigo-700"> Sign up</a>
                         </p>
                     </div>
