@@ -30,7 +30,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
     event.preventDefault();
     // separate members by ,
     const members = rawMembers.split(",");
-    
+
     if (title && date && dueDate && description) {
       addProject(title, date, dueDate, description, members);
     }
@@ -44,7 +44,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
           <div className="">
             <div className="text-center p-5 flex-auto justify-center">
               <CreateSvg />
-              <h2 className="text-xl font-bold py-4 ">Create Project?</h2>
+              <h2 className="text-xl font-bold py-4 ">Create Project</h2>
               <div className="space-y-4">
                 <form>
                   <label className="block text-gray-700 text-sm font-normal mb-2 text-left ">

@@ -3,9 +3,12 @@ import React from "react";
 import { ReactComponent as ViewSvg } from "../assets/icons/view.svg";
 import { ReactComponent as TrashSvg } from "../assets/icons/trash.svg";
 import { ReactComponent as PenSvg } from "../assets/icons/pen.svg";
+import { ReactComponent as AddmemberSvg } from "../assets/icons/addmember.svg";
 import InfoProject from "../components/modal/infoproject";
 import EditProject from "../components/modal/editproject";
 import DeleteProject from "../components/modal/deleteproject";
+import AddMember from "../components/modal/addmember";
+
 
 /// TRY ghaphql
 import gql from "graphql-tag";
@@ -21,13 +24,14 @@ const getMyProjects = () => (
   <Query
     query={gql`
       {
-        user {
-          userid
-          firstname
-          lastname
-          department
-          organization
-          email
+        project {
+          projectid
+          projectname
+          role
+          description
+          startdate
+          duedate
+          completedate
         }
       }
     `}
@@ -39,61 +43,39 @@ const getMyProjects = () => (
 
       return res.data.MyProjects.map(
         ({
-          userid,
-          firstname,
-          lastname,
-          department,
-          organization,
-          email
+          projectid,
+          projectname,
+          role,
+          description,
+          startdate,
+          duedate,
+          completedate,
         }) => (
-         
-          <div key={userid}>
+          <div key={projectid}>
             <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm text-gray-900">
-                {firstname}
+              <div className="text-sm text-gray-900 ">
+                {dateTranform(startdate)}
               </div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
               <div className="text-sm text-gray-900">
-                {lastname}
+                <Link to="/tasks">{projectname}</Link>
               </div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
+              <StatusTag status={role} />
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap ">
               <div className="text-sm text-gray-900">
-                {department}
+                {dateTranform(duedate)}
               </div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
+            {/* <td className="px-6 py-4 whitespace-nowrap ">
               <div className="text-sm text-gray-900">
-                {email}
+                {member.join(",")}
               </div>
-            </td>
+            </td> */}
           </div>
-          // <div key={projectid}>
-          //   <td className="px-6 py-4 whitespace-nowrap">
-          //     <div className="text-sm text-gray-900 ">
-          //       {dateTranform(startdate)}
-          //     </div>
-          //   </td>
-          //   <td className="px-6 py-4 whitespace-nowrap">
-          //     <div className="text-sm text-gray-900">
-          //       <Link to="/tasks">{projectname}</Link>
-          //     </div>
-          //   </td>
-          //   {/* <td className="px-6 py-4 whitespace-nowrap">
-          //     <StatusTag status={role} />
-          //   </td> */}
-          //   <td className="px-6 py-4 whitespace-nowrap ">
-          //     <div className="text-sm text-gray-900">
-          //       {dateTranform(duedate)}
-          //     </div>
-          //   </td>
-          //   <td className="px-6 py-4 whitespace-nowrap ">
-          //     <div className="text-sm text-gray-900">
-          //       {member.join(",")}
-          //     </div>
-          //   </td>
-          // </div>
         )
       );
     }}
@@ -113,7 +95,14 @@ function StatusTag({ status }) {
         Success
       </span>
     );
-  } else {
+  } else if (status === "Late") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+        Late
+      </span>
+    );
+  }
+   else {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         Error
@@ -132,11 +121,15 @@ function ProjectItem({ projectData, deleteProject }) {
   function changeStateDeleteModalFromChild(state) {
     setShowDeleteProjectModal(state);
   }
+  function changeStateAddMemberModalFromChild(state) {
+    setShowAddMemberModal(state);
+  }
 
   const [showInfoProjectModal, setShowInfoProjectModal] = React.useState(false);
   const [showEditProjectModal, setShowEditProjectModal] = React.useState(false);
   const [showDeleteProjectModal, setShowDeleteProjectModal] =
     React.useState(false);
+    const [showAddMemberModal, setShowAddMemberModal] = React.useState(false);
 
   return (
     <>
@@ -158,6 +151,14 @@ function ProjectItem({ projectData, deleteProject }) {
                   className="cursor-pointer"
                   onClick={() => {
                     setShowEditProjectModal(true);
+                  }}
+                />
+              </div>
+              <div class="w-4 mr-4 transform hover:text-blue-500 hover:scale-110">
+                <AddmemberSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowAddMemberModal(true);
                   }}
                 />
               </div>
@@ -188,7 +189,13 @@ function ProjectItem({ projectData, deleteProject }) {
           setShowEditProjectModalFromParent={changeStateEditModalFromChild}
         />
       ) : null}
-
+      {showAddMemberModal ? (
+        <>
+          <AddMember
+            setShowAddMemberModalFromParent={changeStateAddMemberModalFromChild}
+          />
+        </>
+      ) : null}
       {showDeleteProjectModal ? (
         <DeleteProject
           setShowDeleteProjectModalFromParent={changeStateDeleteModalFromChild}

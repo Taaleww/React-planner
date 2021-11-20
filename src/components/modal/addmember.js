@@ -11,7 +11,7 @@ function AddMember({ setShowAddMemberModalFromParent }) {
             <div className="">
               <div className="text-center p-5 flex-auto justify-center">
                 <MemberSvg />
-                <h2 className="text-xl font-bold py-4 ">Add Members?</h2>
+                <h2 className="text-xl font-bold py-4 ">Add Members</h2>
               </div>
               <div className="space-y-4 ">
                 <label className="block text-gray-700 text-sm font-normal mb-2 ">
@@ -40,7 +40,7 @@ function AddMember({ setShowAddMemberModalFromParent }) {
                 >
                   Cancel
                 </button>
-                <button className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-yellow-500">
+                <button className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500">
                   Add
                 </button>
               </div>
