@@ -26,6 +26,12 @@ export class ProjectResolver {
     return this.projectService.findOne(id);
   }
 
+  // Created by Taaleww
+  @Query(() => [ProjectUserRole], { name: 'findProjectByUser' })
+  findByUser(@Args('id', { type: () => Int }) id: number) {
+    return this.projectService.findByUser(id);
+  }
+
   @Mutation(() => Project)
   updateProject(
     @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,

@@ -1,47 +1,26 @@
 import "./myprojects.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "react-apollo";
 // import gql from "graphql-tag";
 // import {graphql} from 'react-apollo';
 // import { useQuery, useMutation } from "@apollo/client";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
+/// TRY ghaphql
+import gql from "graphql-tag"
+import { useMutation } from '@apollo/react-hooks';
 
 function MyProjects() {
+  const [myProjects, setData] = useState([]);
+
   function changeStateCreateModalFromChild(state) {
     setShowCreateProjectModal(state);
   }
 
   //apollo client setup
   const client = new ApolloClient({
-    uri: "http://localhost:3000/graphql",
+    uri: "http://localhost:5000/graphql",
   });
-
-  // const myProjects = gql`
-  //   query Project {
-  //     Project {
-  //       projectid
-  //       projectname
-  //       description
-  //       startdate
-  //       duedate
-  //       member
-  //     }
-  //   }
-  // `;
-
-  const [myProjects, setData] = useState([
-    {
-      id: 0,
-      title: "Test data",
-      createDate: "2021-11-06",
-      dueDate: "2021-11-06",
-      description: "this is test description",
-      status: "Success",
-      members: ["one@mail.com", "two@mail.com"],
-    },
-  ]);
 
   function deleteProject(target) {
     console.log("TEST: ", target);
@@ -53,27 +32,66 @@ function MyProjects() {
     console.log(newList);
     setData(newList);
   }
+  
+  async function getMyProjects() {
+    setData([]);
+    //! Change userid to dynamic data /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const { data } = await client.query({
+      query: gql`
+        query findProjectByUser {
+          findProjectByUser(id: 1) {
+            project {
+              projectid
+              projectname
+              role
+              description
+              startdate
+              duedate
+              completedate
+            }
+          }
+        }
+      `,
+    });
+    if (data.findProjectByUser.length !== 0) {
+      setData([...data.findProjectByUser, ...myProjects]);
+    }
+  }
 
-  function addProject(title, createDate, dueDate, description, members) {
-    const status = "In Progress";
-    const id = myProjects.length;
+  async function addProject(projectname, startdate, duedate, description, members) {
+    const status = "INPROGRESS";
     const newProject = {
-      id,
-      title,
-      createDate: new Date(createDate),
-      dueDate: new Date(dueDate),
+      projectname,
+      startdate: new Date(startdate),
+      duedate: new Date(duedate),
       description,
       status,
       members,
     };
-    setData([newProject, ...myProjects]);
+    console.log(JSON.stringify(newProject));
+    const { data, error } = await client.mutate({
+      mutation: gql`
+      mutation createProject{
+        createProject(createProjectInput: $newProject ){
+          projectUserRoleid
+        }
+      }`
+    });
+    console.log("test: ", error);
+
+    // getMyProjects();
+    // setData([newProject, ...myProjects]);
     setShowCreateProjectModal(false);
   }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
     React.useState(false);
+
+  useEffect(() => {
+    getMyProjects();
+  }, []);
+
   return (
-    <ApolloProvider client={client}>
       <>
         <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono  ">
           <div className="flex flex-wrap items-center">
@@ -139,15 +157,28 @@ function MyProjects() {
                         </th>
                       </tr>
                     </thead>
-                    {myProjects.map((data) => {
-                      return (
-                        <ProjectItem
-                          projectData={data}
-                          deleteProject={deleteProject}
-                          key={data.id}
-                        />
-                      );
-                    })}
+                    {myProjects.length === 0 ? (
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 ">
+                              Loading . . .
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ) : (
+                      myProjects.map((data) => {
+                        console.log("data project", data);
+                        return (
+                          <ProjectItem
+                            projectData={data.project}
+                            deleteProject={deleteProject}
+                            key={data.project.projectid}
+                          />
+                        );
+                      })
+                    )}
                   </table>
                 </div>
               </div>
@@ -165,7 +196,6 @@ function MyProjects() {
           />
         ) : null}
       </>
-    </ApolloProvider>
   );
 }
 

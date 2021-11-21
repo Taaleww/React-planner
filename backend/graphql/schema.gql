@@ -106,6 +106,7 @@ type Test {
 type Query {
   projects: [Project!]!
   project(id: Int!): Project!
+  findProjectByUser(id: Int!): [ProjectUserRole!]!
   projectUserRoles: [ProjectUserRole!]!
   projectUserRole(id: Int!): ProjectUserRole!
   users: [User!]!

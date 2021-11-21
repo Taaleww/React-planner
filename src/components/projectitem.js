@@ -7,12 +7,7 @@ import { ReactComponent as AddmemberSvg } from "../assets/icons/addmember.svg";
 import InfoProject from "../components/modal/infoproject";
 import EditProject from "../components/modal/editproject";
 import DeleteProject from "../components/modal/deleteproject";
-import AddMember from "../components/modal/addmember";
-
-
-/// TRY ghaphql
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import AddMember from "../components/modal/addmember"
 
 function dateTranform(date) {
   const newDate = new Date(date).toString().split(" ");
@@ -20,82 +15,21 @@ function dateTranform(date) {
   return completeDate;
 }
 
-const getMyProjects = () => (
-  <Query
-    query={gql`
-      {
-        project {
-          projectid
-          projectname
-          role
-          description
-          startdate
-          duedate
-          completedate
-        }
-      }
-    `}
-  >
-   
-    {(res) => {
-      if (res.loading) return <p>loading...</p>;
-      if (res.error) return <p>{console.log(res)}</p>;
 
-      return res.data.MyProjects.map(
-        ({
-          projectid,
-          projectname,
-          role,
-          description,
-          startdate,
-          duedate,
-          completedate,
-        }) => (
-          <div key={projectid}>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm text-gray-900 ">
-                {dateTranform(startdate)}
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm text-gray-900">
-                <Link to="/tasks">{projectname}</Link>
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <StatusTag status={role} />
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap ">
-              <div className="text-sm text-gray-900">
-                {dateTranform(duedate)}
-              </div>
-            </td>
-            {/* <td className="px-6 py-4 whitespace-nowrap ">
-              <div className="text-sm text-gray-900">
-                {member.join(",")}
-              </div>
-            </td> */}
-          </div>
-        )
-      );
-    }}
-  </Query>
-);
-
-function StatusTag({ status }) {
-  if (status === "In Progress") {
+function StatusTag({status}) {
+  if (status === "INPROGRESS") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         In Progress
       </span>
     );
-  } else if (status === "Success") {
+  } else if (status === "SUCCESS") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         Success
       </span>
     );
-  } else if (status === "Late") {
+  } else if (status === "LATE") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         Late
@@ -112,6 +46,7 @@ function StatusTag({ status }) {
 }
 
 function ProjectItem({ projectData, deleteProject }) {
+  console.log("data date", projectData.startdate);
   function changeStateInfoProjectModalFromChild(state) {
     setShowInfoProjectModal(state);
   }
@@ -130,15 +65,38 @@ function ProjectItem({ projectData, deleteProject }) {
   const [showDeleteProjectModal, setShowDeleteProjectModal] =
     React.useState(false);
     const [showAddMemberModal, setShowAddMemberModal] = React.useState(false);
-
+    
   return (
     <>
       <tbody className="bg-white divide-y divide-gray-200">
         <tr>
-          {getMyProjects()}
-          <td class="py-2 px-6 whitespace-nowrap text-center">
-            <div class="flex item-left justify-center">
-              <div class="w-4 mr-4 transform hover:text-purple-500 hover:scale-110">
+            <td className="px-6 py-4 whitespace-nowrap">
+              <div className="text-sm text-gray-900 ">
+                {dateTranform(projectData.startdate)}
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <div className="text-sm text-gray-900">
+                <Link to="/tasks">{projectData.projectname}</Link>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <StatusTag status={projectData.role} />
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap ">
+              <div className="text-sm text-gray-900">
+                {dateTranform(projectData.duedate)}
+              </div>
+            </td>
+            {/* <td className="px-6 py-4 whitespace-nowrap ">
+              <div className="text-sm text-gray-900">
+                {member.join(",")}
+              </div>
+            </td> */}
+        
+          <td className="py-2 px-6 whitespace-nowrap text-center">
+            <div className="flex item-left justify-center">
+              <div className="w-4 mr-4 transform hover:text-purple-500 hover:scale-110">
                 <ViewSvg
                   className="cursor-pointer"
                   onClick={() => {
@@ -146,7 +104,7 @@ function ProjectItem({ projectData, deleteProject }) {
                   }}
                 />
               </div>
-              <div class="w-4 mr-4 transform hover:text-yellow-500 hover:scale-110">
+              <div className="w-4 mr-4 transform hover:text-yellow-500 hover:scale-110">
                 <PenSvg
                   className="cursor-pointer"
                   onClick={() => {
@@ -154,7 +112,7 @@ function ProjectItem({ projectData, deleteProject }) {
                   }}
                 />
               </div>
-              <div class="w-4 mr-4 transform hover:text-blue-500 hover:scale-110">
+              <div className="w-4 mr-4 transform hover:text-blue-500 hover:scale-110">
                 <AddmemberSvg
                   className="cursor-pointer"
                   onClick={() => {
@@ -162,7 +120,7 @@ function ProjectItem({ projectData, deleteProject }) {
                   }}
                 />
               </div>
-              <div class="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
+              <div className="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
                 <TrashSvg
                   className="cursor-pointer"
                   onClick={() => {

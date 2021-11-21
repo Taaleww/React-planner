@@ -94,12 +94,13 @@ export class ProjectService {
       where: { user: id },
       relations: ['project', 'user'],
     });
+    
     return project;
   }
 
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
-      where: { taskid: id },
+      where: { projectid: id },
     });
   }
 
