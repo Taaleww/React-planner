@@ -1,21 +1,23 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export enum Status {
+export enum projectStatus {
   TODO = 'todo',
   INPROGRESS = 'inprogress',
   DONE = 'done',
 }
 
-registerEnumType(Status, {
+registerEnumType(projectStatus, {
   name: 'projectStatus',
 });
 
@@ -24,19 +26,19 @@ registerEnumType(Status, {
 export class Project {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
-  projectid: number;
+  projectId: number;
 
   @Column()
   @Field()
-  projectname: string;
+  projectName: string;
 
   @Column({
     type: 'enum',
-    enum: Status,
-    default: Status.TODO,
+    enum: projectStatus,
+    default: projectStatus.TODO,
   })
-  @Field(() => Status)
-  role: Status;
+  @Field(() => projectStatus)
+  role: projectStatus;
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])
@@ -56,14 +58,17 @@ export class Project {
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
-  startdate?: Date;
+  startDate?: Date;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
-  duedate?: Date;
+  dueDate?: Date;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
-  completedate?: Date;
+  completeDate?: Date;
+  
   
 }
+
+

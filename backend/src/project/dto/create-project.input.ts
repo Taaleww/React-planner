@@ -1,31 +1,28 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { Status } from '../entities/project.entity';
+import { projectStatus} from '../entities/project.entity';
 
 @InputType()
 export class CreateProjectInput {
-  // @Field()
-  // projectid: number;
-
   @Field()
-  projectname: string;
+  projectName: string;
 
-  @Field(() => Status)
-  status: Status;
+  @Field(() => projectStatus)
+  status: projectStatus;
 
   @Field()
   description?: string;
 
   // @IsDate(}
   @Field({ nullable: true })
-  startdate?: Date;
+  startDate?: Date;
 
   // @IsDate()
   @Field({ nullable: true })
-  duetdate?: Date;
+  dueDate?: Date;
 
   // @IsDate()
   @Field({ nullable: true })
-  completedate?: Date;
+  completeDate?: Date;
 
   @Field(() => [String])
   members: string[];

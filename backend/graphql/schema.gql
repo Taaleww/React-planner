@@ -22,15 +22,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Project {
-  projectid: Int!
-  projectname: String!
+  projectId: Int!
+  projectName: String!
   role: projectStatus!
   task: [Task!]!
   projectUserRole: [ProjectUserRole!]!
   description: String!
-  startdate: DateTime
-  duedate: DateTime
-  completedate: DateTime
+  startDate: DateTime
+  dueDate: DateTime
+  completeDate: DateTime
 }
 
 enum projectStatus {
@@ -40,14 +40,14 @@ enum projectStatus {
 }
 
 type Task {
-  taskid: Int!
+  taskId: Int!
   project: Project!
-  taskname: String!
+  taskName: String!
   assign: [Assign!]!
-  role: Status!
-  startdate: DateTime
-  duedate: DateTime
-  completedate: DateTime
+  status: Status!
+  startDate: DateTime
+  dueDate: DateTime
+  completeDate: DateTime
   description: String
   reporter: String!
   created_at: DateTime!
@@ -69,38 +69,18 @@ type Assign {
 }
 
 type User {
-  userid: Int!
+  userId: Int!
   projectUserRole: [ProjectUserRole!]!
   assign: [Assign!]!
   email: String!
   password: String!
-  firstname: String!
-  lastname: String!
+  firstName: String!
+  lastName: String!
   job: String!
   department: String!
   organization: String!
   created_at: DateTime!
   updated_at: DateTime!
-}
-
-type Epic {
-  epicid: Int!
-  taskid: Int!
-  epicname: String!
-  startdate: DateTime
-  duedate: DateTime
-  completedate: DateTime
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
-type Test {
-  projectid: Int!
-  projectname: String!
-  description: String!
-  startdate: DateTime
-  duedate: DateTime
-  member: String!
 }
 
 type Query {
@@ -114,8 +94,6 @@ type Query {
   tasks: [Task!]!
   task(id: Int!): Task!
   assign(id: Int!): Assign!
-  epic(id: Int!): Epic!
-  test(id: Int!): Test!
 }
 
 type Mutation {
@@ -134,31 +112,25 @@ type Mutation {
   createAssign(createAssignInput: CreateAssignInput!): Assign!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
-  createEpic(createEpicInput: CreateEpicInput!): Epic!
-  updateEpic(updateEpicInput: UpdateEpicInput!): Epic!
-  removeEpic(id: Int!): Epic!
-  createTest(createTestInput: CreateTestInput!): Test!
-  updateTest(updateTestInput: UpdateTestInput!): Test!
-  removeTest(id: Int!): Test!
 }
 
 input CreateProjectInput {
-  projectname: String!
+  projectName: String!
   status: projectStatus!
   description: String!
-  startdate: DateTime
-  duetdate: DateTime
-  completedate: DateTime
+  startDate: DateTime
+  dueDate: DateTime
+  completeDate: DateTime
   members: [String!]!
 }
 
 input UpdateProjectInput {
-  projectname: String
+  projectName: String
   status: projectStatus
   description: String
-  startdate: DateTime
-  duetdate: DateTime
-  completedate: DateTime
+  startDate: DateTime
+  dueDate: DateTime
+  completeDate: DateTime
   members: [String!]
   id: Int!
 }
@@ -175,8 +147,8 @@ input UpdateProjectUserRole {
 input CreateUserInput {
   email: String!
   password: String!
-  firstname: String!
-  lastname: String!
+  firstName: String!
+  lastName: String!
   job: String!
   departmant: String!
   organization: String!
@@ -185,8 +157,8 @@ input CreateUserInput {
 input UpdateUserInput {
   email: String
   password: String
-  firstname: String
-  lastname: String
+  firstName: String
+  lastName: String
   job: String
   departmant: String
   organization: String
@@ -194,24 +166,24 @@ input UpdateUserInput {
 }
 
 input CreateTaskInput {
-  projectid: Int!
-  userid: [Int!]!
-  taskname: String!
+  projectId: Int!
+  userId: [Int!]!
+  taskName: String!
   status: Status!
-  startdate: DateTime
-  duetdate: DateTime
-  completedate: DateTime
+  startDate: DateTime
+  dueDate: DateTime
+  completeDate: DateTime
   description: String
 }
 
 input UpdateTaskInput {
-  projectid: Int
-  userid: [Int!]
-  taskname: String
+  projectId: Int
+  userId: [Int!]
+  taskName: String
   status: Status
-  startdate: DateTime
-  duetdate: DateTime
-  completedate: DateTime
+  startDate: DateTime
+  dueDate: DateTime
+  completeDate: DateTime
   description: String
   id: Int!
 }
@@ -224,39 +196,5 @@ input CreateAssignInput {
 input UpdateAssignInput {
   userId: Int
   taskId: Int
-  id: Int!
-}
-
-input CreateEpicInput {
-  epicname: String!
-  taskid: Int!
-  startdate: DateTime
-  duetdate: DateTime
-  completedate: DateTime
-}
-
-input UpdateEpicInput {
-  epicname: String
-  taskid: Int
-  startdate: DateTime
-  duetdate: DateTime
-  completedate: DateTime
-  id: Int!
-}
-
-input CreateTestInput {
-  projectname: String!
-  description: String!
-  startdate: DateTime
-  duetdate: DateTime
-  member: String!
-}
-
-input UpdateTestInput {
-  projectname: String
-  description: String
-  startdate: DateTime
-  duetdate: DateTime
-  member: String
   id: Int!
 }

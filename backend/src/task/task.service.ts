@@ -27,26 +27,26 @@ export class TaskService {
   ) {}
   async create(createTaskInput: CreateTaskInput): Promise<Task> {
     let task = await this.taskRepository.findOne({
-      taskname: createTaskInput.taskname,
+      taskName: createTaskInput.taskName,
     });
     if (task) {
       throw new ForbiddenError('Task already existed.');
     }
 
-    const { userid, ...toCreateTask } = createTaskInput;
+    const { userId, ...toCreateTask } = createTaskInput;
 
     const newTask = this.taskRepository.create(toCreateTask);
     const savedTask = await this.taskRepository.save(newTask);
     task = await this.taskRepository.findOne({
-      where: { taskid: savedTask.taskid },
+      where: { taskid: savedTask.taskId },
       relations: ['assign','project'],
     });
-    const project = await this.projectRepository.findOne(createTaskInput.projectid)
+    const project = await this.projectRepository.findOne(createTaskInput.projectId)
     project.task.push(task);
 
-    userid.map(async (user) => {
+    userId.map(async (user) => {
       const userInProject = await this.projectUserRoleRepository.findOne({
-        where: { project: createTaskInput.projectid, user: user },
+        where: { project: createTaskInput.projectId, user: user },
         relations: ['project', 'user'],
       });
       if (!userInProject) {
@@ -68,7 +68,6 @@ export class TaskService {
       await this.taskRepository.save(task);
       await this.userRepository.save(userInTask);
     });
-
     return savedTask;
   }
 
@@ -78,7 +77,7 @@ export class TaskService {
 
   async findOne(id: number): Promise<Task> {
     return await this.taskRepository.findOneOrFail({
-      where: { taskid: id },
+      where: { taskId: id },
     });
   }
 

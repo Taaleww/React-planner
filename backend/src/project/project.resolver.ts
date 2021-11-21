@@ -1,9 +1,10 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, GqlExecutionContext } from '@nestjs/graphql';
 import { ProjectService } from './project.service';
 import { Project } from './entities/project.entity';
 import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
+import { createParamDecorator, ExecutionContext, Get, UseGuards } from '@nestjs/common';
 
 @Resolver(() => Project)
 export class ProjectResolver {
@@ -41,3 +42,9 @@ export class ProjectResolver {
     return this.projectService.remove(id);
   }
 }
+export const CurrentUser = createParamDecorator(
+  (data: unknown, context: ExecutionContext) => {
+    const ctx = GqlExecutionContext.create(context);
+    return ctx.getContext().req.user;
+  },
+);

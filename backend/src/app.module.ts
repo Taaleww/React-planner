@@ -5,14 +5,13 @@ import { ProjectModule } from './project/project.module';
 import { UserModule } from './user/user.module';
 import { TaskModule } from './task/task.module';
 import { AssignModule } from './assign/assign.module';
-import { EpicModule } from './epic/epic.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import graphql_config from './config/graphql.config';
 import typeorm_config from './config/orm.config';
 import { AuthModule } from './auth/auth.module';
-import { TestModule } from './test/test.module';
 import { ProjectUserRoleModule } from './projectUserRole/projectUserRole.module';
+
 
 @Module({
   imports: [
@@ -23,9 +22,8 @@ import { ProjectUserRoleModule } from './projectUserRole/projectUserRole.module'
     UserModule,
     TaskModule,
     AssignModule,
-    EpicModule,
     AuthModule,
-    TestModule,
+
 
   ],
   controllers: [AppController],

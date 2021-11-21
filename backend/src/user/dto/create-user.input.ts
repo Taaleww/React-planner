@@ -12,11 +12,11 @@ export class CreateUserInput {
 
   @IsAlpha()
   @Field()
-  firstname: string;
+  firstName: string;
 
   @IsAlpha()
   @Field()
-  lastname: string;
+  lastName: string;
 
   @Field()
   job: string;

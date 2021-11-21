@@ -5,28 +5,28 @@ import { Status } from '../entities/task.entity';
 @InputType()
 export class CreateTaskInput {
   @Field(() => Int)
-  projectid:number;
+  projectId:number;
 
   @Field(() => [Int])
-  userid: number[];
+  userId: number[];
 
   @Field()
-  taskname: string;
+  taskName: string;
 
   @Field(() => Status)
   status: Status;
   
   // @IsDate(}
   @Field({nullable: true})
-  startdate?: Date;
+  startDate?: Date;
 
   // @IsDate()
   @Field({nullable: true})
-  duetdate?: Date;
+  dueDate?: Date;
 
   // @IsDate()
   @Field({nullable: true})
-  completedate?: Date;
+  completeDate?: Date;
 
   @Field({nullable: true})
   description?: string;
