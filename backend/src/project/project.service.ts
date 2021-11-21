@@ -88,11 +88,7 @@ export class ProjectService {
 
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
-<<<<<<< HEAD
-      where: { projectid: id },
-=======
       where: { taskId: id },
->>>>>>> 2d982442e49fcfcb71292a15100785327f22b759
     });
   }
 
