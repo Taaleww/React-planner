@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UserInputError } from 'apollo-server-errors';
 // import { ForbiddenError } from 'apollo-server-errors';
 
 @Injectable()
@@ -32,7 +33,7 @@ export class AuthService {
     }
 
     async login(user: any){
-        const payload = { name: user.name, sub: user.email};
+        const payload = { name: user.name, sub: user.email , id: user.userId};
 
         return{
             access_token: this.jwtService.sign(payload)

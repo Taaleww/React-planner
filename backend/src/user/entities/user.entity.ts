@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Assign } from 'src/assign/entities/assign.entity';
+import { Project } from 'src/project/entities/project.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import {
   Column,
@@ -13,13 +14,9 @@ import {
 @Entity()
 @ObjectType()
 export class User {
-  // TODO change to uuid in future
-  // @PrimaryGeneratedColumn('uuid')
-  // @Field()
-  // id: string;
   @PrimaryGeneratedColumn()
   @Field(() => Int)
-  userid: number;
+  userId: number;
 
   @OneToMany(() => ProjectUserRole, (projectUserRole) => projectUserRole.user, { eager: true })
   @Field(() => [ProjectUserRole])
@@ -39,11 +36,11 @@ export class User {
 
   @Column()
   @Field()
-  firstname: string;
+  firstName: string;
 
   @Column()
   @Field()
-  lastname: string;
+  lastName: string;
 
   @Column()
   @Field()

@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { AuthGuard } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ForbiddenError } from 'apollo-server-errors';
 import {
@@ -26,43 +28,29 @@ export class ProjectService {
     createProjectInput: CreateProjectInput,
   ): Promise<ProjectUserRole[]> {
     const { members, ...toCreateProject } = createProjectInput;
-
-    // let project = await this.projectRepository.findOne({
-    //   projectname: toCreateProject.projectname,
-    // });
-
     const newProject = this.projectRepository.create(toCreateProject);
 
     await this.projectRepository.save(newProject);
 
-    // const member = members.map((email) =>
-    //   this.userRepository.findOne({
-    //     select: ['userid'],
-    //     where: {
-    //       email: email,
-    //     },
-    //   }),
-    // );
-
     const project = await this.projectRepository.findOne({
       where: {
-        projectname: toCreateProject.projectname,
+        projectName: toCreateProject.projectName,
       },
       relations: ['projectUserRole'],
     });
 
-    members.map(async (userid) => {
+    members.map(async (userId) => {
       const user = await this.userRepository.findOne({
-        where: { userid: userid },
+        where: { userId: userId },
         relations: ['projectUserRole'],
       });
-      if (!userid) {
+      if (!userId) {
         throw new ForbiddenError('Not have this user');
       }
 
       const ProjectUserRoleInput = {
-        projectid: project.projectid,
-        userid: user.userid,
+        projectId: project.projectId,
+        userId: user.userId,
         role: Role.EMPLOYEE,
       };
 
@@ -77,7 +65,7 @@ export class ProjectService {
       await this.userRepository.save(user);
     });
 
-    return await this.projectUserRoleRepository.find({
+      return await this.projectUserRoleRepository.find({
       where: { project: project },
       relations: ['user', 'project'],
     });
@@ -100,7 +88,11 @@ export class ProjectService {
 
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
+<<<<<<< HEAD
       where: { projectid: id },
+=======
+      where: { taskId: id },
+>>>>>>> 2d982442e49fcfcb71292a15100785327f22b759
     });
   }
 
@@ -117,5 +109,13 @@ export class ProjectService {
     const task = await this.projectRepository.findOne(id);
     await this.projectRepository.delete(id);
     return 'Delete Success';
+  }
+}
+
+@Injectable()
+export class GqlAuthGuard extends AuthGuard('jwt') {
+  getRequest(context: ExecutionContext) {
+    const ctx = GqlExecutionContext.create(context);
+    return ctx.getContext().req;
   }
 }

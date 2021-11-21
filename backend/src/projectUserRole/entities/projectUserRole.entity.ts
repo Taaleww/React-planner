@@ -26,7 +26,6 @@ export class ProjectUserRole{
   @Field(() => User)
   user: User;
 
-
   @ManyToOne(() => Project, (project) => project.projectUserRole)
   @Field(() => Project)
   project: Project;

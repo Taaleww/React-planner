@@ -25,7 +25,7 @@ registerEnumType(Status, {
 export class Task {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
-  taskid: number;
+  taskId: number;
 
   @ManyToOne(() => Project, (project) => project.task)
   @Field(() => Project)
@@ -33,11 +33,15 @@ export class Task {
 
   @Column()
   @Field()
-  taskname: string;
+  taskName: string;
 
   @OneToMany(() => Assign, (assign) => assign.task, { eager: true })
   @Field(() => [Assign])
   assign: Assign[];
+
+  // @ManyToOne(() => TaskStatus, (taskStatus) => taskStatus.task)
+  // @Field(() => TaskStatus)
+  // status: TaskStatus;
 
   @Column({
     type: 'enum',
@@ -45,19 +49,19 @@ export class Task {
     default: Status.TODO,
   })
   @Field(() => Status)
-  role: Status;
+  status: Status;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
-  startdate?: Date;
+  startDate?: Date;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
-  duedate?: Date;
+  dueDate?: Date;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
-  completedate?: Date;
+  completeDate?: Date;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
@@ -74,4 +78,5 @@ export class Task {
   @UpdateDateColumn()
   @Field()
   updated_at: Date;
+  taskStatus: any;
 }
