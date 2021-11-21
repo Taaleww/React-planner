@@ -39,7 +39,7 @@ export class ProjectService {
       relations: ['projectUserRole'],
     });
 
-    members.map(async (userId) => {
+    await Promise.all(members.map(async (userId) => {
       const user = await this.userRepository.findOne({
         where: { userId: userId },
         relations: ['projectUserRole'],
@@ -63,12 +63,15 @@ export class ProjectService {
       await this.projectUserRoleRepository.save(newProjectUserRole);
       await this.projectRepository.save(project);
       await this.userRepository.save(user);
-    });
+    }));
 
       return await this.projectUserRoleRepository.find({
       where: { project: project },
       relations: ['user', 'project'],
     });
+
+    // return project;
+
   }
 
   async findAll(): Promise<Project[]> {
