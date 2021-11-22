@@ -112,6 +112,7 @@ type Mutation {
   createAssign(createAssignInput: CreateAssignInput!): Assign!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
+  login(loginInput: loginInput!): String!
 }
 
 input CreateProjectInput {
@@ -197,4 +198,9 @@ input UpdateAssignInput {
   userId: Int
   taskId: Int
   id: Int!
+}
+
+input loginInput {
+  email: String!
+  password: String!
 }

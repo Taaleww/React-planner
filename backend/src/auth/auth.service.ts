@@ -3,6 +3,7 @@ import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserInputError } from 'apollo-server-errors';
+import loginInput from './dto/login.input';
 // import { ForbiddenError } from 'apollo-server-errors';
 
 @Injectable()
@@ -10,8 +11,8 @@ export class AuthService {
     constructor(private usersService: UserService, private jwtService: JwtService) {}
 
     //validate user
-    async validateUser(email: string, password: string): Promise<any>{
-        const user = await this.usersService.findByEmail(email); //find if recieved email is exists
+    async validateUser(loginInput: loginInput): Promise<any>{
+        const user = await this.usersService.findByEmail(loginInput.email); //find if recieved email is exists
 
         // const passwordMatch = await bcrypt.compare(password, user.password);//compare recieved password with password in DB
 
@@ -23,7 +24,7 @@ export class AuthService {
         //     throw new ForbiddenError('Incorrect pasword');
         // }
 
-        if(user && user.password === password){
+        if(user && user.password === loginInput.password){
             const {password, ...rest} = user;
                     return rest;
         }
@@ -32,11 +33,10 @@ export class AuthService {
         return null;
     }
 
-    async login(user: any){
-        const payload = { name: user.name, sub: user.email , id: user.userId};
+    async login(loginInput: loginInput){
 
-        return{
-            access_token: this.jwtService.sign(payload)
-        };
+        const payload = { name: loginInput.email};
+
+        return this.jwtService.sign(payload);
     }
 }
