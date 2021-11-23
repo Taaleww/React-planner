@@ -2,7 +2,7 @@ import Proptypes from "prop-types";
 import React, { useState } from "react";
 import { ReactComponent as CreateSvg } from "../../assets/icons/create.svg";
 
-function CreateTask({ setShowCreateProjectModalFromParent, addProject }) {
+function CreateTask({ setShowCreateProjectModalFromParent, addProject, projectId }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [dueDate, setDueDate] = useState("");

@@ -1,6 +1,5 @@
 import "./App.css";
 import ReactDOM from "react-dom";
-import { Router, Route, browserHistory } from "react-router";
 import MyProjects from "./page/myprojects";
 import Tasks from "./page/tasks";
 import Navbar from "./components/navbar";
@@ -10,26 +9,27 @@ import InfoTask from "./components/modal/infotask";
 import NotFound from "./page/notfound";
 import Profile from "./page/profile";
 import ManageAccount from "./page/manageaccount";
-import Home from "./page/home"
+import Home from "./page/home";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (
     <>
-    <Navbar />
-    <Router history={browserHistory}>
-        <div className="App">
-          <Route path="/" component={Home} />
-        </div>
-        <Route path="/myprojects" component={MyProjects} />
-        <Route path="/tasks" component={Tasks} />
-        <Route path="/login" component={Login} />
-        <Route path="/regis" component={Regis} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/manage_account" component={ManageAccount} />
-        <Route path="/infotask" component={InfoTask} />
-        <Route path="*" component={NotFound} />
-     </Router>
-   </>
+      <Navbar />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/myprojects" element={<MyProjects />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/regis" element={<Regis />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/manage_account" element={<ManageAccount />} />
+          <Route path="/infotask" element={<InfoTask />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

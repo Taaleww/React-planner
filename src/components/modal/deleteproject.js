@@ -12,7 +12,7 @@ function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, delet
                 <DeleteSvg />
                 <h2 className="text-xl font-bold py-4 ">Are you sure?</h2>
                 <p className="text-sm text-gray-500 px-8">
-                  Do you really want to delete <span>'{projectData.title}'</span> project? This process cannot
+                  Do you really want to delete <span  style={{ color:"red" }}>'{projectData.projectName}'</span> project? This process cannot
                   be undone
                 </p>
               </div>
@@ -25,7 +25,7 @@ function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, delet
                 </button>
                 <button
                   className="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600"
-                  onClick={() => deleteProject(projectData.id)}
+                  onClick={() => deleteProject(projectData.projectId)}
                 >
                   Delete
                 </button>

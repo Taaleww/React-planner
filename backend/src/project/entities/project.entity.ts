@@ -12,9 +12,9 @@ import {
 } from 'typeorm';
 
 export enum projectStatus {
-  TODO = 'todo',
   INPROGRESS = 'inprogress',
   DONE = 'done',
+  LATE = 'late'
 }
 
 registerEnumType(projectStatus, {
@@ -35,7 +35,7 @@ export class Project {
   @Column({
     type: 'enum',
     enum: projectStatus,
-    default: projectStatus.TODO,
+    default: projectStatus.INPROGRESS,
   })
   @Field(() => projectStatus)
   role: projectStatus;

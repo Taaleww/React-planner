@@ -13,7 +13,7 @@ export class ProjectResolver {
   @Mutation(() => [ProjectUserRole])
   createProject(
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
-  ) {
+  ) {    
     return this.projectService.create(createProjectInput);
   }
 

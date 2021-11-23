@@ -34,9 +34,9 @@ type Project {
 }
 
 enum projectStatus {
-  TODO
   INPROGRESS
   DONE
+  LATE
 }
 
 type Task {

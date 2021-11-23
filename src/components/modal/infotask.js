@@ -1,3 +1,32 @@
+function StatusTag({ status }) {
+  if (status === "INPROGRESS") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+        In Progress
+      </span>
+    );
+  } else if (status === "SUCCESS") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+        Success
+      </span>
+    );
+  }
+  else if (status === "LATE") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+        Late
+      </span>
+    );
+  } else {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+        Error
+      </span>
+    );
+  }
+}
+
 function InfoTask({setShowInfoTaskModalFromParent}) {
   return (
     <>
