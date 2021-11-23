@@ -11,16 +11,16 @@ const UseForm = (validate) => {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setSubmitting] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         setValues({
             ...values,
             [name]: value
         });
     };
 
-    const handleSubmit = (e) =>{
-        e.preventDefault();
+    const handleSubmit = (event) =>{
+        event.preventDefault();
         
         setErrors(validate(values));
         setSubmitting(true);

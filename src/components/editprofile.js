@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
-function EditProfile() {
+function EditProfile({ infoUser }) {
+    const [selectedImage, setSelectedImage] = useState(infoUser.img);
+    const imageChange = (e) => {
+        if(e.target.files && e.target.files.length > 0){
+            setSelectedImage(URL.createObjectURL(e.target.files[0]));
+        }
+    };
+
     return (
         <div className="w-8/12 p-12 bg-white rounded-2xl">
             <h1 className="text-2xl font-bold text-center pb-8">Edit Profile</h1>
             <form>
                 <div className="image overflow-hidden text-center">
                     <img className="h-auto w-3/12 mx-auto rounded-full"
-                        src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
+                        src = {selectedImage}
                         alt=""
                     />
                     <h1 className="text-center mt-3">
                         <label
-                            htmlFor="file-upload"
+                            htmlFor="img"
                             className="relative cursor-pointer font-semibold text-indigo-600 hover:text-indigo-400 focus-within:outline-none">
                             <span>Upload a file</span>
-                            <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                            <input id="img" name="img" accept="image/*" type="file" className="sr-only" onChange={imageChange} />
                         </label>
                     </h1>
                 </div>
@@ -25,7 +32,7 @@ function EditProfile() {
                         <div className="flex">
                             <input type="text" name="firstname" id="firstname"
                                 className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 " required
-                                placeholder="John"
+                                placeholder="John" value={infoUser.firstname}
                             />
                         </div>
                     </div>
@@ -34,7 +41,7 @@ function EditProfile() {
                         <div className="flex">
                             <input type="text" name="lastname" id="lastname"
                                 className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 " required
-                                placeholder="Smith"
+                                placeholder="Smith" value={infoUser.lastname}
                             />
                         </div>
                     </div>
@@ -45,7 +52,7 @@ function EditProfile() {
                         <div className="flex">
                             <input type="text" name="job" id="job"
                                 className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 "
-                                placeholder="Software Engineer"
+                                placeholder="Software Engineer" value={infoUser.job}
                             />
                         </div>
                     </div>
@@ -54,7 +61,7 @@ function EditProfile() {
                         <div className="flex">
                             <input type="text" name="department" id="department"
                                 className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 "
-                                placeholder="Your Department"
+                                placeholder="Your Department" value={infoUser.department}
                             />
                         </div>
                     </div>
@@ -65,7 +72,7 @@ function EditProfile() {
                         <div className="flex">
                             <input type="text" name="organization" id="organization"
                                 className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 "
-                                placeholder="Your Organization"
+                                placeholder="Your Organization" value={infoUser.organization}
                             />
                         </div>
                     </div>
@@ -74,7 +81,7 @@ function EditProfile() {
                         <div className="flex">
                             <input type="text" name="address" id="address"
                                 className="w-full bg-gray-200 text-gray-700 px-4 py-3 rounded-md block w-full appearance-none border-0 "
-                                placeholder="Your Address"
+                                placeholder="Your Address" value={infoUser.address}
                             />
                         </div>
                     </div>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-// import { Transition } from "@headlessui/react";
 import "./base.css";
 
 function Navbar() {

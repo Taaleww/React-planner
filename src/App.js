@@ -11,24 +11,26 @@ import NotFound from "./page/notfound";
 import Profile from "./page/profile";
 import ManageAccount from "./page/manageaccount";
 import Home from "./page/home"
+import Footer from "./components/footer";
 
 function App() {
   return (
     <>
-    <Navbar />
-    <Router history={browserHistory}>
-        <div className="App">
-          <Route path="/" component={Home} />
-        </div>
-        <Route path="/myprojects" component={MyProjects} />
-        <Route path="/tasks" component={Tasks} />
-        <Route path="/login" component={Login} />
-        <Route path="/regis" component={Regis} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/manage_account" component={ManageAccount} />
-        <Route path="/infotask" component={InfoTask} />
-        <Route path="*" component={NotFound} />
-     </Router>
+      <Navbar />
+      <Router history={browserHistory}>
+          <div className="App">
+            <Route path="/" component={Home} />
+          </div>
+          <Route path="/myprojects" component={MyProjects} />
+          <Route path="/tasks" component={Tasks} />
+          <Route path="/login" component={Login} />
+          <Route path="/regis" component={Regis} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/manage_account" component={ManageAccount} />
+          <Route path="/infotask" component={InfoTask} />
+          <Route path="*" component={NotFound} />
+      </Router>
+      <Footer />
    </>
   );
 }

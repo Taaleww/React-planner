@@ -1,6 +1,6 @@
 import React from "react";
 
-function ChangePassword() {
+function ChangePassword({ infoUser }) {
     return (
         <div className="w-8/12 p-20 bg-white rounded-2xl">
             <h1 className="text-2xl font-bold text-center pb-8">Change Password</h1>
