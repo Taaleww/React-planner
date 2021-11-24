@@ -13,7 +13,7 @@ export class ProjectResolver {
   @Mutation(() => [ProjectUserRole])
   createProject(
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
-  ) {
+  ) {    
     return this.projectService.create(createProjectInput);
   }
 
@@ -25,6 +25,12 @@ export class ProjectResolver {
   @Query(() => Project, { name: 'project' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.projectService.findOne(id);
+  }
+
+  // Created by Taaleww
+  @Query(() => [ProjectUserRole], { name: 'findProjectByUser' })
+  findByUser(@Args('id', { type: () => Int }) id: number) {
+    return this.projectService.findByUser(id);
   }
 
   @Mutation(() => Project)

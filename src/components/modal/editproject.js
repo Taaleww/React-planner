@@ -11,7 +11,7 @@ function EditProject({ setShowEditProjectModalFromParent }) {
             <div className="">
               <div className="text-center p-5 flex-auto justify-center">
                 <EditSvg />
-                <h2 className="text-xl font-bold py-4 ">Edit Project?</h2>
+                <h2 className="text-xl font-bold py-4 ">Edit Project</h2>
               </div>
               <div className="space-y-4">
                 <label

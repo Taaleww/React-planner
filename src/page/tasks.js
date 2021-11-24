@@ -1,125 +1,83 @@
-import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
-import AddMember from "../components/modal/addmember";
+import gql from "graphql-tag";
+import ApolloClient from "apollo-boost";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function Tasks() {
+  const client = new ApolloClient({
+    uri: "http://localhost:5000/graphql",
+  });
+
+  const location = useLocation();
+  const { projectId } = location.state;
+
+  const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
+
+  const [todoData, setTodoData] = React.useState([]);
+  const [inProgressData, setInProgressData] = React.useState([]);
+  const [successData, setSuccessData] = React.useState([]);
+
+  const [task, setTask] = useState([]);
+  const [projectName, setprojectName] = useState("");
+
   function changeStateModalFromChild(state) {
     setShowCreateTaskModal(state);
   }
 
-  function changeStateAddMemberModalFromChild(state) {
-    setShowAddMemberModal(state);
+  async function getMyTasks() {
+    setTask([]);
+    const { data } = await client.query({
+      query: gql`
+        query project {
+          project(id: ${projectId}) {
+            projectName
+            task {
+              taskId
+              taskName
+              status
+              startDate
+              dueDate
+              description
+              assign {
+                user {
+                  userId
+                  firstName
+                }
+              }
+            }
+          }
+        }
+      `,
+    });
+    console.log(data.project);
+    if (data) {
+      await setprojectName(data.project.projectName);
+      await setTask([...data.project.task, ...task]);
+      // await setTodoData(task.filter((task) => task.status === "TODO"));
+      // await setInProgressData(task.filter((task) => task.status === "INPROGRESS"));
+      // await setSuccessData(task.filter((task) => task.status === "DONE"));
+    }
   }
-  const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
-  const [showAddMemberModal, setShowAddMemberModal] = React.useState(false);
-  const [todoData, setTodoData] = React.useState([
-    {
-      title: "Backend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone.",
-      status: "To do",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Web design",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone2.",
-      status: "To do",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Frontend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone3.",
-      status: "To do",
-      members: [1, 2, 3],
-    },
-  ]);
-  const [inProgressData, setInProgressData] = React.useState([
-    {
-      title: "Backend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone.",
-      status: "In Progress",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Web design",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone2.",
-      status: "In Progress",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Frontend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone3.",
-      status: "In Progress",
-      members: [1, 2, 3],
-    },
-  ]);
-  const [successData, setSuccessData] = React.useState([
-    {
-      title: "Backend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone.",
-      status: "Success",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Web design",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone2.",
-      status: "Success",
-      members: [1, 2, 3],
-    },
-    {
-      title: "Frontend",
-      createDate: new Date(),
-      dueDate: new Date(),
-      description: "hello everyone3.",
-      status: "Success",
-      members: [1, 2, 3],
-    },
-  ]);
-  // const entities = {
-  //   columnOrder: [todoData.status, inProgressData.status,successData.status],
-  //   columns: {
-  //     [todoData.status]: Todo,
-  //     [inProgressData.status]: InProgress,
-  //     [successData.status]: Success
-  //   },
-  //   tasks: taskMap
-  // }
+  useEffect(() => {
+    getMyTasks();
+    // projectId()
+  }, []);
+
   return (
     <>
-    {/* title */}
-      <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono ">
+      {/* title */}
+      <div className="MyProjects font-bold md:container md:mx-auto  font-mono ">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1 flex flex-row ">
-            <h3 className="font-semibold text-base px-4 ">
+            <h3 className="font-semibold text-xl px-4 ">
               <Link to="/myprojects">My Projects</Link>
             </h3>
-            <h3 className="font-semibold text-base ">/ Tasks</h3>
+            <h3 className="font-semibold text-xl ">/ Tasks</h3>
           </div>
           <div className="relative w-full px-4 max-w-3 flex-grow flex-1 text-right">
-            <button
-              className="bg-gray-800  text-white hover:shadow-lg rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
-              type="button"
-              onClick={() => setShowAddMemberModal(true)}
-            >
-              + ADD MEMBERS
-            </button>
             <button
               className="bg-gray-800  text-white hover:shadow-lg rounded-full  text-xs font-bold uppercase px-4 py-2 rounded outline-none focus:outline-none mr-3 mb-1 ease-linear"
               type="button"
@@ -142,8 +100,9 @@ function Tasks() {
                           scope="col"
                           className="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
                         >
-                          To Do
+                          To do
                         </th>
+
                         <th
                           scope="col"
                           className="px-32 py-3 text-center text-xs font-medium text-white font-bold uppercase tracking-wider"
@@ -159,25 +118,29 @@ function Tasks() {
                       </tr>
                     </thead>
                     {/* content */}
-                    {/* To do */}
-                    <td>
-                      {todoData.map((data) => {
-                        return <TaskItem taskData={data} />;
-                      })}
-                    </td>
-
-                    {/* In progress */}
-                    <td>
-                      {inProgressData.map((data) => {
-                        return <TaskItem taskData={data} />;
-                      })}
-                    </td>
-                    {/* success */}
-                    <td>
-                      {successData.map((data) => {
-                        return <TaskItem taskData={data} />;
-                      })}
-                    </td>
+                    <tr>
+                      <td>
+                        {task
+                          .filter((task) => task.status === "TODO")
+                          .map((data) => {
+                            return <TaskItem taskData={data} />;
+                          })}
+                      </td>
+                      <td>
+                        {task
+                          .filter((task) => task.status === "INPROGRESS")
+                          .map((data) => {
+                            return <TaskItem taskData={data} />;
+                          })}
+                      </td>
+                      <td>
+                        {task
+                          .filter((task) => task.status === "DONE")
+                          .map((data) => {
+                            return <TaskItem taskData={data} />;
+                          })}
+                      </td>
+                    </tr>
                   </table>
                 </div>
               </div>
@@ -185,19 +148,12 @@ function Tasks() {
           </div>
         </div>
       </div>
-       {/* modal  */}
+      {/* modal  */}
       {showCreateTaskModal ? (
         <>
           <CreateTasks
             setShowCreateTaskModalFromParent={changeStateModalFromChild}
-          />
-        </>
-      ) : null}
-
-      {showAddMemberModal ? (
-        <>
-          <AddMember
-            setShowAddMemberModalFromParent={changeStateAddMemberModalFromChild}
+            projectId={projectId}
           />
         </>
       ) : null}

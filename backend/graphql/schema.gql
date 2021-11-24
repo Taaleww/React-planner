@@ -35,9 +35,9 @@ type Project {
 }
 
 enum projectStatus {
-  TODO
   INPROGRESS
   DONE
+  LATE
 }
 
 type Task {
@@ -97,6 +97,7 @@ type ProjectStatus {
 type Query {
   projects: [Project!]!
   project(id: Int!): Project!
+  findProjectByUser(id: Int!): [ProjectUserRole!]!
   projectUserRoles: [ProjectUserRole!]!
   projectUserRole(id: Int!): ProjectUserRole!
   member(id: Int!): ProjectUserRole!
@@ -133,6 +134,7 @@ type Mutation {
   createProjectStatus(createProjectStatusInput: CreateProjectStatusInput!): ProjectStatus!
   updateProjectStatus(updateProjectStatusInput: UpdateProjectStatusInput!): ProjectStatus!
   removeProjectStatus(id: Int!): ProjectStatus!
+  login(loginInput: loginInput!): String!
 }
 
 input CreateProjectInput {
@@ -240,4 +242,7 @@ input UpdateProjectStatusInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+input loginInput {
+  email: String!
+  password: String!
 }

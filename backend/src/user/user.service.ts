@@ -37,12 +37,12 @@ export class UserService {
   }
   
   async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.find
+    const user = await this.userRepository.findOne
     ({email: email});
     if(!user){
       throw new ForbiddenError('User not found.');
     }
-    return ;
+    return user;
   }
 
 

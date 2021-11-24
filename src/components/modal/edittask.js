@@ -11,7 +11,7 @@ function EditTask({ setShowEditTaskModalFromParent }) {
             <div className="">
               <div className="text-center p-5 flex-auto justify-center">
                 <EditSvg/>
-                <h2 className="text-xl font-bold py-4 ">Edit Task?</h2>
+                <h2 className="text-xl font-bold py-4 ">Edit Task</h2>
               </div>
               <div className="space-y-4">
                 <label

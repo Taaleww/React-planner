@@ -29,8 +29,12 @@ export class ProjectService {
   ): Promise<ProjectUserRole[]> {
     const { members, ...toCreateProject } = createProjectInput;
     const newProject = this.projectRepository.create(toCreateProject);
+<<<<<<< HEAD
 
     console.log(newProject);
+=======
+    
+>>>>>>> bb8192b8aea2f3fbebb42c78b8c1c2144324291a
     await this.projectRepository.save(newProject);
 
 
@@ -49,7 +53,7 @@ export class ProjectService {
       if (!userId) {
         throw new ForbiddenError('Not have this user');
       }
-
+      
       const ProjectUserRoleInput = {
         projectId: project.projectId,
         userId: user.userId,
@@ -87,12 +91,13 @@ export class ProjectService {
       where: { user: id },
       relations: ['project', 'user'],
     });
+    
     return project;
   }
 
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
-      where: { taskId: id },
+      where: { projectId: id },
     });
   }
 

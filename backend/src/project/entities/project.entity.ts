@@ -13,9 +13,9 @@ import {
 } from 'typeorm';
 
 export enum projectStatus {
-  TODO = 'todo',
   INPROGRESS = 'inprogress',
   DONE = 'done',
+  LATE = 'late'
 }
 
 registerEnumType(projectStatus, {
@@ -33,6 +33,7 @@ export class Project {
   @Field()
   projectName: string;
 
+<<<<<<< HEAD
   @Column()
   @Field(() => Int)
   ownerid:number;
@@ -40,6 +41,15 @@ export class Project {
   @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
   @Field(() => [ProjectStatus])
   projectStatusId: ProjectStatus[];
+=======
+  @Column({
+    type: 'enum',
+    enum: projectStatus,
+    default: projectStatus.INPROGRESS,
+  })
+  @Field(() => projectStatus)
+  role: projectStatus;
+>>>>>>> bb8192b8aea2f3fbebb42c78b8c1c2144324291a
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])

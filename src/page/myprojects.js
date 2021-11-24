@@ -1,43 +1,122 @@
 import "./myprojects.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ApolloClient from "apollo-boost";
+// import gql from "graphql-tag";
+// import {graphql} from 'react-apollo';
+// import { useQuery, useMutation } from "@apollo/client";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
-
+/// TRY ghaphql
+import gql from "graphql-tag";
 
 function MyProjects() {
+  const [myProjects, setData] = useState([]);
+
   function changeStateCreateModalFromChild(state) {
     setShowCreateProjectModal(state);
   }
-  const [myProjects, setData] = useState([
-    {
-      id: 0,
-      title: "Test data",
-      createDate: "2021-11-06",
-      dueDate: "2021-11-06",
-      description: "this is test description",
-      status: "Success",
-      members: ['one@mail.com','two@mail.com'],
-    }
-  ]);
 
-  function addProject(title,createDate,dueDate,description,members){
-    const status = "In Progress";
-    const id = myProjects.length;
-    const newProject={
-      id,
-      title,
-      createDate: new Date(createDate),
+  //apollo client setup
+  const client = new ApolloClient({
+    uri: "http://localhost:5000/graphql",
+  });
+
+  function deleteProject(target) {
+    // const { data } = await client.mutate({
+    //   mutation: gql`
+    //     mutation removeProject($id: Int!) {
+    //       removeProject(id: $id) {
+    //         projectId
+    //       }
+    //     }
+    //   `,
+    //   variables: { id: target },
+    // });
+
+    // if (condition) {
+      
+    // }
+
+    getMyProjects();
+  }
+  const userId = 1;
+  async function getMyProjects() {
+    setData([]);
+    const { data } = await client.query({
+      query: gql`
+        query findProjectByUser($id: Int!) {
+          findProjectByUser(id: $id) {
+            project {
+              projectId
+              projectName
+              role
+              description
+              startDate
+              dueDate
+              completeDate
+              task {
+                taskName
+              }
+            }
+            user {
+              firstName
+            }
+          }
+        }
+      `,
+      variables: { id: userId },
+    });
+    if (data.findProjectByUser.length !== 0) {
+      setData([...data.findProjectByUser]);
+    }
+  }
+
+  async function addProject(
+    projectName,
+    startDate,
+    dueDate,
+    description,
+    members
+  ) {
+    const status = "INPROGRESS";
+    const newProject = {
+      projectName,
+      startDate: new Date(startDate),
       dueDate: new Date(dueDate),
       description,
       status,
-      members
+      members,
     };
-    setData([newProject,...myProjects]);
-    setShowCreateProjectModal(false)
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation createProject($createProjectInput: CreateProjectInput!) {
+          createProject(createProjectInput: $createProjectInput) {
+            project {
+              projectId
+              projectName
+              role
+              description
+              startDate
+              dueDate
+            }
+          }
+        }
+      `,
+      variables: { createProjectInput: newProject },
+    });
+    console.log("created data: ", data.createProject[0].project);
+    getMyProjects();
+    // setData([data.createProject[0].project, ...myProjects]);
+    setShowCreateProjectModal(false);
   }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
     React.useState(false);
+
+  useEffect(() => {
+    getMyProjects();
+  }, []);
+
   return (
     <>
       <div className="MyProjects font-bold md:container md:mx-auto bg-white font-mono  ">
@@ -104,9 +183,28 @@ function MyProjects() {
                       </th>
                     </tr>
                   </thead>
-                  {myProjects.map((data) => {
-                    return <ProjectItem projectData={data} key={data.id}/>;
-                  })}
+                  {myProjects.length === 0 ? (
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            No Project
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  ) : (
+                    myProjects.map((data, index) => {
+                      return (
+                        <ProjectItem
+                          key={index}
+                          projectData={data.project}
+                          projectMember={data.user}
+                          deleteProject={deleteProject}
+                        />
+                      );
+                    })
+                  )}
                 </table>
               </div>
             </div>
@@ -121,7 +219,6 @@ function MyProjects() {
           addProject={addProject}
         />
       ) : null}
-
     </>
   );
 }
