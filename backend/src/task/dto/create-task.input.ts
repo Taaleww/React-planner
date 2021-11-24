@@ -1,6 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsDate } from 'class-validator';
-import { Status } from '../entities/task.entity';
+import { TaskStatus } from 'src/task-status/entities/task-status.entity';
+
 
 @InputType()
 export class CreateTaskInput {
@@ -10,25 +10,25 @@ export class CreateTaskInput {
   @Field(() => [Int])
   userId: number[];
 
+  @Field(() => TaskStatus)
+  taskStatusId: TaskStatus;
+
   @Field()
   taskName: string;
-
-  @Field(() => Status)
-  status: Status;
   
   // @IsDate(}
-  @Field({nullable: true})
+  @Field()
   startDate?: Date;
 
   // @IsDate()
-  @Field({nullable: true})
+  @Field()
   dueDate?: Date;
 
   // @IsDate()
   @Field({nullable: true})
   completeDate?: Date;
 
-  @Field({nullable: true})
+  @Field()
   description?: string;
 
   

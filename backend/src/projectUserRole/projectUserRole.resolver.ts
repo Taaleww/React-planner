@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { query } from 'express';
 import { CreateProjectUserRoleInput } from './dto/create-projectUserRolet.input';
 import { UpdateProjectUserRole } from './dto/update-projectUserRolet.input';
 import { ProjectUserRole } from './entities/projectUserRole.entity';
@@ -37,5 +38,10 @@ export class projectUserRoleResvoler {
   @Mutation(() => ProjectUserRole)
   removeproject_user_role(@Args('id', { type: () => Int }) id: number) {
     return this.projectUserRoleService.remove(id);
+  }
+
+  @Query(() => ProjectUserRole, { name: 'member' })
+  findMember(@Args('id', { type: () => Int }) id: number) {
+    return this.projectUserRoleService.findMember(id);
   }
 }

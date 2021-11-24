@@ -10,6 +10,7 @@ export class ProjectUserRoleService {
   constructor(
     @InjectRepository(ProjectUserRole)
     private projectUserRoleRepository: Repository<ProjectUserRole>,
+    
   ) {}
   async create(
     createProjectUserRole: CreateProjectUserRoleInput,
@@ -29,6 +30,13 @@ export class ProjectUserRoleService {
   async findOne(id: number): Promise<ProjectUserRole> {
     return await this.projectUserRoleRepository.findOneOrFail({
       where: { projectUserRoleid: id },
+    });
+  }
+
+  async findMember(id: number): Promise<ProjectUserRole[]>{
+    return await this.projectUserRoleRepository.find({
+      where: { projectID: id},
+      relations:['user']
     });
   }
 

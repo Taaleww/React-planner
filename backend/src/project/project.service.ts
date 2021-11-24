@@ -30,7 +30,9 @@ export class ProjectService {
     const { members, ...toCreateProject } = createProjectInput;
     const newProject = this.projectRepository.create(toCreateProject);
 
+    console.log(newProject);
     await this.projectRepository.save(newProject);
+
 
     const project = await this.projectRepository.findOne({
       where: {

@@ -9,16 +9,19 @@ export class CreateProjectInput {
   @Field(() => projectStatus)
   status: projectStatus;
 
+  @Field(() => Int)
+  ownerid: number;
+
   @Field()
   description?: string;
 
   // @IsDate(}
-  @Field({ nullable: true })
-  startDate?: Date;
+  @Field()
+  startDate: Date;
 
   // @IsDate()
-  @Field({ nullable: true })
-  dueDate?: Date;
+  @Field()
+  dueDate: Date;
 
   // @IsDate()
   @Field({ nullable: true })

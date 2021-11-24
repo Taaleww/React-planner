@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -32,13 +33,13 @@ export class Project {
   @Field()
   projectName: string;
 
-  @Column({
-    type: 'enum',
-    enum: projectStatus,
-    default: projectStatus.TODO,
-  })
-  @Field(() => projectStatus)
-  role: projectStatus;
+  @Column()
+  @Field(() => Int)
+  ownerid:number;
+
+  @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
+  @Field(() => [ProjectStatus])
+  projectStatusId: ProjectStatus[];
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])
@@ -56,13 +57,13 @@ export class Project {
   @Field()
   description: string;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
-  startDate?: Date;
+  @Column({ type: 'date'})
+  @Field()
+  startDate: Date;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
-  dueDate?: Date;
+  @Column({ type: 'date'})
+  @Field()
+  dueDate: Date;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
