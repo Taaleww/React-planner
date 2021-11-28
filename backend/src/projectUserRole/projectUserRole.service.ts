@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ForbiddenError } from 'apollo-server-express';
+import { Project } from 'src/project/entities/project.entity';
+import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateProjectUserRoleInput } from './dto/create-projectUserRolet.input';
 import { UpdateProjectUserRole } from './dto/update-projectUserRolet.input';
@@ -10,15 +13,35 @@ export class ProjectUserRoleService {
   constructor(
     @InjectRepository(ProjectUserRole)
     private projectUserRoleRepository: Repository<ProjectUserRole>,
-    
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Project)
+    private projectRepository: Repository<Project>,
   ) {}
   async create(
     createProjectUserRole: CreateProjectUserRoleInput,
   ): Promise<ProjectUserRole> {
-    const newProject = this.projectUserRoleRepository.create(
-      createProjectUserRole,
-    );
-    return await this.projectUserRoleRepository.save(newProject);
+    const user = await this.userRepository.findOne({
+      userId: createProjectUserRole.user,
+    });
+
+    if (!user) {
+      throw new ForbiddenError('Do not have this user.');
+    }
+
+    const project = await this.projectRepository.findOne({
+      projectId: createProjectUserRole.project,
+    });
+
+    if (!project) {
+      throw new ForbiddenError('Do not have this project.');
+    }
+
+    const newMember = this.projectUserRoleRepository.create({
+      user: user,
+      project: project,
+    });
+    return await this.projectUserRoleRepository.save(newMember);
   }
 
   async findAll(): Promise<ProjectUserRole[]> {
@@ -33,11 +56,12 @@ export class ProjectUserRoleService {
     });
   }
 
-  async findMember(id: number): Promise<ProjectUserRole[]>{
-    return await this.projectUserRoleRepository.find({
-      where: { projectID: id},
-      relations:['user']
+  async findMember(id: number): Promise<ProjectUserRole[]> {
+    const member = await this.projectUserRoleRepository.find({
+      where: { project: id },
+      relations: ['user','project'],
     });
+    return member;
   }
 
   async update(

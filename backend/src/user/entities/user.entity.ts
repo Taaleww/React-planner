@@ -31,10 +31,10 @@ export class User {
   @Field()
   email: string;
 
-  @BeforeInsert()
-  emailToLowerCase(){
-    this.email = this.email.toLowerCase();
-  }
+  // @BeforeInsert()
+  // emailToLowerCase(){
+  //   this.email = this.email.toLowerCase();
+  // }
 
   @Column()
   @Field() //({select: false})

@@ -40,25 +40,25 @@ enum projectStatus {
   LATE
 }
 
+type TaskStatus {
+  taskStatusId: Int!
+  taskStatus: String!
+  task: Task!
+}
+
 type Task {
   taskId: Int!
+  taskStatusId: [TaskStatus!]!
   project: Project!
   taskName: String!
   assign: [Assign!]!
-  status: Status!
-  startDate: DateTime
-  dueDate: DateTime
-  completeDate: DateTime
-  description: String
-  reporter: String!
+  startDate: DateTime!
+  dueDate: DateTime!
+  completeDate: DateTime!
+  description: String!
+  reporter: Float!
   created_at: DateTime!
   updated_at: DateTime!
-}
-
-enum Status {
-  TODO
-  INPROGRESS
-  DONE
 }
 
 type Assign {
@@ -84,14 +84,9 @@ type User {
   updated_at: DateTime!
 }
 
-type TaskStatus {
-  taskStatusId: Int!
-  taskStatus: String!
-}
-
 type ProjectStatus {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  projectStatusId: Int!
+  projectStatus: String!
 }
 
 type Query {
@@ -100,15 +95,17 @@ type Query {
   findProjectByUser(id: Int!): [ProjectUserRole!]!
   projectUserRoles: [ProjectUserRole!]!
   projectUserRole(id: Int!): ProjectUserRole!
-  member(id: Int!): ProjectUserRole!
+  member(id: Int!): [ProjectUserRole!]!
   users: [User!]!
   user(id: Int!): User!
   email(email: String!): User!
   tasks: [Task!]!
   task(id: Int!): Task!
+  assigns: [Assign!]!
   assign(id: Int!): Assign!
   taskStatuses: [TaskStatus!]!
   taskStatus(id: Int!): TaskStatus!
+  projectStatuses: [ProjectStatus!]!
   projectStatus(id: Int!): ProjectStatus!
 }
 
@@ -125,16 +122,15 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: Int!): String!
-  createAssign(createAssignInput: CreateAssignInput!): Assign!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
+  login(loginInput: loginInput!): String!
   createTaskStatus(createTaskStatusInput: CreateTaskStatusInput!): TaskStatus!
   updateTaskStatus(updateTaskStatusInput: UpdateTaskStatusInput!): TaskStatus!
   removeTaskStatus(id: Int!): TaskStatus!
   createProjectStatus(createProjectStatusInput: CreateProjectStatusInput!): ProjectStatus!
   updateProjectStatus(updateProjectStatusInput: UpdateProjectStatusInput!): ProjectStatus!
   removeProjectStatus(id: Int!): ProjectStatus!
-  login(loginInput: loginInput!): String!
 }
 
 input CreateProjectInput {
@@ -142,8 +138,8 @@ input CreateProjectInput {
   status: projectStatus!
   ownerid: Int!
   description: String!
-  startDate: DateTime!
-  dueDate: DateTime!
+  startDate: String!
+  dueDate: String!
   completeDate: DateTime
   members: [String!]!
 }
@@ -153,18 +149,22 @@ input UpdateProjectInput {
   status: projectStatus
   ownerid: Int
   description: String
-  startDate: DateTime
-  dueDate: DateTime
+  startDate: String
+  dueDate: String
   completeDate: DateTime
   members: [String!]
   id: Int!
 }
 
 input CreateProjectUserRoleInput {
+  user: Int!
+  project: Int!
   role: Role!
 }
 
 input UpdateProjectUserRole {
+  user: Int
+  project: Int
   role: Role
   id: Int!
 }
@@ -194,18 +194,18 @@ input CreateTaskInput {
   projectId: Int!
   userId: [Int!]!
   taskName: String!
-  status: Status!
-  startDate: DateTime
-  dueDate: DateTime
+  reporter: Int!
+  startDate: DateTime!
+  dueDate: DateTime!
   completeDate: DateTime
-  description: String
+  description: String!
 }
 
 input UpdateTaskInput {
   projectId: Int
   userId: [Int!]
   taskName: String
-  status: Status
+  reporter: Int
   startDate: DateTime
   dueDate: DateTime
   completeDate: DateTime
@@ -213,15 +213,14 @@ input UpdateTaskInput {
   id: Int!
 }
 
-input CreateAssignInput {
-  userId: Int!
-  taskId: Int!
-}
-
 input UpdateAssignInput {
   userId: Int
-  taskId: Int
   id: Int!
+}
+
+input loginInput {
+  email: String!
+  password: String!
 }
 
 input CreateTaskStatusInput {
@@ -234,15 +233,10 @@ input UpdateTaskStatusInput {
 }
 
 input CreateProjectStatusInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  projectStatus: String!
 }
 
 input UpdateProjectStatusInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  projectStatus: String
   id: Int!
-input loginInput {
-  email: String!
-  password: String!
 }

@@ -1,10 +1,14 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
+import { Role } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { projectStatus} from '../entities/project.entity';
 
 @InputType()
 export class CreateProjectInput {
   @Field()
   projectName: string;
+
+  // @Field(() => Int)
+  // projectStatusId: number;
 
   @Field(() => projectStatus)
   status: projectStatus;

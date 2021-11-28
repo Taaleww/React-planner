@@ -10,11 +10,14 @@ export class CreateTaskInput {
   @Field(() => [Int])
   userId: number[];
 
-  @Field(() => TaskStatus)
-  taskStatusId: TaskStatus;
+  // @Field(() => Int)
+  // taskStatusId: number;
 
   @Field()
   taskName: string;
+
+  @Field(() => Int)
+  reporter: number;
   
   // @IsDate(}
   @Field()

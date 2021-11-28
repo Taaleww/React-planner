@@ -44,7 +44,7 @@ export class Task {
   dueDate?: Date;
 
   @Column({ type: 'date'})
-  @Field({ nullable: true })
+  @Field()
   completeDate?: Date;
 
   @Column()
@@ -53,7 +53,7 @@ export class Task {
 
   @Column()
   @Field()
-  reporter: string;
+  reporter: number;
 
   @CreateDateColumn()
   @Field()

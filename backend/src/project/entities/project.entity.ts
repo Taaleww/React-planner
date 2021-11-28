@@ -1,8 +1,6 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
-import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -33,15 +31,15 @@ export class Project {
   @Field()
   projectName: string;
 
-<<<<<<< HEAD
   @Column()
   @Field(() => Int)
   ownerid:number;
 
-  @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
-  @Field(() => [ProjectStatus])
-  projectStatusId: ProjectStatus[];
-=======
+  // @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
+  // @Field(() => [ProjectStatus])
+  // projectStatusId: ProjectStatus[];
+
+
   @Column({
     type: 'enum',
     enum: projectStatus,
@@ -49,7 +47,6 @@ export class Project {
   })
   @Field(() => projectStatus)
   role: projectStatus;
->>>>>>> bb8192b8aea2f3fbebb42c78b8c1c2144324291a
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])
@@ -67,11 +64,11 @@ export class Project {
   @Field()
   description: string;
 
-  @Column({ type: 'date'})
+  @Column()
   @Field()
   startDate: Date;
 
-  @Column({ type: 'date'})
+  @Column()
   @Field()
   dueDate: Date;
 

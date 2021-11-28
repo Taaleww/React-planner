@@ -29,12 +29,7 @@ export class ProjectService {
   ): Promise<ProjectUserRole[]> {
     const { members, ...toCreateProject } = createProjectInput;
     const newProject = this.projectRepository.create(toCreateProject);
-<<<<<<< HEAD
-
-    console.log(newProject);
-=======
     
->>>>>>> bb8192b8aea2f3fbebb42c78b8c1c2144324291a
     await this.projectRepository.save(newProject);
 
 
@@ -76,7 +71,7 @@ export class ProjectService {
       relations: ['user', 'project'],
     });
 
-    // return project;
+    // return newProject;
 
   }
 

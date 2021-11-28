@@ -40,7 +40,7 @@ export class projectUserRoleResvoler {
     return this.projectUserRoleService.remove(id);
   }
 
-  @Query(() => ProjectUserRole, { name: 'member' })
+  @Query(() => [ProjectUserRole], { name: 'member' })
   findMember(@Args('id', { type: () => Int }) id: number) {
     return this.projectUserRoleService.findMember(id);
   }

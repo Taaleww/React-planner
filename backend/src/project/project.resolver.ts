@@ -48,14 +48,8 @@ export class ProjectResolver {
     return this.projectService.remove(id);
   }
 
-  @Query(() => Project)
-  findByUser(@Args('id',{ type: () => Int}) id:number){
-    return this.projectService.findByUser(id);
-  }
+//   @Query(() => Project)
+//   findByUser(@Args('id',{ type: () => Int}) id:number){
+//     return this.projectService.findByUser(id);
+//   }
 }
-export const CurrentUser = createParamDecorator(
-  (data: unknown, context: ExecutionContext) => {
-    const ctx = GqlExecutionContext.create(context);
-    return ctx.getContext().req.user;
-  },
-);
