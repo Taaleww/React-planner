@@ -138,8 +138,8 @@ input CreateProjectInput {
   status: projectStatus!
   ownerid: Int!
   description: String!
-  startDate: String!
-  dueDate: String!
+  startDate: DateTime!
+  dueDate: DateTime!
   completeDate: DateTime
   members: [String!]!
 }
@@ -149,8 +149,8 @@ input UpdateProjectInput {
   status: projectStatus
   ownerid: Int
   description: String
-  startDate: String
-  dueDate: String
+  startDate: DateTime
+  dueDate: DateTime
   completeDate: DateTime
   members: [String!]
   id: Int!
