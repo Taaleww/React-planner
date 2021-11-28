@@ -12,6 +12,8 @@ import graphql_config from './config/graphql.config';
 import typeorm_config from './config/orm.config';
 import { AuthModule } from './auth/auth.module';
 import { ProjectUserRoleModule } from './projectUserRole/projectUserRole.module';
+import { TaskStatusModule } from './task-status/task-status.module';
+import { ProjectStatusModule } from './project-status/project-status.module';
 
 
 @Module({
@@ -24,8 +26,8 @@ import { ProjectUserRoleModule } from './projectUserRole/projectUserRole.module'
     TaskModule,
     AssignModule,
     AuthModule,
-
-
+    TaskStatusModule,
+    ProjectStatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],

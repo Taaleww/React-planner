@@ -38,13 +38,13 @@ export class TaskService {
     const newTask = this.taskRepository.create(toCreateTask);
     const savedTask = await this.taskRepository.save(newTask);
     task = await this.taskRepository.findOne({
-      where: { taskid: savedTask.taskId },
+      where: { taskId: savedTask.taskId },
       relations: ['assign','project'],
     });
     const project = await this.projectRepository.findOne(createTaskInput.projectId)
     project.task.push(task);
 
-    userId.map(async (user) => {
+    await Promise.all(userId.map(async (user) => {
       const userInProject = await this.projectUserRoleRepository.findOne({
         where: { project: createTaskInput.projectId, user: user },
         relations: ['project', 'user'],
@@ -67,7 +67,7 @@ export class TaskService {
       await this.assignRepository.save(newAssign);
       await this.taskRepository.save(task);
       await this.userRepository.save(userInTask);
-    });
+    }));
     return savedTask;
   }
 

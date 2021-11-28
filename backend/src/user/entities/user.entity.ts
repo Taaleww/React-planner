@@ -3,6 +3,7 @@ import { Assign } from 'src/assign/entities/assign.entity';
 import { Project } from 'src/project/entities/project.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -26,12 +27,17 @@ export class User {
   @Field(() => [Assign])
   assign: Assign[];
 
-  @Column()
+  @Column() //({unique: true})
   @Field()
   email: string;
 
+  // @BeforeInsert()
+  // emailToLowerCase(){
+  //   this.email = this.email.toLowerCase();
+  // }
+
   @Column()
-  @Field()
+  @Field() //({select: false})
   password: string;
 
   @Column()

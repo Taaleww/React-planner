@@ -32,6 +32,7 @@ export class ProjectService {
     
     await this.projectRepository.save(newProject);
 
+
     const project = await this.projectRepository.findOne({
       where: {
         projectName: toCreateProject.projectName,
@@ -70,7 +71,7 @@ export class ProjectService {
       relations: ['user', 'project'],
     });
 
-    // return project;
+    // return newProject;
 
   }
 

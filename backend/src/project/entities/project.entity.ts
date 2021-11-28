@@ -1,7 +1,6 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
-import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -32,6 +31,15 @@ export class Project {
   @Field()
   projectName: string;
 
+  @Column()
+  @Field(() => Int)
+  ownerid:number;
+
+  // @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
+  // @Field(() => [ProjectStatus])
+  // projectStatusId: ProjectStatus[];
+
+
   @Column({
     type: 'enum',
     enum: projectStatus,
@@ -56,13 +64,13 @@ export class Project {
   @Field()
   description: string;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
-  startDate?: Date;
+  @Column()
+  @Field()
+  startDate: Date;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
-  dueDate?: Date;
+  @Column()
+  @Field()
+  dueDate: Date;
 
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })

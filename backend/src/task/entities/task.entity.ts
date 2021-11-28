@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { Assign } from 'src/assign/entities/assign.entity';
 import { Project } from 'src/project/entities/project.entity';
+import { TaskStatus } from 'src/task-status/entities/task-status.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,21 +12,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum Status {
-  TODO = 'todo',
-  INPROGRESS = 'INPROGESS',
-  DONE = 'DONE',
-}
-
-registerEnumType(Status, {
-  name: 'Status',
-});
 @Entity()
 @ObjectType()
 export class Task {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   taskId: number;
+
+  @OneToMany(() => TaskStatus, (taskStatus) => taskStatus.task, { eager: true })
+  @Field(() => [TaskStatus])
+  taskStatusId: TaskStatus[];
 
   @ManyToOne(() => Project, (project) => project.task , {onDelete:"CASCADE"})
   @Field(() => Project)
@@ -39,37 +35,25 @@ export class Task {
   @Field(() => [Assign])
   assign: Assign[];
 
-  // @ManyToOne(() => TaskStatus, (taskStatus) => taskStatus.task)
-  // @Field(() => TaskStatus)
-  // status: TaskStatus;
-
-  @Column({
-    type: 'enum',
-    enum: Status,
-    default: Status.TODO,
-  })
-  @Field(() => Status)
-  status: Status;
-
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
+  @Column({ type: 'date'})
+  @Field()
   startDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
+  @Column({ type: 'date'})
+  @Field()
   dueDate?: Date;
 
-  @Column({ type: 'date', nullable: true })
-  @Field({ nullable: true })
+  @Column({ type: 'date'})
+  @Field()
   completeDate?: Date;
 
-  @Column({ nullable: true })
-  @Field({ nullable: true })
+  @Column()
+  @Field()
   description?: string;
 
   @Column()
   @Field()
-  reporter: string;
+  reporter: number;
 
   @CreateDateColumn()
   @Field()
@@ -78,5 +62,5 @@ export class Task {
   @UpdateDateColumn()
   @Field()
   updated_at: Date;
-  taskStatus: any;
+
 }
