@@ -7,10 +7,12 @@ import { ReactComponent as TodoSvg } from "../assets/icons/todo.svg";
 import { ReactComponent as InProgressSvg } from "../assets/icons/inprogress.svg";
 import { ReactComponent as DoneSvg } from "../assets/icons/done.svg";
 import { ReactComponent as DateSvg } from "../assets/icons/date.svg";
+import { ReactComponent as CompleteSvg } from "../assets/icons/complete.svg";
 import EditTask from "../components/modal/edittask";
 import DeleteTask from "../components/modal/deletetask";
 import InfoTask from "../components/modal/infotask";
-import AddMember from "../components/modal/addmember";
+import AddAssignee from "../components/modal/addassignee";
+import CompleteTask from "../components/modal/completetask";
 import "./base.css";
 
 function HeaderIcon({ status }) {
@@ -66,13 +68,17 @@ function TaskItem({ taskData }) {
   function changeStateInfoModalFromChild(state) {
     setShowInfoTaskModal(state);
   }
-  function changeStateAddMemberModalFromChild(state) {
-    setShowAddMemberModal(state);
+  function changeStateAddAssigneeModalFromChild(state) {
+    setShowAddAssigneeModal(state);
+  }
+  function changeStateCompleteModalTaskFromChild(state) {
+    setShowCompleteTaskModal(state);
   }
   const [showEditTaskModal, setShowEditTaskModal] = React.useState(false);
   const [showDeleteTaskModal, setShowDeleteTaskModal] = React.useState(false);
   const [showInfoTaskModal, setShowInfoTaskModal] = React.useState(false);
-  const [showAddMemberModal, setShowAddMemberModal] = React.useState(false);
+  const [showAddAssigneeModal, setShowAddAssigneeModal] = React.useState(false);
+  const [showCompleteTaskModal, setShowCompleteTaskModal] = React.useState(false);
 
   return (
     <>
@@ -124,7 +130,7 @@ function TaskItem({ taskData }) {
                     <AddmemberSvg
                       className="cursor-pointer"
                       onClick={() => {
-                        setShowAddMemberModal(true);
+                        setShowAddAssigneeModal(true);
                       }}
                     />
                   </div>
@@ -136,6 +142,14 @@ function TaskItem({ taskData }) {
                       }}
                     />
                   </div>
+                  <div className="w-4 mr-4 transform hover:text-green-500 hover:scale-110">
+                <CompleteSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowCompleteTaskModal(true);
+                  }}
+                />
+              </div>
                 </div>
               </td>
             </div>
@@ -151,11 +165,11 @@ function TaskItem({ taskData }) {
               setShowDeleteTaskModalFromParent={changeStateDeleteModalFromChild}
             />
           ) : null}
-          {showAddMemberModal ? (
+          {showAddAssigneeModal ? (
             <>
-              <AddMember
-                setShowAddMemberModalFromParent={
-                  changeStateAddMemberModalFromChild
+              <AddAssignee
+                setShowAddAssigneeModalFromParent={
+                  changeStateAddAssigneeModalFromChild
                 }
               />
             </>
@@ -166,6 +180,11 @@ function TaskItem({ taskData }) {
             />
           ) : null}
         </>
+      ) : null}
+      {showCompleteTaskModal ? (
+        <CompleteTask
+          setShowCompleteTaskModalFromParent={changeStateCompleteModalTaskFromChild}
+        />
       ) : null}
     </>
   );

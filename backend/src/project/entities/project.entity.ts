@@ -38,7 +38,7 @@ export class Project {
     default: projectStatus.INPROGRESS,
   })
   @Field(() => projectStatus)
-  role: projectStatus;
+  status: projectStatus;
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])

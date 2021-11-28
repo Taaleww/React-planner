@@ -65,7 +65,7 @@ function InfoProject({
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600  mr-48">Status</p>
                   <p>
-                    <StatusTag status={projectData.role} />
+                    <StatusTag status={projectData.status} />
                   </p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">

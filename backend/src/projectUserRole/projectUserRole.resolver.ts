@@ -14,6 +14,8 @@ export class projectUserRoleResvoler {
   createproject_user_role(
     @Args('createproject_user_roleInput') input: CreateProjectUserRoleInput,
   ) {
+    console.log("log 1 ", input);
+    
     return this.projectUserRoleService.create(input);
   }
 

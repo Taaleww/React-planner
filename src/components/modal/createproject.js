@@ -7,6 +7,7 @@ import ApolloClient from "apollo-client";
 import Select from "react-select";
 import { ReactComponent as CreateSvg } from "../../assets/icons/create.svg";
 
+
 import gql from "graphql-tag";
 
 //! Set to query data
@@ -140,9 +141,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
         <div className="absolute bg-black opacity-80 inset-0 z-0 "></div>
         <div className="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0 ">
           <div className="">
-            <div className="text-center p-5 flex-auto justify-center">
+            <div className="text-center p-5 flex-auto justify-center ">
               <CreateSvg />
-              <h2 className="text-xl font-bold py-4 ">Create Project</h2>
+              <h2 className="text-xl font-bold py-4  ">Create Project</h2>
               <div className="space-y-4">
                 <form>
                   <label className="block text-gray-700 text-sm font-normal mb-2 text-left ">

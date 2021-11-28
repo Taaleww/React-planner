@@ -22,11 +22,11 @@ export class ProjectUserRole{
   @Field(() => Int)
   projectUserRoleid: number;
 
-  @ManyToOne(() => User, (user) => user.projectUserRole)
+  @ManyToOne(() => User, (user) => user.projectUserRole, {onDelete:"CASCADE"})
   @Field(() => User)
-  user: User;
+  user: User; 
 
-  @ManyToOne(() => Project, (project) => project.projectUserRole)
+  @ManyToOne(() => Project, (project) => project.projectUserRole, {onDelete:"CASCADE"})
   @Field(() => Project)
   project: Project;
 

@@ -1,16 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import React, { useState } from "react";
 import { ReactComponent as ViewSvg } from "../assets/icons/view.svg";
 import { ReactComponent as TrashSvg } from "../assets/icons/trash.svg";
 import { ReactComponent as PenSvg } from "../assets/icons/pen.svg";
 import { ReactComponent as AddmemberSvg } from "../assets/icons/addmember.svg";
+import { ReactComponent as CompleteSvg } from "../assets/icons/complete.svg";
 import InfoProject from "../components/modal/infoproject";
 import EditProject from "../components/modal/editproject";
 import DeleteProject from "../components/modal/deleteproject";
 import AddMember from "../components/modal/addmember";
+import CompleteProject from "../components/modal/completeproject";
 import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import Tasks from "../page/tasks";
 
 function dateTranform(date) {
   if (!date) {
@@ -22,25 +25,22 @@ function dateTranform(date) {
 }
 
 function StatusTag({ data }) {
-  if (data.role === "INPROGRESS") {
+  if (data.status === "INPROGRESS") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         In Progress
       </span>
     );
-  } else if (data.role === "DONE") {
-    const completeDate = new Date(data.completeDate);
-    const dueDate = new Date(data.dueDate);
-    if (completeDate > dueDate) {
-      return (
-        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-          Late
-        </span>
-      );
-    }
+  } else if (data.status === "DONE") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         Success
+      </span>
+    );
+  } else if (data.status === "LATE") {
+    return (
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+        Late
       </span>
     );
   } else {
@@ -52,7 +52,12 @@ function StatusTag({ data }) {
   }
 }
 
-function ProjectItem({ projectData, projectMember, deleteProject }) {
+function ProjectItem({
+  projectData,
+  projectMember,
+  deleteProject,
+  editProject,
+}) {
   // const httpLink = createHttpLink({
   //   uri: "http://localhost:5000/graphql",
   // });
@@ -87,12 +92,17 @@ function ProjectItem({ projectData, projectMember, deleteProject }) {
   function changeStateAddMemberModalFromChild(state) {
     setShowAddMemberModal(state);
   }
+  function changeStateCompleteModalFromChild(state) {
+    setShowCompleteProjectModal(state);
+  }
 
   const [showInfoProjectModal, setShowInfoProjectModal] = React.useState(false);
   const [showEditProjectModal, setShowEditProjectModal] = React.useState(false);
   const [showDeleteProjectModal, setShowDeleteProjectModal] =
     React.useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = React.useState(false);
+  const [showCompleteProjectModal, setShowCompleteProjectModal] =
+    React.useState(false);
   return (
     <>
       <tbody className="bg-white divide-y divide-gray-200">
@@ -104,7 +114,13 @@ function ProjectItem({ projectData, projectMember, deleteProject }) {
           </td>
           <td className="px-6 py-4 whitespace-nowrap">
             <div className="text-sm text-gray-900">
-              <Link to="/tasks" state={{ projectId: projectData.projectId }}>
+            
+              <Link
+              to={{
+                pathname: `/project/${projectData.projectId}/tasks`,
+                state: { projectId: projectData.projectId }
+              }}
+              >
                 {projectData.projectName}
               </Link>
             </div>
@@ -119,10 +135,16 @@ function ProjectItem({ projectData, projectMember, deleteProject }) {
           </td>
           <td className="px-6 py-4 whitespace-nowrap ">
             <div className="text-sm text-gray-900 flex ">
-            {/* {projectMember.firstName} */}
-              <div className="{'h-7 w-5  bg-blue-300 text-center rounded-full text-white }">L</div>
-              <div className="{'h-7 w-5  bg-green-300 text-center rounded-full text-white }">D</div>
-              <div className="{'h-7 w-5  bg-red-300 text-center rounded-full text-white }">N</div>
+              {/* {projectMember.firstName} */}
+              <div className="{'h-7 w-5  bg-blue-300 text-center rounded-full text-white }">
+                L
+              </div>
+              <div className="{'h-7 w-5  bg-green-300 text-center rounded-full text-white }">
+                D
+              </div>
+              <div className="{'h-7 w-5  bg-red-300 text-center rounded-full text-white }">
+                N
+              </div>
               {/* {projectMember.map((user) => {
                 return <>
                   {user.firstName}
@@ -170,6 +192,14 @@ function ProjectItem({ projectData, projectMember, deleteProject }) {
                   }}
                 />
               </div>
+              <div className="w-4 mr-4 transform hover:text-green-500 hover:scale-110">
+                <CompleteSvg
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setShowCompleteProjectModal(true);
+                  }}
+                />
+              </div>
             </div>
           </td>
         </tr>
@@ -188,6 +218,8 @@ function ProjectItem({ projectData, projectMember, deleteProject }) {
       {showEditProjectModal ? (
         <EditProject
           setShowEditProjectModalFromParent={changeStateEditModalFromChild}
+          projectData={projectData}
+          editProject={editProject}
         />
       ) : null}
       {showAddMemberModal ? (
@@ -202,6 +234,15 @@ function ProjectItem({ projectData, projectMember, deleteProject }) {
           setShowDeleteProjectModalFromParent={changeStateDeleteModalFromChild}
           projectData={projectData}
           deleteProject={deleteProject}
+        />
+      ) : null}
+      {showCompleteProjectModal ? (
+        <CompleteProject
+          setShowCompleteProjectModalFromParent={
+            changeStateCompleteModalFromChild
+          }
+          projectData={projectData}
+          editProject={editProject}
         />
       ) : null}
     </>

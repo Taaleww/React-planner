@@ -1,6 +1,6 @@
 import { ReactComponent as MemberSvg } from "../../assets/icons/member.svg";
 
-function AddMember({ setShowAddMemberModalFromParent, projectId }) {
+function AddAssignee({ setShowAddAssigneeModalFromParent }) {
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -27,7 +27,7 @@ function AddMember({ setShowAddMemberModalFromParent, projectId }) {
               <div className="p-3  mt-2 text-center space-x-4 md:block">
                 <button
                   className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
-                  onClick={() => setShowAddMemberModalFromParent(false)}
+                  onClick={() => setShowAddAssigneeModalFromParent(false)}
                 >
                   Cancel
                 </button>
@@ -43,4 +43,4 @@ function AddMember({ setShowAddMemberModalFromParent, projectId }) {
   );
 }
 
-export default AddMember;
+export default AddAssignee;

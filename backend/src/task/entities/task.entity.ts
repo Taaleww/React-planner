@@ -27,7 +27,7 @@ export class Task {
   @Field(() => Int)
   taskId: number;
 
-  @ManyToOne(() => Project, (project) => project.task)
+  @ManyToOne(() => Project, (project) => project.task , {onDelete:"CASCADE"})
   @Field(() => Project)
   project: Project;
 

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
 import gql from "graphql-tag";
@@ -11,8 +11,10 @@ function Tasks() {
     uri: "http://localhost:5000/graphql",
   });
 
-  const location = useLocation();
-  const { projectId } = location.state;
+  const params = useParams()
+
+  // Check value of Object
+  let projectId = params?.projectId
 
   const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
 
@@ -21,13 +23,50 @@ function Tasks() {
   const [successData, setSuccessData] = React.useState([]);
 
   const [task, setTask] = useState([]);
-  const [projectName, setprojectName] = useState("");
+  const [projectName, setProjectName] = useState("");
 
   function changeStateModalFromChild(state) {
     setShowCreateTaskModal(state);
   }
 
+  async function addTask(
+    projectId,
+    taskName,
+    startDate,
+    dueDate,
+    description,
+    userId,
+    reporter
+  ) {
+    const status = "TODO";
+    const newTask = {
+      projectId: parseInt(projectId),
+      taskName,
+      startDate: new Date(startDate),
+      dueDate: new Date(dueDate),
+      description,
+      status,
+      userId,
+      reporter
+    };
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation createTask($createTaskInput: CreateTaskInput!) {
+          createTask(createTaskInput: $createTaskInput) {
+            taskId
+          }
+        }
+      `,
+      variables: { createTaskInput: newTask },
+    });
+    console.log("created data: ", data);
+    getMyTasks();
+    // setData([data.createProject[0].project, ...myProjects]);
+    setShowCreateTaskModal(false);
+  }
+
   async function getMyTasks() {
+    console.log("HERE", projectId);
     setTask([]);
     const { data } = await client.query({
       query: gql`
@@ -54,7 +93,7 @@ function Tasks() {
     });
     console.log(data.project);
     if (data) {
-      await setprojectName(data.project.projectName);
+      await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
       // await setTodoData(task.filter((task) => task.status === "TODO"));
       // await setInProgressData(task.filter((task) => task.status === "INPROGRESS"));
@@ -153,6 +192,7 @@ function Tasks() {
         <>
           <CreateTasks
             setShowCreateTaskModalFromParent={changeStateModalFromChild}
+            addTask={addTask}
             projectId={projectId}
           />
         </>

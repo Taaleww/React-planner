@@ -100,14 +100,18 @@ export class ProjectService {
     updateProjectInput: UpdateProjectInput,
   ): Promise<Project> {
     const project = await this.projectRepository.findOne(id);
+    console.log(updateProjectInput);
+    
     const update = Object.assign(project, updateProjectInput);
+  
+    console.log("update",update);
     return await this.projectRepository.save(update);
   }
 
-  async remove(id: number): Promise<string> {
+  async remove(id: number): Promise<number> {
     const task = await this.projectRepository.findOne(id);
-    await this.projectRepository.delete(id);
-    return 'Delete Success';
+    const deleted = await this.projectRepository.delete(id);
+    return deleted.affected;
   }
 }
 

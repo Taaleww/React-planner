@@ -21,22 +21,15 @@ function MyProjects() {
     uri: "http://localhost:5000/graphql",
   });
 
-  function deleteProject(target) {
-    // const { data } = await client.mutate({
-    //   mutation: gql`
-    //     mutation removeProject($id: Int!) {
-    //       removeProject(id: $id) {
-    //         projectId
-    //       }
-    //     }
-    //   `,
-    //   variables: { id: target },
-    // });
-
-    // if (condition) {
-      
-    // }
-
+  async function deleteProject(target) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation removeProject($id: Int!) {
+          removeProject(id: $id) 
+        }
+      `,
+      variables: { id: target },
+    });
     getMyProjects();
   }
   const userId = 1;
@@ -49,7 +42,7 @@ function MyProjects() {
             project {
               projectId
               projectName
-              role
+              status
               description
               startDate
               dueDate
@@ -68,6 +61,25 @@ function MyProjects() {
     });
     if (data.findProjectByUser.length !== 0) {
       setData([...data.findProjectByUser]);
+    }
+  }
+
+  async function editProject(newData) {
+
+    const { data } = await client.mutate({
+      mutation: gql`
+      mutation updateProject($updateProjectInput : UpdateProjectInput!){
+        updateProject(updateProjectInput : $updateProjectInput){
+          projectId
+          status
+        }
+      }
+      `,
+      variables: { updateProjectInput: newData },
+    });
+
+    if (data) {
+      getMyProjects();
     }
   }
 
@@ -94,7 +106,7 @@ function MyProjects() {
             project {
               projectId
               projectName
-              role
+              status
               description
               startDate
               dueDate
@@ -108,6 +120,10 @@ function MyProjects() {
     getMyProjects();
     // setData([data.createProject[0].project, ...myProjects]);
     setShowCreateProjectModal(false);
+  }
+
+  function setstatus(){
+
   }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
@@ -201,6 +217,7 @@ function MyProjects() {
                           projectData={data.project}
                           projectMember={data.user}
                           deleteProject={deleteProject}
+                          editProject={editProject}
                         />
                       );
                     })
