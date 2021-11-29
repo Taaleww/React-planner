@@ -20,28 +20,37 @@ export class ProjectUserRoleService {
   ) {}
   async create(
     createProjectUserRole: CreateProjectUserRoleInput,
-  ): Promise<ProjectUserRole> {
-    const user = await this.userRepository.findOne({
-      userId: createProjectUserRole.user,
-    });
-
-    if (!user) {
-      throw new ForbiddenError('Do not have this user.');
-    }
+  ): Promise<Project> {
+    const { userId, ...toCreate } = createProjectUserRole;
 
     const project = await this.projectRepository.findOne({
-      projectId: createProjectUserRole.project,
+      projectId: toCreate.project,
     });
 
     if (!project) {
       throw new ForbiddenError('Do not have this project.');
     }
 
-    const newMember = this.projectUserRoleRepository.create({
-      user: user,
-      project: project,
-    });
-    return await this.projectUserRoleRepository.save(newMember);
+    await Promise.all(
+      userId.map(async (user) => {
+        const member = await this.userRepository.findOne({
+          where: { userId: user },
+          relations: ['projectUserRole'],
+        });
+        if (!member) {
+          throw new ForbiddenError('Do not have this user.');
+        }
+
+        const newMember = this.projectUserRoleRepository.create({
+          user: member,
+          project: project,
+        });
+
+        await this.projectUserRoleRepository.save(newMember);
+      }),
+    );
+    
+    return project;
   }
 
   async findAll(): Promise<ProjectUserRole[]> {
@@ -59,7 +68,7 @@ export class ProjectUserRoleService {
   async findMember(id: number): Promise<ProjectUserRole[]> {
     const member = await this.projectUserRoleRepository.find({
       where: { project: id },
-      relations: ['user','project'],
+      relations: ['user', 'project'],
     });
     return member;
   }

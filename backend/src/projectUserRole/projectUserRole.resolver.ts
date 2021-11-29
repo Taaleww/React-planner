@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { query } from 'express';
+import { Project } from 'src/project/entities/project.entity';
 import { CreateProjectUserRoleInput } from './dto/create-projectUserRolet.input';
 import { UpdateProjectUserRole } from './dto/update-projectUserRolet.input';
 import { ProjectUserRole } from './entities/projectUserRole.entity';
@@ -11,9 +11,9 @@ export class projectUserRoleResvoler {
     private readonly projectUserRoleService: ProjectUserRoleService,
   ) {}
 
-  @Mutation(() => ProjectUserRole)
-  createproject_user_role(
-    @Args('createproject_user_roleInput') input: CreateProjectUserRoleInput,
+  @Mutation(() => Project)
+  addMember(
+    @Args('addMemberInput') input: CreateProjectUserRoleInput,
   ) {
     return this.projectUserRoleService.create(input);
   }

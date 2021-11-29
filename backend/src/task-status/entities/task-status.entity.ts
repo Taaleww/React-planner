@@ -13,7 +13,7 @@ export class TaskStatus {
   @Field()
   taskStatus: string;
 
-  @ManyToOne(() => Task, (task) => task.taskStatusId,)
-  @Field(() => Task)
-  task: Task;
+  // @ManyToOne(() => Task, (task) => task.taskStatusId,)
+  // @Field(() => Task)
+  // task: Task;
 }
