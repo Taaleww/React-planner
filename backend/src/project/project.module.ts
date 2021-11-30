@@ -6,9 +6,10 @@ import { Project } from './entities/project.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Task } from 'src/task/entities/task.entity';
+import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Project, ProjectUserRole, User,Task])],
+  imports: [TypeOrmModule.forFeature([Project, ProjectUserRole, User,Task,ProjectStatus])],
   providers: [ProjectResolver, ProjectService],
   exports: [ProjectService],
 })

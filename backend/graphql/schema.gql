@@ -43,13 +43,12 @@ enum projectStatus {
 type TaskStatus {
   taskStatusId: Int!
   taskStatus: String!
-  task: Task!
 }
 
 type Task {
   taskId: Int!
-  taskStatusId: [TaskStatus!]!
   project: Project!
+  status: taskStatus!
   taskName: String!
   assign: [Assign!]!
   startDate: DateTime!
@@ -57,8 +56,12 @@ type Task {
   completeDate: DateTime!
   description: String!
   reporter: Float!
-  created_at: DateTime!
-  updated_at: DateTime!
+}
+
+enum taskStatus {
+  TODO
+  INPROGRESS
+  DONE
 }
 
 type Assign {
@@ -113,7 +116,7 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!): [ProjectUserRole!]!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: Int!): Int!
-  createproject_user_role(createproject_user_roleInput: CreateProjectUserRoleInput!): ProjectUserRole!
+  addMember(addMemberInput: CreateProjectUserRoleInput!): Project!
   updateproject_user_role(updateproject_user_roleInput: UpdateProjectUserRole!): ProjectUserRole!
   removeproject_user_role(id: Int!): ProjectUserRole!
   createUser(createUserInput: CreateUserInput!): User!
@@ -157,13 +160,13 @@ input UpdateProjectInput {
 }
 
 input CreateProjectUserRoleInput {
-  user: Int!
+  userId: [Int!]!
   project: Int!
   role: Role!
 }
 
 input UpdateProjectUserRole {
-  user: Int
+  userId: [Int!]
   project: Int
   role: Role
   id: Int!
@@ -193,6 +196,7 @@ input UpdateUserInput {
 input CreateTaskInput {
   projectId: Int!
   userId: [Int!]!
+  status: taskStatus!
   taskName: String!
   reporter: Int!
   startDate: DateTime!
@@ -204,6 +208,7 @@ input CreateTaskInput {
 input UpdateTaskInput {
   projectId: Int
   userId: [Int!]
+  status: taskStatus
   taskName: String
   reporter: Int
   startDate: DateTime

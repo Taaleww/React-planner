@@ -4,4 +4,5 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 export class CreateProjectStatusInput {
   @Field()
   projectStatus: string;
+
 }
