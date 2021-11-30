@@ -25,7 +25,7 @@ function MyProjects() {
     const { data } = await client.mutate({
       mutation: gql`
         mutation removeProject($id: Int!) {
-          removeProject(id: $id) 
+          removeProject(id: $id)
         }
       `,
       variables: { id: target },
@@ -63,17 +63,16 @@ function MyProjects() {
       setData([...data.findProjectByUser]);
     }
   }
-
+ 
   async function editProject(newData) {
-
     const { data } = await client.mutate({
       mutation: gql`
-      mutation updateProject($updateProjectInput : UpdateProjectInput!){
-        updateProject(updateProjectInput : $updateProjectInput){
-          projectId
-          status
+        mutation updateProject($updateProjectInput: UpdateProjectInput!) {
+          updateProject(updateProjectInput: $updateProjectInput) {
+            projectId
+            status
+          }
         }
-      }
       `,
       variables: { updateProjectInput: newData },
     });
@@ -91,6 +90,8 @@ function MyProjects() {
     members
   ) {
     const status = "INPROGRESS";
+    //! current userID wait for change
+    const ownerid = 1;
     const newProject = {
       projectName,
       startDate: new Date(startDate),
@@ -98,6 +99,7 @@ function MyProjects() {
       description,
       status,
       members,
+      ownerid,
     };
     const { data } = await client.mutate({
       mutation: gql`
@@ -110,6 +112,7 @@ function MyProjects() {
               description
               startDate
               dueDate
+              ownerid
             }
           }
         }
@@ -122,8 +125,23 @@ function MyProjects() {
     setShowCreateProjectModal(false);
   }
 
-  function setstatus(){
+  async function addMember(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+      mutation createproject_user_role($createproject_user_roleInput: CreateProjectUserRoleInput!){
+        createproject_user_role(createproject_user_roleInput:$createproject_user_roleInput) {
+          user {
+            userId
+          }
+        }
+      }
+      `,
+      variables: { createproject_user_roleInput: newData },
+    });
 
+    if (data) {
+      getMyProjects();
+    }
   }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
@@ -215,9 +233,9 @@ function MyProjects() {
                         <ProjectItem
                           key={index}
                           projectData={data.project}
-                          projectMember={data.user}
                           deleteProject={deleteProject}
                           editProject={editProject}
+                          addMember={addMember}
                         />
                       );
                     })

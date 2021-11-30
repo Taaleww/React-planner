@@ -7,15 +7,12 @@ import ApolloClient from "apollo-client";
 import Select from "react-select";
 import { ReactComponent as CreateSvg } from "../../assets/icons/create.svg";
 
-
 import gql from "graphql-tag";
 
 //! Set to query data
 const currentUserId = 1;
 
 function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
-  //apollo client setup
-
   useEffect(() => {
     getUsers();
   }, []);
@@ -23,29 +20,29 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-
+  //apollo client setup
   const client = new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache(),
   });
-
+  // set value project data
   const [values, setValues] = useState({
     projectName: "",
     startDate: "",
     dueDate: "",
-    description: ""
+    description: "",
   });
 
   const [selectedOption, setSelectedOption] = useState([]);
 
   function handleMultiChange(option) {
-    setSelectedOption(option)
+    setSelectedOption(option);
   }
 
   const [users, setUsers] = useState([]);
 
   const [errors, setErrors] = useState({});
-
+  // query user
   async function getUsers() {
     const { data } = await client.query({
       query: gql`
@@ -69,10 +66,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
 
     setUsers(filteredOptions);
   }
-
+  // validate form create projct info
   function ValidateCreateProjectInfo() {
     let errors = {};
-    
 
     if (!values.projectName) {
       errors.projectName = "Please input project name";
@@ -96,13 +92,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
       errors.description = "Please input description";
     }
     setErrors(errors);
-    console.log("error1",
-      errors
-    );
-    return errors
-    
+    console.log("error1", errors);
+    return errors;
   }
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,19 +103,19 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
       [name]: value,
     });
   };
-
+  // sent form on submit
   async function onSubmit(event) {
     event.preventDefault();
 
     const members = [
       currentUserId.toString(),
-      ...selectedOption.map((item) => { return item.value.toString()}),
-    ]
-    
+      ...selectedOption.map((item) => {
+        return item.value.toString();
+      }),
+    ];
+
     const errors = ValidateCreateProjectInfo();
-    console.log("error",
-      errors
-    );
+    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       addProject(
         values.projectName,

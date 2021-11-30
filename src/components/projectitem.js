@@ -57,6 +57,7 @@ function ProjectItem({
   projectMember,
   deleteProject,
   editProject,
+  addMember
 }) {
   // const httpLink = createHttpLink({
   //   uri: "http://localhost:5000/graphql",
@@ -136,10 +137,10 @@ function ProjectItem({
           <td className="px-6 py-4 whitespace-nowrap ">
             <div className="text-sm text-gray-900 flex ">
               {/* {projectMember.firstName} */}
-              <div className="{'h-7 w-5  bg-blue-300 text-center rounded-full text-white }">
+              <div className="{'h-7 w-5 mr-2 bg-blue-300 text-center rounded-full text-white }">
                 L
               </div>
-              <div className="{'h-7 w-5  bg-green-300 text-center rounded-full text-white }">
+              <div className="{'h-7 w-5 mr-2 bg-green-300 text-center rounded-full text-white }">
                 D
               </div>
               <div className="{'h-7 w-5  bg-red-300 text-center rounded-full text-white }">
@@ -211,7 +212,6 @@ function ProjectItem({
             changeStateInfoProjectModalFromChild
           }
           projectData={projectData}
-          projectMember={projectMember}
         />
       ) : null}
 
@@ -226,6 +226,8 @@ function ProjectItem({
         <>
           <AddMember
             setShowAddMemberModalFromParent={changeStateAddMemberModalFromChild}
+            projectData={projectData}
+            addMember={addMember}
           />
         </>
       ) : null}

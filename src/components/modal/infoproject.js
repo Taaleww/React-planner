@@ -1,3 +1,7 @@
+import gql from "graphql-tag";
+import React, { useState, useEffect } from "react";
+import ApolloClient from "apollo-boost";
+
 function StatusTag({ status }) {
   if (status === "INPROGRESS") {
     return (
@@ -28,16 +32,51 @@ function StatusTag({ status }) {
 function InfoProject({
   setShowInfoProjectModalFromParent,
   projectData,
-  projectMember,
 }) {
   function dateTranform(date) {
     if (!date) {
-      return '-'
+      return "-";
     }
     const newDate = new Date(date).toString().split(" ");
     const completeDate = newDate[2] + " " + newDate[1] + " " + newDate[3];
     return completeDate;
   }
+
+  const client = new ApolloClient({
+    uri: "http://localhost:5000/graphql",
+  });
+
+  const [getMember, setData] = useState([]);
+  // const members = projectData.projectId
+
+  async function getMembers(members) {
+    setData([]);
+    const { data } = await client.query({
+      query: gql`
+        query member($id: Int!) {
+          member(id: $id) {
+            user {
+              firstName
+            }
+          }
+        }
+      `,
+      variables: { id: members },
+    });
+
+    if (data.member.length !== 0) {
+      const completeMembers = data.member.map((item) => {
+        return item.user.firstName;
+      });
+      setData([...completeMembers]);
+    }
+  }
+  useEffect(() => {
+    getMembers(projectData.projectId);
+  }, []);
+
+  console.log("xx", getMember);
+
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -75,11 +114,7 @@ function InfoProject({
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
                   <p className="text-gray-600">Members</p>
 
-                  <p>
-                    {(projectMember ? " " : ", ") + projectMember.firstName}
-                  </p>
-
-                  {/* <p> {projectData.members.join(' , ')} </p> */}
+                  <p>{(getMember ? " " : ", ") + getMember}</p>
                 </div>
                 <div className="p-3  mt-2 text-center space-x-4 md:block">
                   <button

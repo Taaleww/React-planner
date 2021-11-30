@@ -1,6 +1,83 @@
 import { ReactComponent as MemberSvg } from "../../assets/icons/member.svg";
+import React, { useEffect, useState } from "react";
+import { createHttpLink } from "apollo-link-http";
+import ApolloClient from "apollo-client";
+import Select from "react-select";
+import gql from "graphql-tag";
+import { InMemoryCache } from "apollo-cache-inmemory";
 
-function AddMember({ setShowAddMemberModalFromParent, projectId }) {
+function AddMember({
+  setShowAddMemberModalFromParent,
+  projectData,
+  addMember,
+}) {
+  console.log("projectData.projectId", projectData.projectId);
+  
+  //! Set to query data
+  const currentUserId = 1;
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  //set up
+  const httpLink = createHttpLink({
+    uri: "http://localhost:5000/graphql",
+  });
+
+  const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+  });
+
+  const [selectedOption, setSelectedOption] = useState([]);
+
+  function handleMultiChange(option) {
+    setSelectedOption(option);
+  }
+  // query data from user to get email all user
+  const [users, setUsers] = useState([]);
+  async function getUsers() {
+    const { data } = await client.query({
+      query: gql`
+        query users {
+          users {
+            userId
+            email
+          }
+        }
+      `,
+    });
+    const userOptions = data.users.map((user) => {
+      return {
+        value: user.userId,
+        label: user.email,
+      };
+    });
+    const filteredOptions = userOptions.filter(
+      (option) => option.value !== currentUserId
+    );
+
+    setUsers(filteredOptions);
+  }
+  async function onSubmit(event) {
+    event.preventDefault();
+
+    // const members = [
+    //   currentUserId.toString(),
+    //   ...selectedOption.map((item) => {
+    //     return item.value.toString();
+    //   }),
+    // ];
+    const role = "EMPLOYEE"
+    const addmember = {
+      project : projectData.projectId ,
+      user : selectedOption[0].value,
+      role,
+    }
+    addMember(addmember);
+    
+  }
+
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -17,10 +94,17 @@ function AddMember({ setShowAddMemberModalFromParent, projectId }) {
                 <label className="block text-gray-700 text-sm font-normal mb-2 ">
                   Email
                 </label>
-                <input
+                {/* <input
                   type="text"
                   placeholder="Email"
                   className="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300"
+                /> */}
+                <Select
+                  placeholder="Members"
+                  defaultValue={selectedOption}
+                  onChange={handleMultiChange}
+                  options={users}
+                  isMulti={true}
                 />
               </div>
 
@@ -31,7 +115,10 @@ function AddMember({ setShowAddMemberModalFromParent, projectId }) {
                 >
                   Cancel
                 </button>
-                <button className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500">
+                <button
+                  className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500"
+                  onClick={onSubmit}
+                >
                   Add
                 </button>
               </div>
