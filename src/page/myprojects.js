@@ -63,7 +63,7 @@ function MyProjects() {
       setData([...data.findProjectByUser]);
     }
   }
- 
+
   async function editProject(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -128,15 +128,13 @@ function MyProjects() {
   async function addMember(newData) {
     const { data } = await client.mutate({
       mutation: gql`
-      mutation createproject_user_role($createproject_user_roleInput: CreateProjectUserRoleInput!){
-        createproject_user_role(createproject_user_roleInput:$createproject_user_roleInput) {
-          user {
-            userId
+        mutation addMember($addMemberInput: CreateProjectUserRoleInput!) {
+          addMember(addMemberInput: $addMemberInput) {
+            projectId
           }
         }
-      }
       `,
-      variables: { createproject_user_roleInput: newData },
+      variables: { addMemberInput: newData },
     });
 
     if (data) {

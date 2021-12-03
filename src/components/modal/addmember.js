@@ -10,12 +10,14 @@ function AddMember({
   setShowAddMemberModalFromParent,
   projectData,
   addMember,
+  members,
 }) {
   console.log("projectData.projectId", projectData.projectId);
   
   //! Set to query data
   const currentUserId = 1;
   useEffect(() => {
+    // getMembers(projectData.projectId);
     getUsers();
   }, []);
 
@@ -36,8 +38,11 @@ function AddMember({
   }
   // query data from user to get email all user
   const [users, setUsers] = useState([]);
+
   async function getUsers() {
-    const { data } = await client.query({
+    const memberUserOptions = members.map((item) => item.prop);
+
+    const userResponse = await client.query({
       query: gql`
         query users {
           users {
@@ -47,31 +52,33 @@ function AddMember({
         }
       `,
     });
-    const userOptions = data.users.map((user) => {
+    const userOptions = userResponse.data.users.map((user) => {
       return {
         value: user.userId,
         label: user.email,
       };
     });
+
     const filteredOptions = userOptions.filter(
-      (option) => option.value !== currentUserId
+      (allUserItem) => memberUserOptions.filter((memberItem) => {
+        return allUserItem.label === memberItem.label
+      }).length === 0
     );
 
     setUsers(filteredOptions);
   }
+
   async function onSubmit(event) {
     event.preventDefault();
 
-    // const members = [
-    //   currentUserId.toString(),
-    //   ...selectedOption.map((item) => {
-    //     return item.value.toString();
-    //   }),
-    // ];
+    const members = selectedOption.map((item) => {
+      return item.value;
+    });
     const role = "EMPLOYEE"
     const addmember = {
       project : projectData.projectId ,
-      user : selectedOption[0].value,
+      // user : selectedOption[0].value,
+      userId : members,
       role,
     }
     addMember(addmember);

@@ -11,10 +11,10 @@ function Tasks() {
     uri: "http://localhost:5000/graphql",
   });
 
-  const params = useParams()
+  const params = useParams();
 
   // Check value of Object
-  let projectId = params?.projectId
+  let projectId = params?.projectId;
 
   const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
 
@@ -47,7 +47,7 @@ function Tasks() {
       description,
       status,
       userId,
-      reporter
+      reporter,
     };
     const { data } = await client.mutate({
       mutation: gql`
@@ -77,8 +77,7 @@ function Tasks() {
               taskId
               taskName
               status
-              startDate
-              dueDate
+            
               description
               assign {
                 user {
@@ -91,7 +90,8 @@ function Tasks() {
         }
       `,
     });
-    console.log(data.project);
+    console.log("project", data.project);
+    console.log("task", task);
     if (data) {
       await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
@@ -100,9 +100,50 @@ function Tasks() {
       // await setSuccessData(task.filter((task) => task.status === "DONE"));
     }
   }
+
+  async function editTask(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation updateTask($updateTaskInput: UpdateTaskInput!) {
+          updateTask(updateTaskInput: $updateTaskInput) {
+            taskId
+            taskName
+            status
+
+            description
+            assign {
+              user {
+                userId
+                firstName
+              }
+            }
+          }
+        }
+      `,
+      variables: { updateTaskInput: newData },
+    });
+
+    if (data?.updateTask) {
+      setTask([...task.filter((task) => task.taskId !== newData.id), data.updateTask]);
+    }
+  }
+
+  async function deleteTask(target) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation removeTask($id: Int!) {
+          removeTask(id: $id)
+        }
+      `,
+      variables: { id: target },
+    });
+    if (data.removeTask === "Delete Success") {
+      setTask(task.filter((task) => task.taskId !== target));
+    }
+  }
+
   useEffect(() => {
     getMyTasks();
-    // projectId()
   }, []);
 
   return (
@@ -111,10 +152,10 @@ function Tasks() {
       <div className="MyProjects font-bold md:container md:mx-auto  font-mono ">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1 flex flex-row ">
-            <h3 className="font-semibold text-xl px-4 ">
+            <h3 className="font-semibold text-base px-4 ">
               <Link to="/myprojects">My Projects</Link>
             </h3>
-            <h3 className="font-semibold text-xl ">/ Tasks</h3>
+            <h3 className="font-semibold text-base ">/ Tasks</h3>
           </div>
           <div className="relative w-full px-4 max-w-3 flex-grow flex-1 text-right">
             <button
@@ -162,21 +203,45 @@ function Tasks() {
                         {task
                           .filter((task) => task.status === "TODO")
                           .map((data) => {
-                            return <TaskItem taskData={data} />;
+                            return (
+                              <TaskItem
+                                taskData={data}
+                                deleteTask={deleteTask}
+                                editTask={editTask}
+                                addTask={addTask}
+                                projectId={projectId}
+                              />
+                            );
                           })}
                       </td>
                       <td>
                         {task
                           .filter((task) => task.status === "INPROGRESS")
                           .map((data) => {
-                            return <TaskItem taskData={data} />;
+                            return (
+                              <TaskItem
+                                taskData={data}
+                                deleteTask={deleteTask}
+                                editTask={editTask}
+                                addTask={addTask}
+                                projectId={projectId}
+                              />
+                            );
                           })}
                       </td>
                       <td>
                         {task
                           .filter((task) => task.status === "DONE")
                           .map((data) => {
-                            return <TaskItem taskData={data} />;
+                            return (
+                              <TaskItem
+                                taskData={data}
+                                deleteTask={deleteTask}
+                                editTask={editTask}
+                                addTask={addTask}
+                                projectId={projectId}
+                              />
+                            );
                           })}
                       </td>
                     </tr>

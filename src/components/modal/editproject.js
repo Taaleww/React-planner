@@ -1,30 +1,24 @@
 import { useState, useEffect } from "react";
 import { ReactComponent as EditSvg } from "../../assets/icons/edit.svg";
 import { InMemoryCache } from "apollo-cache-inmemory";
-
 import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
 import Select from "react-select";
-
 import gql from "graphql-tag";
 
 //! Set to query data
-const currentUserId = 1;
+const currentUserId = 1; // currentUserId logged in
 
 function EditProject({
   setShowEditProjectModalFromParent,
   projectData,
   editProject,
+  members,
 }) {
-  useEffect(() => {
-    getMembers();
-    getUsers();
-  }, []);
-
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-
+  // set up apollo client
   const client = new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache(),
@@ -32,33 +26,26 @@ function EditProject({
 
   const [values, setValues] = useState(projectData);
 
-  const [selectedOption, setSelectedOption] = useState([]);
+  useEffect(() => {
+    getUsers();
+  }, []);
 
-  function handleMultiChange(option) {
-    setSelectedOption(option);
-  }
+  const [selectedOption, setSelectedOption] = useState(
+    members
+      .map((item) => item.prop)
+      .filter((item) => item.value !== currentUserId)
+  );
 
   const [users, setUsers] = useState([]);
 
   const [errors, setErrors] = useState({});
 
-  async function getMembers() {
-    // TODO get member opration HERE!
-
-    // const userOptions = data.users.map((user) => {
-    //   return {
-    //     value: user.userId,
-    //     label: user.email,
-    //   };
-    // });
-    // const filteredOptions = userOptions.filter(
-    //   (option) => option.value !== currentUserId
-    // );
-    setSelectedOption([])
+  function handleMultiChange(option) {
+    setSelectedOption(option);
   }
-
+  // query all user in DB
   async function getUsers() {
-    const { data } = await client.query({
+    const userResponse = await client.query({
       query: gql`
         query users {
           users {
@@ -68,21 +55,20 @@ function EditProject({
         }
       `,
     });
-
-    // change format to Select library format
-    const userOptions = data.users.map((user) => {
+    const userOptions = userResponse.data.users.map((user) => {
       return {
         value: user.userId,
         label: user.email,
       };
     });
+
     const filteredOptions = userOptions.filter(
       (option) => option.value !== currentUserId
     );
 
-    setUsers(filteredOptions);
+    setUsers([...filteredOptions]);
   }
-
+  // validation input data
   function ValidateCreateProjectInfo() {
     let errors = {};
 
@@ -108,7 +94,6 @@ function EditProject({
       errors.description = "Please input description";
     }
     setErrors(errors);
-    console.log("error1", errors);
     return errors;
   }
 
@@ -131,7 +116,6 @@ function EditProject({
     ];
 
     const errors = ValidateCreateProjectInfo();
-    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       const editedProject = {
         id: projectData.projectId,

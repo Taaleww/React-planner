@@ -1,6 +1,23 @@
 import { ReactComponent as CompleteSvg } from "../../assets/icons/completeicon.svg";
 
-function CompleteTask({setShowCompleteTaskModalFromParent}) {
+function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
+  function computeData(taskData){
+    let status = taskData.status
+   if(status === "TODO" ){
+     status = "INPROGRESS"
+   }
+   else if(status === "INPROGRESS"){
+     status = "DONE"
+   }
+   else if(status === "DONE"){
+     status = "DONE"
+   }
+   return {
+     id : taskData.taskId,
+     status
+   }
+     
+  }
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black"></div>
@@ -13,7 +30,7 @@ function CompleteTask({setShowCompleteTaskModalFromParent}) {
                 <h2 className="text-xl font-bold py-4 ">Are you sure?</h2>
                 <p className="text-sm text-gray-500 px-8">
                   Do you really want to complete task 
-                  {/* <span  style={{ color:"red" }}>'{projectData.projectName}'</span>  */}
+                  <span  style={{ color:"red" }}>'{taskData.taskName}'</span> 
                  ? This process cannot
                   be undone
                 </p>
@@ -27,7 +44,7 @@ function CompleteTask({setShowCompleteTaskModalFromParent}) {
                 </button>
                 <button
                    className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
-                
+                   onClick={() => editTask(computeData(taskData))}
                 >
                   complete
                 </button>

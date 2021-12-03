@@ -1,5 +1,4 @@
 import { Link, Route } from "react-router-dom";
-import React, { useState } from "react";
 import { ReactComponent as ViewSvg } from "../assets/icons/view.svg";
 import { ReactComponent as TrashSvg } from "../assets/icons/trash.svg";
 import { ReactComponent as PenSvg } from "../assets/icons/pen.svg";
@@ -10,10 +9,9 @@ import EditProject from "../components/modal/editproject";
 import DeleteProject from "../components/modal/deleteproject";
 import AddMember from "../components/modal/addmember";
 import CompleteProject from "../components/modal/completeproject";
-import { createHttpLink } from "apollo-link-http";
-import ApolloClient from "apollo-client";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import Tasks from "../page/tasks";
+import gql from "graphql-tag";
+import React, { useState, useEffect } from "react";
+import ApolloClient from "apollo-boost";
 
 function dateTranform(date) {
   if (!date) {
@@ -57,29 +55,50 @@ function ProjectItem({
   projectMember,
   deleteProject,
   editProject,
-  addMember
+  addMember,
 }) {
-  // const httpLink = createHttpLink({
-  //   uri: "http://localhost:5000/graphql",
-  // });
+  const client = new ApolloClient({
+    uri: "http://localhost:5000/graphql",
+  });
 
-  // const client = new ApolloClient({
-  //   link: httpLink,
-  //   cache: new InMemoryCache(),
-  // });
-  // const [members, setMembers] = useState([]);
-  // async function getMembers() {
-  //   setMembers([]);
-  //   const { data } = await client.query({
-  //     query: gql`
-  //       ???????
-  //     `,
-  //     variables: { id: projectData.projectId },
-  //   });
-  //   if (data.findProjectByUser.length !== 0) {
-  //     setData([...data.findProjectByUser]);
-  //   }
-  // }
+  const [getMember, setData] = useState([]);
+
+  async function getMembers(members) {
+    setData([]);
+    const { data } = await client.query({
+      query: gql`
+        query member($id: Int!) {
+          member(id: $id) {
+            user {
+              firstName
+              email
+              userId
+            }
+          }
+        }
+      `,
+      variables: { id: members },
+    });
+
+    if (data.member.length !== 0) {
+      const completeMembers = data.member.map((item) => {
+        return {
+          name: item.user.firstName,
+          prop: {
+            value: item.user.userId,
+            label: item.user.email,
+          },
+        };
+      });
+      setData([...completeMembers]);
+      console.log(completeMembers);
+    }
+  }
+  useEffect(() => {
+    getMembers(projectData.projectId);
+  }, []);
+
+
   console.log(projectData);
   function changeStateInfoProjectModalFromChild(state) {
     setShowInfoProjectModal(state);
@@ -95,6 +114,15 @@ function ProjectItem({
   }
   function changeStateCompleteModalFromChild(state) {
     setShowCompleteProjectModal(state);
+  }
+
+  function bubbleStyleClass(type) {
+    if (type === 0) {
+      return "{'h-7 w-5 mr-2 bg-blue-300 text-center rounded-full text-white }";
+    } else if (type === 1) {
+      return "{'h-7 w-5 mr-2 bg-green-300 text-center rounded-full text-white }";
+    }
+    return "{'h-7 w-5 mr-2 bg-red-300 text-center rounded-full text-white }";
   }
 
   const [showInfoProjectModal, setShowInfoProjectModal] = React.useState(false);
@@ -115,12 +143,11 @@ function ProjectItem({
           </td>
           <td className="px-6 py-4 whitespace-nowrap">
             <div className="text-sm text-gray-900">
-            
               <Link
-              to={{
-                pathname: `/project/${projectData.projectId}/tasks`,
-                state: { projectId: projectData.projectId }
-              }}
+                to={{
+                  pathname: `/project/${projectData.projectId}/tasks`,
+                  state: { projectId: projectData.projectId },
+                }}
               >
                 {projectData.projectName}
               </Link>
@@ -136,21 +163,20 @@ function ProjectItem({
           </td>
           <td className="px-6 py-4 whitespace-nowrap ">
             <div className="text-sm text-gray-900 flex ">
-              {/* {projectMember.firstName} */}
-              <div className="{'h-7 w-5 mr-2 bg-blue-300 text-center rounded-full text-white }">
-                L
-              </div>
-              <div className="{'h-7 w-5 mr-2 bg-green-300 text-center rounded-full text-white }">
-                D
-              </div>
-              <div className="{'h-7 w-5  bg-red-300 text-center rounded-full text-white }">
-                N
-              </div>
-              {/* {projectMember.map((user) => {
-                return <>
-                  {user.firstName}
-                </>
-              })} */}
+              {getMember.slice(0, 3).map((user, index) => {
+                return (
+                  <div className={bubbleStyleClass(index)}>
+                    <p>{user.name.charAt(0)}</p>
+                  </div>
+                );
+              })}  
+              {getMember.length <= 3 ? null : 
+                (
+                  <div className="{'h-7 w-7 mr-2 bg-black text-center rounded-full text-white }">
+                    <p>{`+${getMember.length - 3}`}</p>
+                  </div>
+                )
+              }
             </div>
           </td>
           {/* <td className="px-6 py-4 whitespace-nowrap ">
@@ -220,6 +246,7 @@ function ProjectItem({
           setShowEditProjectModalFromParent={changeStateEditModalFromChild}
           projectData={projectData}
           editProject={editProject}
+          members={getMember}
         />
       ) : null}
       {showAddMemberModal ? (
@@ -228,6 +255,7 @@ function ProjectItem({
             setShowAddMemberModalFromParent={changeStateAddMemberModalFromChild}
             projectData={projectData}
             addMember={addMember}
+            members={getMember}
           />
         </>
       ) : null}

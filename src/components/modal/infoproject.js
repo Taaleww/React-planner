@@ -29,10 +29,7 @@ function StatusTag({ status }) {
     );
   }
 }
-function InfoProject({
-  setShowInfoProjectModalFromParent,
-  projectData,
-}) {
+function InfoProject({ setShowInfoProjectModalFromParent, projectData }) {
   function dateTranform(date) {
     if (!date) {
       return "-";
@@ -75,8 +72,6 @@ function InfoProject({
     getMembers(projectData.projectId);
   }, []);
 
-  console.log("xx", getMember);
-
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -112,10 +107,25 @@ function InfoProject({
                   <p>{projectData.description}</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
-                  <p className="text-gray-600">Members</p>
-
-                  <p>{(getMember ? " " : ", ") + getMember}</p>
+                  <p>Members</p>
+                  <p class="overflow-ellipsis overflow-hidden">
+                    {getMember.map((member, index) => {
+                      if (index === getMember.length - 1 ) {
+                        return `${member}`
+                      }
+                      return `${member} ,`
+                    })}
+                  </p>
                 </div>
+                {/* {getMember.slice(1).map((item) => {
+                  return (
+                    <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
+                      <p className="text-gray-600"> </p>
+                      <p>{item}</p>
+                    </div>
+                  );
+                })} */}
+
                 <div className="p-3  mt-2 text-center space-x-4 md:block">
                   <button
                     className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "

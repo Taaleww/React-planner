@@ -1,4 +1,3 @@
-import React from "react";
 import { ReactComponent as ViewSvg } from "../assets/icons/view.svg";
 import { ReactComponent as TrashSvg } from "../assets/icons/trash.svg";
 import { ReactComponent as AddmemberSvg } from "../assets/icons/addmember.svg";
@@ -14,6 +13,10 @@ import InfoTask from "../components/modal/infotask";
 import AddAssignee from "../components/modal/addassignee";
 import CompleteTask from "../components/modal/completetask";
 import "./base.css";
+import gql from "graphql-tag";
+import React, { useState, useEffect } from "react";
+import ApolloClient from "apollo-boost";
+
 
 function HeaderIcon({ status }) {
   if (status === "TODO") {
@@ -57,7 +60,7 @@ function dateTranform(date) {
   return completeDate;
 }
 
-function TaskItem({ taskData }) {
+function TaskItem({ taskData , deleteTask , editTask , projectData}) {
   console.log("this is data", taskData);
   function changeStateEditModalFromChild(state) {
     setShowEditTaskModal(state);
@@ -80,6 +83,8 @@ function TaskItem({ taskData }) {
   const [showAddAssigneeModal, setShowAddAssigneeModal] = React.useState(false);
   const [showCompleteTaskModal, setShowCompleteTaskModal] = React.useState(false);
 
+  
+
   return (
     <>
       {taskData ? (
@@ -99,11 +104,11 @@ function TaskItem({ taskData }) {
               </button>
               <div className="flex space-x-2 text-gray-400 text-sm my-3">
                 <DateSvg />
-                <p>Date : {dateTranform(taskData.startDate)}</p>
+                {/* <p>Date : {dateTranform(taskData.startDate)}</p> */}
               </div>
               <div className="flex space-x-2 text-gray-400 text-sm my-3">
                 <DateSvg />
-                <p>Due Date : {dateTranform(taskData.dueDate)}</p>
+                {/* <p>Due Date : {dateTranform(taskData.dueDate)}</p> */}
               </div>
               <td className="px-0 py-0 whitespace-nowrap">
                 <StatusTag status={taskData.status} />
@@ -158,11 +163,15 @@ function TaskItem({ taskData }) {
           {showEditTaskModal ? (
             <EditTask
               setShowEditTaskModalFromParent={changeStateEditModalFromChild}
+              taskData={taskData}
+              editTask={editTask}
             />
           ) : null}
           {showDeleteTaskModal ? (
             <DeleteTask
               setShowDeleteTaskModalFromParent={changeStateDeleteModalFromChild}
+              deleteTask = {deleteTask}
+              taskData={taskData}
             />
           ) : null}
           {showAddAssigneeModal ? (
@@ -177,6 +186,7 @@ function TaskItem({ taskData }) {
           {showInfoTaskModal ? (
             <InfoTask
               setShowInfoTaskModalFromParent={changeStateInfoModalFromChild}
+              taskData={taskData}
             />
           ) : null}
         </>
@@ -184,6 +194,9 @@ function TaskItem({ taskData }) {
       {showCompleteTaskModal ? (
         <CompleteTask
           setShowCompleteTaskModalFromParent={changeStateCompleteModalTaskFromChild}
+          taskData={taskData}
+          editTask={editTask}
+
         />
       ) : null}
     </>

@@ -11,11 +11,11 @@ import ApolloClient from "apollo-client";
 //! Set to query data
 const currentUserId = 1;
 
-function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId }) {
-  useEffect(() => {
-    getUsers();
-  }, []);
-  
+function CreateTask({
+  setShowCreateProjectModalFromParent,
+  addTask,
+  projectId,
+}) {
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
@@ -29,13 +29,13 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
     taskName: "",
     startDate: "",
     dueDate: "",
-    description: ""
+    description: "",
   });
 
   const [selectedOption, setSelectedOption] = useState([]);
 
   function handleMultiChange(option) {
-    setSelectedOption(option)
+    setSelectedOption(option);
   }
 
   const [users, setUsers] = useState([]);
@@ -43,21 +43,24 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
   const [errors, setErrors] = useState({});
 
   //! Mock Fix this plz !!!!!!!!!!!!!!!!!!!!!! must member of project
-  async function getUsers() {
-    const { data } = await client.query({
+  async function getUsers(projectId) { 
+    const { data, error } = await client.query({
       query: gql`
-        query users {
-          users {
-            userId
-            email
+        query member {
+          member(id: ${projectId}) {
+            user {
+              email
+            }
           }
         }
       `,
+      variables: { id: projectId },
     });
-    const userOptions = data.users.map((user) => {
+
+    const userOptions = data.member.map((item) => {
       return {
-        value: user.userId,
-        label: user.email,
+        value: item.user.userId,
+        label: item.user.email,
       };
     });
     const filteredOptions = userOptions.filter(
@@ -66,10 +69,12 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
 
     setUsers(filteredOptions);
   }
+  useEffect(() => {
+    getUsers(projectId);
+  }, []);
 
   function Validate() {
     let errors = {};
-    
 
     if (!values.taskName) {
       errors.taskName = "Please input task name";
@@ -93,13 +98,9 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
       errors.description = "Please input description";
     }
     setErrors(errors);
-    console.log("error1",
-      errors
-    );
-    return errors
-    
+    console.log("error1", errors);
+    return errors;
   }
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -114,13 +115,13 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
 
     const userId = [
       currentUserId,
-      ...selectedOption.map((item) => { return item.value}),
-    ]
-    
+      ...selectedOption.map((item) => {
+        return item.value;
+      }),
+    ];
+
     const errors = Validate();
-    console.log("error",
-      errors
-    );
+    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       addTask(
         projectId,
@@ -133,7 +134,6 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
       );
     }
   }
-  
 
   return (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none">
@@ -143,7 +143,7 @@ function CreateTask({ setShowCreateProjectModalFromParent, addTask, projectId })
           <div className="">
             <div className="text-center p-5 flex-auto justify-center ">
               <CreateSvg />
-              <h2 className="text-xl font-bold py-4  ">Create Project</h2>
+              <h2 className="text-xl font-bold py-4  ">Create Task</h2>
               <div className="space-y-4">
                 <form>
                   <label className="block text-gray-700 text-sm font-normal mb-2 text-left ">

@@ -103,7 +103,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
       [name]: value,
     });
   };
-  // sent form on submit
+  // sent data to addProject function
   async function onSubmit(event) {
     event.preventDefault();
 
