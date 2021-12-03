@@ -12,15 +12,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum taskStatus {
-  TODO = 'todo',
-  INPROGRESS = 'inprogress',
-  DONE = 'done',
-}
+// export enum taskStatus {
+//   TODO = 'todo',
+//   INPROGRESS = 'inprogress',
+//   DONE = 'done',
+// }
 
-registerEnumType(taskStatus, {
-  name: 'taskStatus',
-});
+// registerEnumType(taskStatus, {
+//   name: 'taskStatus',
+// });
 
 @Entity()
 @ObjectType()
@@ -37,14 +37,17 @@ export class Task {
   @Field(() => Project)
   project: Project;
 
-  @Column({
-    type: 'enum',
-    enum: taskStatus,
-    default: taskStatus.TODO,
-  })
-  @Field(() => taskStatus)
-  status: taskStatus;
-  
+  @ManyToOne(() => TaskStatus, (taskStatus) => taskStatus.task)
+  @Field(() => TaskStatus)
+  taskStatusId: TaskStatus;
+
+  // @Column({
+  //   type: 'enum',
+  //   enum: taskStatus,
+  //   default: taskStatus.TODO,
+  // })
+  // @Field(() => taskStatus)
+  // status: taskStatus;
 
   @Column()
   @Field()
@@ -54,15 +57,15 @@ export class Task {
   @Field(() => [Assign])
   assign: Assign[];
 
-  @Column({ type: 'date'})
+  @Column({ type: 'date' })
   @Field()
   startDate: Date;
 
-  @Column({ type: 'date'})
+  @Column({ type: 'date' })
   @Field()
   dueDate: Date;
 
-  @Column({ type: 'date'})
+  @Column({ type: 'date' })
   @Field()
   completeDate?: Date;
 
@@ -73,5 +76,4 @@ export class Task {
   @Column()
   @Field()
   reporter: number;
-
 }

@@ -1,6 +1,12 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Project } from 'src/project/entities/project.entity';
-import { PrimaryGeneratedColumn, Column, ManyToOne, Entity } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Entity,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -13,11 +19,11 @@ export class ProjectStatus {
   @Field()
   projectStatus: string;
 
-  // @ManyToOne(() => Project, (project) => project.projectStatusId,)
+  // @ManyToOne(() => Project, (project) => project.projectStatus,)
   // @Field(() => Project)
   // project: Project;
+
+  @OneToMany(() => Project, (project) => project.projectStatus, { eager: true })
+  @Field(() => Project)
+  project: Project[];
 }
-
-
-
-

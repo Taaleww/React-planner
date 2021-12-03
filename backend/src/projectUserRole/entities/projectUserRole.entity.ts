@@ -1,13 +1,18 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { Project } from 'src/project/entities/project.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from 'typeorm';
 
 export enum Role {
   MANAGER = 'manager',
   EMPLOYEE = 'employee',
-
 }
 
 registerEnumType(Role, {
@@ -16,17 +21,20 @@ registerEnumType(Role, {
 
 @Entity()
 @ObjectType()
-export class ProjectUserRole{
-
+export class ProjectUserRole {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   projectUserRoleid: number;
 
-  @ManyToOne(() => User, (user) => user.projectUserRole, { onDelete: 'CASCADE'})
+  @ManyToOne(() => User, (user) => user.projectUserRole, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => Project, (project) => project.projectUserRole, { onDelete: 'CASCADE'})
+  @ManyToOne(() => Project, (project) => project.projectUserRole, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Project)
   project: Project;
 
@@ -46,4 +54,3 @@ export class ProjectUserRole{
   @Field()
   updated_at: Date;
 }
-

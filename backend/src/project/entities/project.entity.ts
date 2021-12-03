@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
 import {
@@ -10,15 +11,15 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export enum projectStatus {
-  INPROGRESS = 'inprogress',
-  DONE = 'done',
-  LATE = 'late'
-}
+// export enum projectStatus {
+//   INPROGRESS = 'inprogress',
+//   DONE = 'done',
+//   LATE = 'late'
+// }
 
-registerEnumType(projectStatus, {
-  name: 'projectStatus',
-});
+// registerEnumType(projectStatus, {
+//   name: 'projectStatus',
+// });
 
 @Entity()
 @ObjectType()
@@ -37,16 +38,20 @@ export class Project {
 
   // @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
   // @Field(() => [ProjectStatus])
-  // projectStatusId: ProjectStatus[];
+  // projectStatus: ProjectStatus[];
+
+  @ManyToOne(() => ProjectStatus, (projectStatus) => projectStatus.project)
+  @Field(() => ProjectStatus)
+  projectStatus: ProjectStatus;
 
 
-  @Column({
-    type: 'enum',
-    enum: projectStatus,
-    default: projectStatus.INPROGRESS,
-  })
-  @Field(() => projectStatus)
-  role: projectStatus;
+  // @Column({
+  //   type: 'enum',
+  //   enum: projectStatus,
+  //   default: projectStatus.INPROGRESS,
+  // })
+  // @Field(() => projectStatus)
+  // role: projectStatus;
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])

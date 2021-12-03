@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ProjectStatus {
+  projectStatusId: Int!
+  projectStatus: String!
+  project: Project!
+}
+
 type ProjectUserRole {
   projectUserRoleid: Int!
   user: User!
@@ -25,7 +31,7 @@ type Project {
   projectId: Int!
   projectName: String!
   ownerid: Int!
-  role: projectStatus!
+  projectStatus: ProjectStatus!
   task: [Task!]!
   projectUserRole: [ProjectUserRole!]!
   description: String!
@@ -34,21 +40,16 @@ type Project {
   completeDate: DateTime
 }
 
-enum projectStatus {
-  INPROGRESS
-  DONE
-  LATE
-}
-
 type TaskStatus {
   taskStatusId: Int!
   taskStatus: String!
+  task: [Task!]!
 }
 
 type Task {
   taskId: Int!
   project: Project!
-  status: taskStatus!
+  taskStatusId: TaskStatus!
   taskName: String!
   assign: [Assign!]!
   startDate: DateTime!
@@ -56,12 +57,6 @@ type Task {
   completeDate: DateTime!
   description: String!
   reporter: Float!
-}
-
-enum taskStatus {
-  TODO
-  INPROGRESS
-  DONE
 }
 
 type Assign {
@@ -85,11 +80,6 @@ type User {
   organization: String!
   created_at: DateTime!
   updated_at: DateTime!
-}
-
-type ProjectStatus {
-  projectStatusId: Int!
-  projectStatus: String!
 }
 
 type Query {
@@ -125,6 +115,7 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: Int!): String!
+  newTaskMember(taskMember: CreateAssignInput!): Assign!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
   login(loginInput: loginInput!): String!
@@ -138,7 +129,7 @@ type Mutation {
 
 input CreateProjectInput {
   projectName: String!
-  status: projectStatus!
+  projectStatusId: Int!
   ownerid: Int!
   description: String!
   startDate: DateTime!
@@ -149,7 +140,7 @@ input CreateProjectInput {
 
 input UpdateProjectInput {
   projectName: String
-  status: projectStatus
+  projectStatusId: Int
   ownerid: Int
   description: String
   startDate: DateTime
@@ -196,7 +187,7 @@ input UpdateUserInput {
 input CreateTaskInput {
   projectId: Int!
   userId: [Int!]!
-  status: taskStatus!
+  taskStatus: Int!
   taskName: String!
   reporter: Int!
   startDate: DateTime!
@@ -208,7 +199,7 @@ input CreateTaskInput {
 input UpdateTaskInput {
   projectId: Int
   userId: [Int!]
-  status: taskStatus
+  taskStatus: Int
   taskName: String
   reporter: Int
   startDate: DateTime
@@ -218,8 +209,14 @@ input UpdateTaskInput {
   id: Int!
 }
 
+input CreateAssignInput {
+  userId: [Int!]!
+  taskId: Int!
+}
+
 input UpdateAssignInput {
-  userId: Int
+  userId: [Int!]
+  taskId: Int
   id: Int!
 }
 

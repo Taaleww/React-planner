@@ -8,10 +8,10 @@ import { UpdateAssignInput } from './dto/update-assign.input';
 export class AssignResolver {
   constructor(private readonly assignService: AssignService) {}
 
-  // @Mutation(() => Assign)
-  // createAssign(@Args('createAssignInput') createAssignInput: CreateAssignInput) {
-  //   return this.assignService.create(createAssignInput);
-  // }
+  @Mutation(() => Assign)
+  newTaskMember(@Args('taskMember') createAssignInput: CreateAssignInput) {
+    return this.assignService.create(createAssignInput);
+  }
 
   @Query(() => [Assign], { name: 'assigns' })
   findAll() {

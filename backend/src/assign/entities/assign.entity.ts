@@ -18,11 +18,11 @@ export class Assign {
   @Field(() => Int)
   id: number;
 
-  @ManyToOne(() => Task, (task) => task.assign)
+  @ManyToOne(() => Task, (task) => task.assign ,{ onDelete: 'CASCADE'})
   @Field(() => Task)
   task: Task;
 
-  @ManyToOne(() => User, (user) => user.assign)
+  @ManyToOne(() => User, (user) => user.assign,{ onDelete: 'CASCADE'})
   @Field(() => User)
   user: User;
 
