@@ -1,4 +1,3 @@
-import { element } from "prop-types";
 import React, {useState} from "react";
 import UserInfo from "../components/userinfoitem";
 
@@ -45,7 +44,7 @@ function Profile(){
                 <div className="md:flex no-wrap md:-mx-2 ">
                     {/* Left Side */}
                     <div className="w-full md:w-3/12 md:mx-2 ">
-                        {/* Profile image */}
+                    {/* Profile image */}
                         <div>
                             <div className="image overflow-hidden rounded-2xl">
                                 <img className="h-auto w-full mx-auto"
@@ -55,10 +54,8 @@ function Profile(){
                             <h1 className="uppercase text-gray-800 text-center font-bold text-2xl leading-8 my-3">{ user.firstname } { user.lastname }</h1>
                             <a className="block w-full my-3 p-2 text-center text-sm font-medium rounded-full text-white bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500" href="/manage_account">Manage Your Account</a>
                         </div>
-                        {/* End of profile image */}
-                        {/* User infomation  */}
-                            <UserInfo info={ user } />
-                        {/* End of yser infomation */}
+                    {/* User infomation  */}
+                        <UserInfo info={ user } />
                     </div>
                     {/*  Right Side  */}
                     <div className="w-full md:w-9/12 mx-2">
@@ -89,9 +86,6 @@ function Profile(){
                                     <span className="pl-2"> </span>
                                 {/* })} */}
                             </div>
-                            {/* <div className="text-xs text-gray-400 mt-4 text-right">
-                                <a className="hover:text-gray-300 hover:underline " href="/">View Full</a>
-                            </div> */}
                         </div>
                         <div className="bg-white p-3 overflow-auto h-60  shadow-sm rounded-2xl px-10 py-8 mb-2">
                             <div className="font-semibold text-gray-700 leading-8">
