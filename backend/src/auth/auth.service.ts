@@ -9,25 +9,31 @@ import { ForbiddenError } from 'apollo-server-express';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UserService, private jwtService: JwtService) {}
+  constructor(
+    private usersService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
-    //validate user
-    async validateUser(LoginInput: LoginInput): Promise<any>{
-        const user = await this.usersService.findByEmail(LoginInput.email); //find if recieved email is exists
+  //validate user
+  async validateUser(LoginInput: LoginInput): Promise<any> {
+    const user = await this.usersService.findByEmail(LoginInput.email); //find if recieved email is exists
 
-        const passwordMatch = await bcrypt.compare(LoginInput.password, user.password);//compare recieved password with password in DB
+    const passwordMatch = await bcrypt.compare(
+      LoginInput.password,
+      user.password,
+    ); //compare recieved password with password in DB
 
-        //then check if it's correct password
-        if(user && passwordMatch){
-                const {password, ...rest} = user;
-                return rest; //
-        }else {
-            throw new ForbiddenError('Incorrect pasword');
-        }
+    //then check if it's correct password
+    if (user && passwordMatch) {
+      const { password, ...rest } = user;
+      return rest; //
+    } else {
+      throw new ForbiddenError('Incorrect pasword');
     }
+  }
 
-    async login(LoginInput: LoginInput){
-        const payload = { name: LoginInput.email};
-        return this.jwtService.sign(payload);
-    }
+  async login(LoginInput: LoginInput) {
+    const payload = { name: LoginInput.email };
+    return this.jwtService.sign(payload);
+  }
 }
