@@ -12,7 +12,7 @@ import { AuthResolver } from './auth.resolver';
 @Module({
   imports: [UserModule, PassportModule.register({session:true}), JwtModule.register({
     secret: constant.secret,
-    signOptions: { expiresIn: '6h' },
+    signOptions: { expiresIn: '8h' },
   })],
   providers: [AuthService, LocalStrategy, SessionSerializer, JwtStrategy, AuthResolver],
   exports: [AuthService]

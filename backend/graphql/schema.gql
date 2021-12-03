@@ -118,7 +118,7 @@ type Mutation {
   newTaskMember(taskMember: CreateAssignInput!): Assign!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
-  login(loginInput: loginInput!): String!
+  login(loginInput: LoginInput!): String!
   createTaskStatus(createTaskStatusInput: CreateTaskStatusInput!): TaskStatus!
   updateTaskStatus(updateTaskStatusInput: UpdateTaskStatusInput!): TaskStatus!
   removeTaskStatus(id: Int!): TaskStatus!
@@ -220,7 +220,7 @@ input UpdateAssignInput {
   id: Int!
 }
 
-input loginInput {
+input LoginInput {
   email: String!
   password: String!
 }
