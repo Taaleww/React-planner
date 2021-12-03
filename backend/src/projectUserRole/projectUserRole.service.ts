@@ -41,6 +41,14 @@ export class ProjectUserRoleService {
           throw new ForbiddenError('Do not have this user.');
         }
 
+        const currentUser = await this.projectUserRoleRepository.findOne({
+          where: { user: user, project: project },
+        });
+
+        if (currentUser) {
+          throw new ForbiddenError('Already have this user.');
+        }
+
         const newMember = this.projectUserRoleRepository.create({
           user: member,
           project: project,
@@ -49,7 +57,7 @@ export class ProjectUserRoleService {
         await this.projectUserRoleRepository.save(newMember);
       }),
     );
-    
+
     return project;
   }
 

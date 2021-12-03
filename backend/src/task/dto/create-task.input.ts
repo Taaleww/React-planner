@@ -1,6 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { TaskStatus } from 'src/task-status/entities/task-status.entity';
-import { taskStatus } from '../entities/task.entity';
 
 
 @InputType()
@@ -11,8 +10,8 @@ export class CreateTaskInput {
   @Field(() => [Int])
   userId: number[];
 
-  @Field(() => taskStatus)
-  status: taskStatus;
+  @Field(() => Int)
+  taskStatus: number;
 
   @Field()
   taskName: string;
