@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 
 function EditProfile({ infoUser }) {
+
+    //For upload and show image
     const [selectedImage, setSelectedImage] = useState(infoUser.img);
     const imageChange = (e) => {
         if(e.target.files && e.target.files.length > 0){
+            //convert image to link url
             setSelectedImage(URL.createObjectURL(e.target.files[0]));
         }
     };
@@ -13,11 +16,13 @@ function EditProfile({ infoUser }) {
             <h1 className="text-2xl font-bold text-center pb-8">Edit Profile</h1>
             <form>
                 <div className="image overflow-hidden text-center">
+                     {/* Profile Image */}
                     <img className="h-auto w-3/12 mx-auto rounded-full"
                         src = {selectedImage}
                         alt=""
                     />
                     <h1 className="text-center mt-3">
+                        {/* Upload image */}
                         <label
                             htmlFor="img"
                             className="relative cursor-pointer font-semibold text-indigo-600 hover:text-indigo-400 focus-within:outline-none">
@@ -26,6 +31,7 @@ function EditProfile({ infoUser }) {
                         </label>
                     </h1>
                 </div>
+                {/* Edit user infomation */}
                 <div className="flex text-sm mt-6">
                     <div className="w-1/2 mr-5 space-y-2">
                         <label for="firstname" className="block text-base font-semibold">First name</label>
@@ -86,6 +92,7 @@ function EditProfile({ infoUser }) {
                         </div>
                     </div>
                 </div>
+                {/* Submit button */}
                 <button className="block w-full mt-7 p-2 text-center text-base font-medium rounded-full text-white bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-green-400 hover:to-blue-500">Save</button>
             </form>
         </div>

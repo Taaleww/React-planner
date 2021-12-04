@@ -78,6 +78,8 @@ type User {
   job: String!
   department: String!
   organization: String!
+  address: String!
+  image: String!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -85,10 +87,10 @@ type User {
 type Query {
   projects: [Project!]!
   project(id: Int!): Project!
-  findProjectByUser(id: Int!): [ProjectUserRole!]!
   projectUserRoles: [ProjectUserRole!]!
   projectUserRole(id: Int!): ProjectUserRole!
   member(id: Int!): [ProjectUserRole!]!
+  findProjectByUser(id: Int!): [ProjectUserRole!]!
   users: [User!]!
   user(id: Int!): User!
   email(email: String!): User!
@@ -168,9 +170,6 @@ input CreateUserInput {
   password: String!
   firstName: String!
   lastName: String!
-  job: String!
-  departmant: String!
-  organization: String!
 }
 
 input UpdateUserInput {
@@ -178,9 +177,6 @@ input UpdateUserInput {
   password: String
   firstName: String
   lastName: String
-  job: String
-  departmant: String
-  organization: String
   id: Int!
 }
 

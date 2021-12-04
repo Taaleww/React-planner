@@ -29,25 +29,17 @@ export class Task {
   @Field(() => Int)
   taskId: number;
 
-  // @OneToMany(() => TaskStatus, (taskStatus) => taskStatus.task, { eager: true })
-  // @Field(() => [TaskStatus])
-  // taskStatusId: TaskStatus[];
-
-  @ManyToOne(() => Project, (project) => project.task , {onDelete:"CASCADE"})
+  @ManyToOne(() => Project, (project) => project.task, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Project)
   project: Project;
 
-  @ManyToOne(() => TaskStatus, (taskStatus) => taskStatus.task)
+  @ManyToOne(() => TaskStatus, (taskStatus) => taskStatus.task, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => TaskStatus)
   taskStatusId: TaskStatus;
-
-  // @Column({
-  //   type: 'enum',
-  //   enum: taskStatus,
-  //   default: taskStatus.TODO,
-  // })
-  // @Field(() => taskStatus)
-  // status: taskStatus;
 
   @Column()
   @Field()

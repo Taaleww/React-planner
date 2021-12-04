@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, GqlExecutionContext } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, GqlExecutionContext, ResolveField, Parent } from '@nestjs/graphql';
 import { ProjectService } from './project.service';
 import { Project } from './entities/project.entity';
 import { CreateProjectInput } from './dto/create-project.input';
@@ -27,12 +27,6 @@ export class ProjectResolver {
     return this.projectService.findOne(id);
   }
 
-  // Created by Taaleww
-  @Query(() => [ProjectUserRole], { name: 'findProjectByUser' })
-  findByUser(@Args('id', { type: () => Int }) id: number) {
-    return this.projectService.findByUser(id);
-  }
-
   @Mutation(() => Project)
   updateProject(
     @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
@@ -48,8 +42,5 @@ export class ProjectResolver {
     return this.projectService.remove(id);
   }
 
-//   @Query(() => Project)
-//   findByUser(@Args('id',{ type: () => Int}) id:number){
-//     return this.projectService.findByUser(id);
-//   }
+
 }

@@ -18,14 +18,14 @@ export class CreateUserInput {
   @Field()
   lastName: string;
 
-  @Field()
-  job: string;
+  // @Field()
+  // job: string;
 
-  @Field()
-  departmant: string;
+  // @Field()
+  // departmant: string;
 
-  @Field()
-  organization: string;
+  // @Field()
+  // organization: string;
 
 
 }

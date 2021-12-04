@@ -60,6 +60,14 @@ export class User {
   @Field()
   organization: string;
 
+  @Column('text')
+  @Field()
+  address: string;
+
+  @Column()
+  @Field()
+  image: string;
+
   @CreateDateColumn()
   @Field()
   created_at: Date;
