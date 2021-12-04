@@ -180,7 +180,7 @@ input UpdateUserInput {
   id: Int!
   oldPassword: String!
   job: String!
-  departmant: String!
+  department: String!
   organization: String!
   address: String!
   image: String!
