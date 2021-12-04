@@ -137,12 +137,15 @@ export class TaskService {
   }
 
   async findAll(): Promise<Task[]> {
-    return await this.taskRepository.find();
+    return await this.taskRepository.find({
+      relations:['taskStatus']
+    });
   }
 
   async findOne(id: number): Promise<Task> {
     return await this.taskRepository.findOneOrFail({
       where: { taskId: id },
+      relations: ['taskStatusId']
     });
   }
 
@@ -152,6 +155,10 @@ export class TaskService {
       relations: ['project','taskStatusId'],
     });
 
+
+    if(updateTaskInput.taskStatus){
+      task.taskStatusId.taskStatusId = updateTaskInput.taskStatus;
+    }
     //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
     if (!updateTaskInput.userId) {
       const updateTask = Object.assign(task, updateTaskInput);
@@ -181,7 +188,13 @@ export class TaskService {
           }
         }),
       );
-      return await this.taskRepository.save(updateTask);
+      await this.taskRepository.save(updateTask);
+
+      return await this.taskRepository.findOne({
+        where: { taskId:updateTask.id},
+        relations:['project','assign','taskStatus']
+      })
+
     }
   }
 
