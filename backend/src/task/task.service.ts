@@ -133,30 +133,33 @@ export class TaskService {
       }),
     );
 
-    return newTask;
+    // return newTask;
+    return await this.taskRepository.findOne({
+      where: { taskId: newTask.taskId },
+      relations: ['project', 'taskStatusId','assign'],
+    });
   }
 
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find({
-      relations:['taskStatus']
+      relations: ['taskStatus'],
     });
   }
 
   async findOne(id: number): Promise<Task> {
     return await this.taskRepository.findOneOrFail({
       where: { taskId: id },
-      relations: ['taskStatusId']
+      relations: ['taskStatusId'],
     });
   }
 
   async update(id: number, updateTaskInput: UpdateTaskInput): Promise<Task> {
     const task = await this.taskRepository.findOneOrFail({
       where: { taskId: id },
-      relations: ['project','taskStatusId'],
+      relations: ['project', 'taskStatusId'],
     });
 
-
-    if(updateTaskInput.taskStatus){
+    if (updateTaskInput.taskStatus) {
       task.taskStatusId.taskStatusId = updateTaskInput.taskStatus;
     }
     //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
@@ -191,10 +194,9 @@ export class TaskService {
       await this.taskRepository.save(updateTask);
 
       return await this.taskRepository.findOne({
-        where: { taskId:updateTask.id},
-        relations:['project','assign','taskStatus']
-      })
-
+        where: { taskId: updateTask.id },
+        relations: ['project', 'assign', 'taskStatus'],
+      });
     }
   }
 

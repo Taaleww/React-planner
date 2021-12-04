@@ -106,7 +106,7 @@ export class ProjectService {
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
       where: { projectId: id },
-      relations: ['task'],
+      relations: ['task','task.taskStatusId','task.assign','projectStatus','projectUserRole'],
     });
   }
   async update(
