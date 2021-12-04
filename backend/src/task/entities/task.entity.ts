@@ -63,7 +63,7 @@ export class Task {
 
   @Column()
   @Field()
-  description?: string;
+  description: string;
 
   @Column()
   @Field()
