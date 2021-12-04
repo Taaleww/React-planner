@@ -80,18 +80,14 @@ function Tasks() {
               }
               description
               assign {
-                user {
-                  userId
-                  firstName
-                }
+                id 
               }
             }
           }
         }
       `,
     });
-    console.log("project", data.project);
-    console.log("task", task);
+    console.log("project", data);
     if (data) {
       await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
@@ -101,6 +97,52 @@ function Tasks() {
     }
   }
 
+  async function addTask(
+    projectId,
+    taskName,
+    startDate,
+    dueDate,
+    description,
+    userId
+  ) {
+    const taskStatus = 1; // to do
+    //! current userID wait for change
+    const reporter = 1;
+    const newTask = {
+      projectId,
+      taskName,
+      startDate: new Date(startDate),
+      dueDate: new Date(dueDate),
+      description,
+      taskStatus,
+      userId,
+      reporter,
+    };
+    console.log("new task",newTask);
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation createTask($createTaskInput: CreateTaskInput!) {
+          createTask(createTaskInput: $createTaskInput) {
+            project {
+              projectName
+            }
+            taskName
+            startDate
+            dueDate
+            description
+            assign {
+              id
+            }
+          }
+        }
+      `,
+      variables: { createTaskInput: newTask },
+    });
+    console.log("newtask", newTask);
+    getMyTasks();
+    setShowCreateTaskModal(false);
+  }
+
   async function editTask(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -108,24 +150,23 @@ function Tasks() {
           updateTask(updateTaskInput: $updateTaskInput) {
             taskId
             taskName
-            taskStatusId{
+            taskStatusId {
               taskStatusId
             }
             description
             assign {
-              user {
-                userId
-                firstName
-              }
+              id
             }
           }
         }
       `,
       variables: { updateTaskInput: newData },
     });
-
     if (data?.updateTask) {
-      setTask([...task.filter((task) => task.taskId !== newData.id), data.updateTask]);
+      setTask([
+        ...task.filter((task) => task.taskId !== newData.id),
+        data.updateTask,
+      ]);
     }
   }
 
@@ -169,7 +210,7 @@ function Tasks() {
           </div>
         </div>
 
-        <div className="Titleasks font-mono font-bold px-4">
+        <div className="Titletasks font-mono font-bold px-4">
           <div className="flex flex-col mb-6">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 mt-6">
@@ -202,7 +243,9 @@ function Tasks() {
                     <tr>
                       <td>
                         {task
-                          .filter((task) => task.status === "TODO")
+                          .filter(
+                            (task) => task.taskStatusId.taskStatusId === 1
+                          )
                           .map((data) => {
                             return (
                               <TaskItem
@@ -217,7 +260,9 @@ function Tasks() {
                       </td>
                       <td>
                         {task
-                          .filter((task) => task.status === "INPROGRESS")
+                          .filter(
+                            (task) => task.taskStatusId.taskStatusId === 2
+                          )
                           .map((data) => {
                             return (
                               <TaskItem
@@ -232,7 +277,9 @@ function Tasks() {
                       </td>
                       <td>
                         {task
-                          .filter((task) => task.status === "DONE")
+                          .filter(
+                            (task) => task.taskStatusId.taskStatusId === 3
+                          )
                           .map((data) => {
                             return (
                               <TaskItem

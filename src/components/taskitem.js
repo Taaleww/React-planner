@@ -19,29 +19,29 @@ import ApolloClient from "apollo-boost";
 
 
 function HeaderIcon({ status }) {
-  if (status === "TODO") {
+  if (status === 1) { // TO DO
     return <TodoSvg />;
-  } else if (status === "INPROGRESS") {
+  } else if (status === 2) { // INPROGRESS
     return <InProgressSvg />;
-  } else if (status === "DONE") {
+  } else if (status === 3) { // DONE
     return <DoneSvg />;
   }
 }
 
 function StatusTag({ status }) {
-  if (status === "TODO") {
+  if (status === 1) { // TO DO
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         To DO
       </span>
     );
-  } else if (status === "INPROGRESS") {
+  } else if (status === 2) { // INPROGRESS
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         IN PROGRESS
       </span>
     );
-  } else if (status === "DONE") {
+  } else if (status === 3) { // DONE
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         SUCCESS
@@ -60,7 +60,7 @@ function dateTranform(date) {
   return completeDate;
 }
 
-function TaskItem({ taskData , deleteTask , editTask , projectData}) {
+function TaskItem({ taskData , deleteTask , editTask , projectId}) {
   console.log("this is data", taskData);
   function changeStateEditModalFromChild(state) {
     setShowEditTaskModal(state);
@@ -83,14 +83,55 @@ function TaskItem({ taskData , deleteTask , editTask , projectData}) {
   const [showAddAssigneeModal, setShowAddAssigneeModal] = React.useState(false);
   const [showCompleteTaskModal, setShowCompleteTaskModal] = React.useState(false);
 
+  const client = new ApolloClient({
+    uri: "http://localhost:5000/graphql",
+  });
+
+  const [getMember, setData] = useState([]);
+
+  async function getMembers(members) {
+    setData([]);
+    const { data } = await client.query({
+      query: gql`
+        query member($id: Int!) {
+          member(id: $id) {
+            user {
+              firstName
+              email
+              userId
+            }
+          }
+        }
+      `,
+      variables: { id: members },
+    });
+
+    if (data.member.length !== 0) {
+      const completeMembers = data.member.map((item) => {
+        return {
+          name: item.user.firstName,
+          prop: {
+            value: item.user.userId,
+            label: item.user.email,
+          },
+        };
+      });
+      setData([...completeMembers]);
+      console.log(completeMembers);
+    }
+  }
+  useEffect(() => {
+    getMembers(parseInt(projectId)); // change string -> int
+  }, []);
+  console.log("ss", projectId);
   
 
   return (
     <>
       {taskData ? (
         <>
-          <div className="Tasks relative bg-gray-800 py-6 px-6 rounded-3xl w-72 my-4 shadow mt-9 m-auto cursor-move text-white hover:bg-gray-700">
-            <HeaderIcon status={taskData.status} />
+          <div className="Tasks relative bg-gray-800 py-6 px-6 rounded-3xl w-72 my-4 shadow mt-9 m-auto  text-white hover:bg-gray-700">
+            <HeaderIcon status={taskData.taskStatusId.taskStatusId} />
             <div className="mt-8 ">
               <button
                 className=""
@@ -104,14 +145,14 @@ function TaskItem({ taskData , deleteTask , editTask , projectData}) {
               </button>
               <div className="flex space-x-2 text-gray-400 text-sm my-3">
                 <DateSvg />
-                {/* <p>Date : {dateTranform(taskData.startDate)}</p> */}
+                <p>Date : {dateTranform(taskData.startDate)}</p>
               </div>
               <div className="flex space-x-2 text-gray-400 text-sm my-3">
                 <DateSvg />
-                {/* <p>Due Date : {dateTranform(taskData.dueDate)}</p> */}
+                <p>Due Date : {dateTranform(taskData.dueDate)}</p>
               </div>
               <td className="px-0 py-0 whitespace-nowrap">
-                <StatusTag status={taskData.status} />
+                <StatusTag status={taskData.taskStatusId.taskStatusId} />
               </td>
               <td class="px-4 py-0 whitespace-nowrap text-center align-center">
                 <div class="flex item-left justify-center">
@@ -165,6 +206,7 @@ function TaskItem({ taskData , deleteTask , editTask , projectData}) {
               setShowEditTaskModalFromParent={changeStateEditModalFromChild}
               taskData={taskData}
               editTask={editTask}
+              members={getMember}
             />
           ) : null}
           {showDeleteTaskModal ? (

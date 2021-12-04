@@ -8,8 +8,8 @@ import Select from "react-select";
 import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
 
-//! Set to query data
-const currentUserId = 1;
+//! Set to query data currnt user 
+const reporter = 1;
 
 function CreateTask({
   setShowCreateProjectModalFromParent,
@@ -42,13 +42,14 @@ function CreateTask({
 
   const [errors, setErrors] = useState({});
 
-  //! Mock Fix this plz !!!!!!!!!!!!!!!!!!!!!! must member of project
+  // query member of project
   async function getUsers(projectId) { 
     const { data, error } = await client.query({
       query: gql`
         query member {
           member(id: ${projectId}) {
             user {
+              userId
               email
             }
           }
@@ -64,13 +65,13 @@ function CreateTask({
       };
     });
     const filteredOptions = userOptions.filter(
-      (option) => option.value !== currentUserId
+      (option) => option.value !== reporter
     );
 
     setUsers(filteredOptions);
   }
   useEffect(() => {
-    getUsers(projectId);
+    getUsers(parseInt(projectId));
   }, []);
 
   function Validate() {
@@ -114,23 +115,22 @@ function CreateTask({
     event.preventDefault();
 
     const userId = [
-      currentUserId,
+      reporter,
       ...selectedOption.map((item) => {
         return item.value;
       }),
     ];
-
+      console.log("member task",userId);
     const errors = Validate();
-    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       addTask(
-        projectId,
+        parseInt(projectId),
         values.taskName,
         values.startDate,
         values.dueDate,
         values.description,
         userId,
-        currentUserId
+        reporter
       );
     }
   }

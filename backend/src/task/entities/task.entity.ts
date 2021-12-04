@@ -49,15 +49,15 @@ export class Task {
   @Field(() => [Assign])
   assign: Assign[];
 
-  @Column({ type: 'date' })
+  @Column()
   @Field()
   startDate: Date;
 
-  @Column({ type: 'date' })
+  @Column()
   @Field()
   dueDate: Date;
 
-  @Column({nullable: true , type: 'date' })
+  @Column({nullable: true  })
   @Field()
   completeDate?: Date;
 

@@ -1,4 +1,6 @@
 import { ReactComponent as MemberSvg } from "../../assets/icons/member.svg";
+import Select from "react-select";
+
 
 function AddAssignee({ setShowAddAssigneeModalFromParent }) {
   return (
@@ -17,10 +19,17 @@ function AddAssignee({ setShowAddAssigneeModalFromParent }) {
                 <label className="block text-gray-700 text-sm font-normal mb-2 ">
                   Email
                 </label>
-                <input
+                {/* <input
                   type="text"
                   placeholder="Email"
                   className="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300"
+                /> */}
+                <Select
+                  placeholder="Members"
+                  // defaultValue={selectedOption}
+                  // onChange={handleMultiChange}
+                  // options={users}
+                  isMulti={true}
                 />
               </div>
 
