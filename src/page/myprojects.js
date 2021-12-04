@@ -1,12 +1,8 @@
 import "./myprojects.css";
 import React, { useState, useEffect } from "react";
 import ApolloClient from "apollo-boost";
-// import gql from "graphql-tag";
-// import {graphql} from 'react-apollo';
-// import { useQuery, useMutation } from "@apollo/client";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
-/// TRY ghaphql
 import gql from "graphql-tag";
 
 function MyProjects() {
@@ -21,24 +17,18 @@ function MyProjects() {
     uri: "http://localhost:5000/graphql",
   });
 
-  function deleteProject(target) {
-    // const { data } = await client.mutate({
-    //   mutation: gql`
-    //     mutation removeProject($id: Int!) {
-    //       removeProject(id: $id) {
-    //         projectId
-    //       }
-    //     }
-    //   `,
-    //   variables: { id: target },
-    // });
-
-    // if (condition) {
-      
-    // }
-
+  async function deleteProject(target) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation removeProject($id: Int!) {
+          removeProject(id: $id)
+        }
+      `,
+      variables: { id: target },
+    });
     getMyProjects();
   }
+  //! please change current userid nowwwwwww !!!!!!!!!
   const userId = 1;
   async function getMyProjects() {
     setData([]);
@@ -49,7 +39,9 @@ function MyProjects() {
             project {
               projectId
               projectName
-              role
+              projectStatus {
+                projectStatusId
+              }
               description
               startDate
               dueDate
@@ -71,6 +63,26 @@ function MyProjects() {
     }
   }
 
+  async function editProject(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation updateProject($updateProjectInput: UpdateProjectInput!) {
+          updateProject(updateProjectInput: $updateProjectInput) {
+            projectId
+            projectStatus {
+              projectStatusId
+            }
+          }
+        }
+      `,
+      variables: { updateProjectInput: newData },
+    });
+
+    if (data) {
+      getMyProjects();
+    }
+  }
+
   async function addProject(
     projectName,
     startDate,
@@ -78,14 +90,17 @@ function MyProjects() {
     description,
     members
   ) {
-    const status = "INPROGRESS";
+    const projectStatusId = 1; // inprogress
+    //! current userID wait for change
+    const ownerid = 1;
     const newProject = {
       projectName,
       startDate: new Date(startDate),
       dueDate: new Date(dueDate),
       description,
-      status,
+      projectStatusId,
       members,
+      ownerid,
     };
     const { data } = await client.mutate({
       mutation: gql`
@@ -94,20 +109,39 @@ function MyProjects() {
             project {
               projectId
               projectName
-              role
+              projectStatus {
+                projectStatusId
+              }
               description
               startDate
               dueDate
+              ownerid
             }
           }
         }
       `,
       variables: { createProjectInput: newProject },
     });
-    console.log("created data: ", data.createProject[0].project);
+    // console.log("created data: ", data.createProject[0].project);
     getMyProjects();
-    // setData([data.createProject[0].project, ...myProjects]);
     setShowCreateProjectModal(false);
+  }
+
+  async function addMember(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation addMember($addMemberInput: CreateProjectUserRoleInput!) {
+          addMember(addMemberInput: $addMemberInput) {
+            projectId
+          }
+        }
+      `,
+      variables: { addMemberInput: newData },
+    });
+
+    if (data) {
+      getMyProjects();
+    }
   }
 
   const [showCreateProjectModal, setShowCreateProjectModal] =
@@ -199,8 +233,9 @@ function MyProjects() {
                         <ProjectItem
                           key={index}
                           projectData={data.project}
-                          projectMember={data.user}
                           deleteProject={deleteProject}
+                          editProject={editProject}
+                          addMember={addMember}
                         />
                       );
                     })

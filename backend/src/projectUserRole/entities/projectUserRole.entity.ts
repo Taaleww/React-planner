@@ -32,7 +32,7 @@ export class ProjectUserRole {
     onDelete: 'CASCADE',
   })
   @Field(() => User)
-  user: User;
+  user: User; 
 
   @ManyToOne(() => Project, (project) => project.projectUserRole, {
     onDelete: 'CASCADE',

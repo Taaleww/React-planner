@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
 import gql from "graphql-tag";
@@ -11,8 +11,10 @@ function Tasks() {
     uri: "http://localhost:5000/graphql",
   });
 
-  const location = useLocation();
-  const { projectId } = location.state;
+  const params = useParams();
+
+  // Check value of Object
+  let projectId = params?.projectId;
 
   const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
 
@@ -21,13 +23,49 @@ function Tasks() {
   const [successData, setSuccessData] = React.useState([]);
 
   const [task, setTask] = useState([]);
-  const [projectName, setprojectName] = useState("");
+  const [projectName, setProjectName] = useState("");
 
   function changeStateModalFromChild(state) {
     setShowCreateTaskModal(state);
   }
 
+  async function addTask(
+    projectId,
+    taskName,
+    startDate,
+    dueDate,
+    description,
+    userId,
+    reporter
+  ) {
+    const taskStatusId = 1;
+    const newTask = {
+      projectId: parseInt(projectId),
+      taskName,
+      startDate: new Date(startDate),
+      dueDate: new Date(dueDate),
+      description,
+      taskStatusId,
+      userId,
+      reporter,
+    };
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation createTask($createTaskInput: CreateTaskInput!) {
+          createTask(createTaskInput: $createTaskInput) {
+            taskId
+          }
+        }
+      `,
+      variables: { createTaskInput: newTask },
+    });
+    console.log("created data: ", data);
+    getMyTasks();
+    setShowCreateTaskModal(false);
+  }
+
   async function getMyTasks() {
+    console.log("HERE", projectId);
     setTask([]);
     const { data } = await client.query({
       query: gql`
@@ -37,9 +75,9 @@ function Tasks() {
             task {
               taskId
               taskName
-              status
-              startDate
-              dueDate
+              taskStatusId{
+                taskStatusId
+              }
               description
               assign {
                 user {
@@ -52,18 +90,61 @@ function Tasks() {
         }
       `,
     });
-    console.log(data.project);
+    console.log("project", data.project);
+    console.log("task", task);
     if (data) {
-      await setprojectName(data.project.projectName);
+      await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
       // await setTodoData(task.filter((task) => task.status === "TODO"));
       // await setInProgressData(task.filter((task) => task.status === "INPROGRESS"));
       // await setSuccessData(task.filter((task) => task.status === "DONE"));
     }
   }
+
+  async function editTask(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation updateTask($updateTaskInput: UpdateTaskInput!) {
+          updateTask(updateTaskInput: $updateTaskInput) {
+            taskId
+            taskName
+            taskStatusId{
+              taskStatusId
+            }
+            description
+            assign {
+              user {
+                userId
+                firstName
+              }
+            }
+          }
+        }
+      `,
+      variables: { updateTaskInput: newData },
+    });
+
+    if (data?.updateTask) {
+      setTask([...task.filter((task) => task.taskId !== newData.id), data.updateTask]);
+    }
+  }
+
+  async function deleteTask(target) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation removeTask($id: Int!) {
+          removeTask(id: $id)
+        }
+      `,
+      variables: { id: target },
+    });
+    if (data.removeTask === "Delete Success") {
+      setTask(task.filter((task) => task.taskId !== target));
+    }
+  }
+
   useEffect(() => {
     getMyTasks();
-    // projectId()
   }, []);
 
   return (
@@ -72,10 +153,10 @@ function Tasks() {
       <div className="MyProjects font-bold md:container md:mx-auto  font-mono ">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full px-4 max-w-full flex-grow flex-1 flex flex-row ">
-            <h3 className="font-semibold text-xl px-4 ">
+            <h3 className="font-semibold text-base px-4 ">
               <Link to="/myprojects">My Projects</Link>
             </h3>
-            <h3 className="font-semibold text-xl ">/ Tasks</h3>
+            <h3 className="font-semibold text-base ">/ Tasks</h3>
           </div>
           <div className="relative w-full px-4 max-w-3 flex-grow flex-1 text-right">
             <button
@@ -123,21 +204,45 @@ function Tasks() {
                         {task
                           .filter((task) => task.status === "TODO")
                           .map((data) => {
-                            return <TaskItem taskData={data} />;
+                            return (
+                              <TaskItem
+                                taskData={data}
+                                deleteTask={deleteTask}
+                                editTask={editTask}
+                                addTask={addTask}
+                                projectId={projectId}
+                              />
+                            );
                           })}
                       </td>
                       <td>
                         {task
                           .filter((task) => task.status === "INPROGRESS")
                           .map((data) => {
-                            return <TaskItem taskData={data} />;
+                            return (
+                              <TaskItem
+                                taskData={data}
+                                deleteTask={deleteTask}
+                                editTask={editTask}
+                                addTask={addTask}
+                                projectId={projectId}
+                              />
+                            );
                           })}
                       </td>
                       <td>
                         {task
                           .filter((task) => task.status === "DONE")
                           .map((data) => {
-                            return <TaskItem taskData={data} />;
+                            return (
+                              <TaskItem
+                                taskData={data}
+                                deleteTask={deleteTask}
+                                editTask={editTask}
+                                addTask={addTask}
+                                projectId={projectId}
+                              />
+                            );
                           })}
                       </td>
                     </tr>
@@ -153,6 +258,7 @@ function Tasks() {
         <>
           <CreateTasks
             setShowCreateTaskModalFromParent={changeStateModalFromChild}
+            addTask={addTask}
             projectId={projectId}
           />
         </>

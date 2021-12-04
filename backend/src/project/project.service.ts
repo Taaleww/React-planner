@@ -162,10 +162,10 @@ export class ProjectService {
     // });
   }
 
-  async remove(id: number): Promise<string> {
+  async remove(id: number): Promise<number> {
     const task = await this.projectRepository.findOne(id);
-    await this.projectRepository.delete(id);
-    return 'Delete Success';
+    const deleted = await this.projectRepository.delete(id);
+    return deleted.affected;
   }
 }
 
