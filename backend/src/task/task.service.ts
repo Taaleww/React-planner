@@ -149,13 +149,13 @@ export class TaskService {
   async update(id: number, updateTaskInput: UpdateTaskInput): Promise<Task> {
     const task = await this.taskRepository.findOneOrFail({
       where: { taskId: id },
-      relations: ['project'],
+      relations: ['project','taskStatusId'],
     });
 
     //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
     if (!updateTaskInput.userId) {
       const updateTask = Object.assign(task, updateTaskInput);
-      return await this.projectRepository.save(updateTask);
+      return await this.taskRepository.save(updateTask);
       /**
        * แยก member กับตัวอื่น
        * หาก member เดิมในโปรเจกต์

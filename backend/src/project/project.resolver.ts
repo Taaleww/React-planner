@@ -10,7 +10,7 @@ import { createParamDecorator, ExecutionContext, Get, UseGuards } from '@nestjs/
 export class ProjectResolver {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Mutation(() => [ProjectUserRole])
+  @Mutation(() => ProjectUserRole)
   createProject(
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
   ) {    

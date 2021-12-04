@@ -29,15 +29,15 @@ export class ProjectService {
 
   async create(
     createProjectInput: CreateProjectInput,
-  ): Promise<ProjectUserRole[]> {
-    const project = await this.projectRepository.findOne({
+  ): Promise<ProjectUserRole> {
+    const alreadyProject = await this.projectRepository.findOne({
       where: {
         projectName: createProjectInput.projectName,
       },
     });
 
-    if (!project) {
-      throw new ForbiddenError('Not have this project');
+    if (alreadyProject) {
+      throw new ForbiddenError('Already has this project');
     }
 
     const newProject = this.projectRepository.create(createProjectInput);
@@ -53,6 +53,12 @@ export class ProjectService {
 
     //Relation to status
     status.project.push(newProject);
+    await this.projectRepository.save(newProject);
+
+    const project = await this.projectRepository.findOne({
+      where: { projectId:newProject.projectId},
+      relations: ['projectStatus','projectUserRole']
+    })
 
     await Promise.all(
       createProjectInput.members.map(async (userId) => {
@@ -70,6 +76,8 @@ export class ProjectService {
           role: Role.EMPLOYEE,
         });
 
+        console.log(newProject);
+
         user.projectUserRole.push(newProjectUserRole);
         project.projectUserRole.push(newProjectUserRole);
 
@@ -81,7 +89,7 @@ export class ProjectService {
     await this.projectRepository.save(newProject);
     await this.projectStatusRepository.save(status);
 
-    return await this.projectUserRoleRepository.find({
+    return await this.projectUserRoleRepository.findOne({
       where: { project: project },
       relations: ['user', 'project'],
     });
@@ -107,7 +115,7 @@ export class ProjectService {
   ): Promise<Project> {
     const project = await this.projectRepository.findOneOrFail({
       where: { projectId: id },
-      relations: ['task'],
+      relations: ['task', 'projectStatus'],
     });
 
     //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
@@ -143,6 +151,10 @@ export class ProjectService {
       );
       return await this.projectRepository.save(updateProject);
     }
+    // return this.projectRepository.findOne({
+    //   where :{ projectId:project},
+    //   relations:['projectUserRole','projectStatsus']
+    // });
   }
 
   async remove(id: number): Promise<number> {
@@ -150,7 +162,6 @@ export class ProjectService {
     const deleted = await this.projectRepository.delete(id);
     return deleted.affected;
   }
-
 }
 
 @Injectable()
@@ -160,4 +171,3 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     return ctx.getContext().req;
   }
 }
-
