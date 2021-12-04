@@ -178,9 +178,12 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   id: Int!
+  oldPassword: String!
   job: String!
-  departmant: String!
+  department: String!
   organization: String!
+  address: String!
+  image: String!
 }
 
 input CreateTaskInput {
