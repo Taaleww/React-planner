@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ProjectStatus {
-  projectStatusId: Int!
-  projectStatus: String!
-  project: Project!
-}
-
 type TaskStatus {
   taskStatusId: Int!
   taskStatus: String!
@@ -32,17 +26,29 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Project {
-  projectId: Int!
-  projectName: String!
-  ownerId: Int!
-  projectStatus: ProjectStatus!
-  task: [Task!]!
+type User {
+  userId: Int!
   projectUserRole: [ProjectUserRole!]!
-  description: String!
-  startDate: DateTime!
-  dueDate: DateTime!
-  completeDate: DateTime
+  assign: [Assign!]!
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  job: String!
+  department: String!
+  organization: String!
+  address: String!
+  image: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Assign {
+  id: Int!
+  task: Task!
+  user: User!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 type ProjectUserRole {
@@ -59,29 +65,23 @@ enum Role {
   EMPLOYEE
 }
 
-type Assign {
-  id: Int!
-  task: Task!
-  user: User!
-  created_at: DateTime!
-  updated_at: DateTime!
+type Project {
+  projectId: Int!
+  projectName: String!
+  ownerId: Int!
+  projectStatus: ProjectStatus!
+  task: [Task!]!
+  projectUserRole: [ProjectUserRole!]!
+  description: String!
+  startDate: DateTime!
+  dueDate: DateTime!
+  completeDate: DateTime
 }
 
-type User {
-  userId: Int!
-  projectUserRole: [ProjectUserRole!]!
-  assign: [Assign!]!
-  email: String!
-  password: String!
-  firstName: String!
-  lastName: String!
-  job: String!
-  department: String!
-  organization: String!
-  address: String!
-  image: String!
-  created_at: DateTime!
-  updated_at: DateTime!
+type ProjectStatus {
+  projectStatusId: Int!
+  projectStatus: String!
+  project: Project!
 }
 
 type Query {
