@@ -13,8 +13,6 @@ import gql from "graphql-tag";
 const currentUserId = 1;
 
 function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
-  //apollo client setup
-
   useEffect(() => {
     getUsers();
   }, []);
@@ -22,29 +20,29 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-
+  //apollo client setup
   const client = new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache(),
   });
-
+  // set value project data
   const [values, setValues] = useState({
     projectName: "",
     startDate: "",
     dueDate: "",
-    description: ""
+    description: "",
   });
 
   const [selectedOption, setSelectedOption] = useState([]);
 
   function handleMultiChange(option) {
-    setSelectedOption(option)
+    setSelectedOption(option);
   }
 
   const [users, setUsers] = useState([]);
 
   const [errors, setErrors] = useState({});
-
+  // query user
   async function getUsers() {
     const { data } = await client.query({
       query: gql`
@@ -68,10 +66,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
 
     setUsers(filteredOptions);
   }
-
+  // validate form create projct info
   function ValidateCreateProjectInfo() {
     let errors = {};
-    
 
     if (!values.projectName) {
       errors.projectName = "Please input project name";
@@ -95,13 +92,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
       errors.description = "Please input description";
     }
     setErrors(errors);
-    console.log("error1",
-      errors
-    );
-    return errors
-    
+    console.log("error1", errors);
+    return errors;
   }
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -110,19 +103,19 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
       [name]: value,
     });
   };
-
+  // sent data to addProject function
   async function onSubmit(event) {
     event.preventDefault();
 
     const members = [
       currentUserId.toString(),
-      ...selectedOption.map((item) => { return item.value.toString()}),
-    ]
-    
+      ...selectedOption.map((item) => {
+        return item.value.toString();
+      }),
+    ];
+
     const errors = ValidateCreateProjectInfo();
-    console.log("error",
-      errors
-    );
+    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       addProject(
         values.projectName,
@@ -140,9 +133,9 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
         <div className="absolute bg-black opacity-80 inset-0 z-0 "></div>
         <div className="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0 ">
           <div className="">
-            <div className="text-center p-5 flex-auto justify-center">
+            <div className="text-center p-5 flex-auto justify-center ">
               <CreateSvg />
-              <h2 className="text-xl font-bold py-4 ">Create Project</h2>
+              <h2 className="text-xl font-bold py-4  ">Create Project</h2>
               <div className="space-y-4">
                 <form>
                   <label className="block text-gray-700 text-sm font-normal mb-2 text-left ">

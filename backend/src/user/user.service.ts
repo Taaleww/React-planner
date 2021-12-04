@@ -51,6 +51,23 @@ export class UserService {
     if (!user) {
       throw new ForbiddenError('User not found.');
     }
+
+    if(updateUserInput.oldPassword){
+      const passwordMatch = await bcrypt.compare(
+        updateUserInput.oldPassword,
+        user.password,
+      );
+      
+      if(passwordMatch){
+        if(updateUserInput.password){
+          const hashPassword = await bcrypt.hash(updateUserInput.password, 10);
+          updateUserInput.password = hashPassword;
+        }
+      }else{
+        throw new ForbiddenError('Password does not match');
+      }
+    }
+
     const updated = Object.assign(user, updateUserInput);
     return await this.userRepository.save(updated);
   }

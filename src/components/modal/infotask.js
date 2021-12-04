@@ -1,21 +1,21 @@
 function StatusTag({ status }) {
-  if (status === "INPROGRESS") {
+  if (status === "TODO") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-        In Progress
+        TO DO
       </span>
     );
-  } else if (status === "SUCCESS") {
+  } else if (status === "DONE") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-        Success
+        SUCESS
       </span>
     );
   }
-  else if (status === "LATE") {
+  else if (status === "INPROGRESS") {
     return (
-      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-        Late
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+        IN PROGRESS
       </span>
     );
   } else {
@@ -27,7 +27,7 @@ function StatusTag({ status }) {
   }
 }
 
-function InfoTask({setShowInfoTaskModalFromParent}) {
+function InfoTask({setShowInfoTaskModalFromParent,taskData}) {
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -43,7 +43,7 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
               <div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Task Name</p>
-                  <p>Jane Doe</p>
+                  <p>{taskData.taskName}</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Date</p>
@@ -55,17 +55,13 @@ function InfoTask({setShowInfoTaskModalFromParent}) {
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Status</p>
-                  <p>$ 12000</p>
+                  <p>
+                    <StatusTag status={taskData.status} />
+                  </p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Descriptions</p>
-                  <p>
-                    Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
-                    incididunt cillum culpa consequat. Excepteur qui ipsum
-                    aliquip consequat sint. Sit id mollit nulla mollit nostrud
-                    in ea officia proident. Irure nostrud pariatur mollit ad
-                    adipisicing reprehenderit deserunt qui eu.
-                  </p>
+                  <p>{taskData.description}</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
                   <p className="text-gray-600">Members</p>

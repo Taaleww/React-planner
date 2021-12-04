@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { Assign } from 'src/assign/entities/assign.entity';
 import { Project } from 'src/project/entities/project.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -8,6 +9,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 export enum Role {
@@ -30,13 +32,17 @@ export class ProjectUserRole {
     onDelete: 'CASCADE',
   })
   @Field(() => User)
-  user: User;
+  user: User; 
 
   @ManyToOne(() => Project, (project) => project.projectUserRole, {
     onDelete: 'CASCADE',
   })
   @Field(() => Project)
   project: Project;
+
+  // @OneToMany(() => Assign, (assign) => assign.user, { eager: true })
+  // @Field(() => [Assign])
+  // assign: Assign[];
 
   @Column({
     type: 'enum',

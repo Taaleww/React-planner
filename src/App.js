@@ -6,6 +6,7 @@ import Navbar from "./components/navbar";
 import Login from "./page/loginform";
 import Regis from "./page/regisform";
 import InfoTask from "./components/modal/infotask";
+import Footer from "./components/footer";
 import NotFound from "./page/notfound";
 import Profile from "./page/profile";
 import ManageAccount from "./page/manageaccount";
@@ -20,15 +21,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/myprojects" element={<MyProjects />} />
-          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/project/:projectId/tasks" element={<Tasks />} />
           <Route path="/login" element={<Login />} />
           <Route path="/regis" element={<Regis />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/manage_account" element={<ManageAccount />} />
           <Route path="/infotask" element={<InfoTask />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
+      <Footer/>
     </>
   );
 }

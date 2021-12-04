@@ -69,6 +69,7 @@ export class AssignService {
   async findOne(id: number): Promise<Assign> {
     return await this.assignRepository.findOne({
       where: { id: id },
+      relations:['user','task']
     });
   }
 
