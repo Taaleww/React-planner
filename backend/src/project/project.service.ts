@@ -91,7 +91,7 @@ export class ProjectService {
 
     return await this.projectUserRoleRepository.findOne({
       where: { project: project },
-      relations: ['user', 'project'],
+      relations: ['user', 'project','project.projectStatus'],
     });
 
     // return newProject;
@@ -118,6 +118,11 @@ export class ProjectService {
       relations: ['task', 'projectStatus'],
     });
 
+    if(updateProjectInput.projectStatusId){
+    project.projectStatus.projectStatusId = updateProjectInput.projectStatusId;
+  }
+
+    
     //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
     if (!updateProjectInput.members) {
       const updateProject = Object.assign(project, updateProjectInput);
@@ -129,7 +134,7 @@ export class ProjectService {
        */
     } else {
       const { members, ...restInput } = updateProjectInput;
-
+      
       const updateProject = Object.assign(project, restInput);
 
       const allMember = await this.projectUserRoleRepository.find({
@@ -138,17 +143,17 @@ export class ProjectService {
         },
         relations: ['user', 'project'],
       });
-
+      
       await Promise.all(
         allMember.map(async (member) => {
           if (!members.includes(member.user.userId.toString())) {
             console.log('Delete member ' + member.user.userId);
             await this.projectUserRoleRepository.delete(
               member.projectUserRoleid,
-            );
-          }
-        }),
-      );
+              );
+            }
+          }),
+          );
       return await this.projectRepository.save(updateProject);
     }
     // return this.projectRepository.findOne({
