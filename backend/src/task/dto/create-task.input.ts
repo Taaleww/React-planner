@@ -16,8 +16,8 @@ export class CreateTaskInput {
   @Field()
   taskName: string;
 
-  @Field(() => Int)
-  reporter: number;
+  @Field(() => Int,{nullable: true})
+  onwerId: number;
   
   // @IsDate(}
   @Field()

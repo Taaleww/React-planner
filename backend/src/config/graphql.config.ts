@@ -8,5 +8,9 @@ const graphql_config: GqlModuleOptions = {
   context: ({ req, connection }) =>
     connection ? { req: req } : { headers: req.headers },
   resolvers: {},
+  cors : {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }
 };
 export default graphql_config;

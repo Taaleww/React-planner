@@ -8,38 +8,6 @@ type ProjectStatus {
   project: Project!
 }
 
-type ProjectUserRole {
-  projectUserRoleid: Int!
-  user: User!
-  project: Project!
-  role: Role!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
-enum Role {
-  MANAGER
-  EMPLOYEE
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Project {
-  projectId: Int!
-  projectName: String!
-  ownerid: Int!
-  projectStatus: ProjectStatus!
-  task: [Task!]!
-  projectUserRole: [ProjectUserRole!]!
-  description: String!
-  startDate: DateTime!
-  dueDate: DateTime!
-  completeDate: DateTime
-}
-
 type TaskStatus {
   taskStatusId: Int!
   taskStatus: String!
@@ -56,7 +24,39 @@ type Task {
   dueDate: DateTime!
   completeDate: DateTime!
   description: String!
-  reporter: Float!
+  onwerId: Float!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Project {
+  projectId: Int!
+  projectName: String!
+  ownerId: Int!
+  projectStatus: ProjectStatus!
+  task: [Task!]!
+  projectUserRole: [ProjectUserRole!]!
+  description: String!
+  startDate: DateTime!
+  dueDate: DateTime!
+  completeDate: DateTime
+}
+
+type ProjectUserRole {
+  projectUserRoleid: Int!
+  user: User!
+  project: Project!
+  role: Role!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+enum Role {
+  MANAGER
+  EMPLOYEE
 }
 
 type Assign {
@@ -98,6 +98,7 @@ type Query {
   task(id: Int!): Task!
   assigns: [Assign!]!
   assign(id: Int!): Assign!
+  findMemberInTask(taskId: Int!): [Assign!]!
   taskStatuses: [TaskStatus!]!
   taskStatus(id: Int!): TaskStatus!
   projectStatuses: [ProjectStatus!]!
@@ -117,7 +118,7 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: Int!): String!
-  newTaskMember(taskMember: CreateAssignInput!): Assign!
+  newTaskMember(taskMember: CreateAssignInput!): [Assign!]!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
   login(loginInput: LoginInput!): String!
@@ -132,7 +133,7 @@ type Mutation {
 input CreateProjectInput {
   projectName: String!
   projectStatusId: Int!
-  ownerid: Int!
+  ownerId: Int
   description: String!
   startDate: DateTime!
   dueDate: DateTime!
@@ -143,7 +144,7 @@ input CreateProjectInput {
 input UpdateProjectInput {
   projectName: String
   projectStatusId: Int
-  ownerid: Int
+  ownerId: Int
   description: String
   startDate: DateTime
   dueDate: DateTime
@@ -178,9 +179,12 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   id: Int!
+  oldPassword: String!
   job: String!
-  departmant: String!
+  department: String!
   organization: String!
+  address: String!
+  image: String!
 }
 
 input CreateTaskInput {
@@ -188,7 +192,7 @@ input CreateTaskInput {
   userId: [Int!]!
   taskStatus: Int!
   taskName: String!
-  reporter: Int!
+  onwerId: Int
   startDate: DateTime!
   dueDate: DateTime!
   completeDate: DateTime
@@ -200,7 +204,7 @@ input UpdateTaskInput {
   userId: [Int!]
   taskStatus: Int
   taskName: String
-  reporter: Int
+  onwerId: Int
   startDate: DateTime
   dueDate: DateTime
   completeDate: DateTime

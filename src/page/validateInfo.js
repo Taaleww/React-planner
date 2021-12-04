@@ -1,16 +1,16 @@
 export default function ValidateInfo(values) {
     let errors = {}
 
-    if(!values.firstname){
-        errors.firstname = "Please input your first name"
-    }else if(/[^a-zA-Z\s]/.test(values.firstname)){
-        errors.firstname = "Plese input only characters"
+    if(!values.firstName){
+        errors.firstName = "Please input your first name"
+    }else if(/[^a-zA-Z\s]/.test(values.firstName)){
+        errors.firstName = "Plese input only characters"
     }
 
-    if(!values.lastname){
-        errors.lastname = "Please input your last name"
-    }else if(/[^a-zA-Z-\s]/.test(values.lastname)){
-        errors.lastname = "Plese input only characters"
+    if(!values.lastName){
+        errors.lastName = "Please input your last name"
+    }else if(/[^a-zA-Z-\s]/.test(values.lastName)){
+        errors.lastName = "Plese input only characters"
     }
     
     if(!values.email){
@@ -30,6 +30,7 @@ export default function ValidateInfo(values) {
     } else if (values.cfpassword !== values.password) {
         errors.cfpassword = 'Passwords do not match';
     }
+    // console.log(errors);
 
     return errors;
 }

@@ -3,14 +3,23 @@ import { TaskService } from './task.service';
 import { Task } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
+import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
+import { User } from 'src/user/entities/user.entity';
 
 @Resolver(() => Task)
 export class TaskResolver {
   constructor(private readonly taskService: TaskService) {}
 
   @Mutation(() => Task)
-  createTask(@Args('createTaskInput') createTaskInput: CreateTaskInput) {
-    return this.taskService.create(createTaskInput);
+  createTask(
+    // @CurrentUser() user : User,
+
+    @Args('createTaskInput') createTaskInput: CreateTaskInput) : Promise<Task> {
+    return this.taskService.create(
+      
+      // user.userId,
+
+      createTaskInput);
   }
 
   @Query(() => [Task], { name: 'tasks' })

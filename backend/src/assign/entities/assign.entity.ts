@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -25,6 +26,10 @@ export class Assign {
   @ManyToOne(() => User, (user) => user.assign,{ onDelete: 'CASCADE'})
   @Field(() => User)
   user: User;
+
+  // @ManyToOne(() => ProjectUserRole, (projectUserRole) => projectUserRole.assign,{ onDelete: 'CASCADE'})
+  // @Field(() => ProjectUserRole)
+  // userInProject: ProjectUserRole;
 
   @CreateDateColumn()
   @Field()
