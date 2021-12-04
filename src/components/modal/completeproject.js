@@ -6,16 +6,18 @@ function CompleteProject({
   editProject,
 }) {
   function computeData(projectData) {
+    console.log(projectData.projectStatus.projectStatusId);
     let projectStatusId = 2 // inprogress 
     const today = new Date()
     const dueDate = new Date(projectData.dueDate)
     if (today > dueDate) {
       projectStatusId = 3 // late
     }
+    console.log(projectStatusId);
     return {
       id: projectData.projectId,
       completeDate: today,
-      projectStatusId
+      projectStatusId 
     }
   }
   return (

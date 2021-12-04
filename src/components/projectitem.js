@@ -23,19 +23,20 @@ function dateTranform(date) {
 }
 
 function StatusTag({ data }) {
-  if (data.projectStatusId === "1") {
+  console.log("projectStatusId",data.projectStatus.projectStatusId);
+  if (data.projectStatus.projectStatusId === 1) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         In Progress
       </span>
     );
-  } else if (data.projectStatusId === "2") {
+  } else if (data.projectStatus.projectStatusId === 2) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         Success
       </span>
     );
-  } else if (data.projectStatusId === "3") {
+  } else if (data.projectStatus.projectStatusId === 3) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         Late

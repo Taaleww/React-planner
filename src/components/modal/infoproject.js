@@ -3,19 +3,19 @@ import React, { useState, useEffect } from "react";
 import ApolloClient from "apollo-boost";
 
 function StatusTag({ status }) {
-  if (status === "INPROGRESS") {
+  if (status === 1) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         In Progress
       </span>
     );
-  } else if (status === "SUCCESS") {
+  } else if (status === 2) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         Success
       </span>
     );
-  } else if (status === "LATE") {
+  } else if (status === 3) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         Late
@@ -44,7 +44,6 @@ function InfoProject({ setShowInfoProjectModalFromParent, projectData }) {
   });
 
   const [getMember, setData] = useState([]);
-  // const members = projectData.projectId
 
   async function getMembers(members) {
     setData([]);
@@ -99,7 +98,9 @@ function InfoProject({ setShowInfoProjectModalFromParent, projectData }) {
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600  mr-48">Status</p>
                   <p>
-                    <StatusTag status={projectData.status} />
+                    <StatusTag
+                      status={projectData.projectStatus.projectStatusId}
+                    />
                   </p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
@@ -110,10 +111,10 @@ function InfoProject({ setShowInfoProjectModalFromParent, projectData }) {
                   <p>Members</p>
                   <p class="overflow-ellipsis overflow-hidden">
                     {getMember.map((member, index) => {
-                      if (index === getMember.length - 1 ) {
-                        return `${member}`
+                      if (index === getMember.length - 1) {
+                        return `${member}`;
                       }
-                      return `${member} ,`
+                      return `${member} ,`;
                     })}
                   </p>
                 </div>

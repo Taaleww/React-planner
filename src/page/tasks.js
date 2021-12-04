@@ -38,14 +38,14 @@ function Tasks() {
     userId,
     reporter
   ) {
-    const status = "TODO";
+    const taskStatusId = 1;
     const newTask = {
       projectId: parseInt(projectId),
       taskName,
       startDate: new Date(startDate),
       dueDate: new Date(dueDate),
       description,
-      status,
+      taskStatusId,
       userId,
       reporter,
     };
@@ -61,7 +61,6 @@ function Tasks() {
     });
     console.log("created data: ", data);
     getMyTasks();
-    // setData([data.createProject[0].project, ...myProjects]);
     setShowCreateTaskModal(false);
   }
 
@@ -76,8 +75,9 @@ function Tasks() {
             task {
               taskId
               taskName
-              status
-            
+              taskStatusId{
+                taskStatusId
+              }
               description
               assign {
                 user {
@@ -108,8 +108,9 @@ function Tasks() {
           updateTask(updateTaskInput: $updateTaskInput) {
             taskId
             taskName
-            status
-
+            taskStatusId{
+              taskStatusId
+            }
             description
             assign {
               user {

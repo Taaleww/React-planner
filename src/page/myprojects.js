@@ -1,12 +1,8 @@
 import "./myprojects.css";
 import React, { useState, useEffect } from "react";
 import ApolloClient from "apollo-boost";
-// import gql from "graphql-tag";
-// import {graphql} from 'react-apollo';
-// import { useQuery, useMutation } from "@apollo/client";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
-/// TRY ghaphql
 import gql from "graphql-tag";
 
 function MyProjects() {
@@ -32,6 +28,7 @@ function MyProjects() {
     });
     getMyProjects();
   }
+  //! please change current userid nowwwwwww !!!!!!!!!
   const userId = 1;
   async function getMyProjects() {
     setData([]);
@@ -72,7 +69,9 @@ function MyProjects() {
         mutation updateProject($updateProjectInput: UpdateProjectInput!) {
           updateProject(updateProjectInput: $updateProjectInput) {
             projectId
-            status
+            projectStatus{
+              projectstatusId
+            }
           }
         }
       `,
@@ -125,7 +124,6 @@ function MyProjects() {
     });
     console.log("created data: ", data.createProject[0].project);
     getMyProjects();
-    // setData([data.createProject[0].project, ...myProjects]);
     setShowCreateProjectModal(false);
   }
 
