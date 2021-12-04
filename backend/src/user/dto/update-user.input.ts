@@ -14,4 +14,10 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
 
   @Field()
   organization: string;
+
+  @Field()
+  address: string;
+
+  @Field()
+  image: string;
 }
