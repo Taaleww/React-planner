@@ -10,7 +10,7 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   job: string;
 
   @Field()
-  departmant: string;
+  department: string;
 
   @Field()
   organization: string;
