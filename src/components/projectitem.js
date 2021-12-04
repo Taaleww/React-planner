@@ -23,19 +23,19 @@ function dateTranform(date) {
 }
 
 function StatusTag({ data }) {
-  if (data.status === "INPROGRESS") {
+  if (data.projectStatusId === "1") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         In Progress
       </span>
     );
-  } else if (data.status === "DONE") {
+  } else if (data.projectStatusId === "2") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         Success
       </span>
     );
-  } else if (data.status === "LATE") {
+  } else if (data.projectStatusId === "3") {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         Late
@@ -179,12 +179,6 @@ function ProjectItem({
               }
             </div>
           </td>
-          {/* <td className="px-6 py-4 whitespace-nowrap ">
-              <div className="text-sm text-gray-900">
-                {member.join(",")}
-              </div>
-            </td> */}
-
           <td className="py-2 px-6 whitespace-nowrap text-center">
             <div className="flex item-left justify-center">
               <div className="w-4 mr-4 transform hover:text-purple-500 hover:scale-110">

@@ -42,7 +42,9 @@ function MyProjects() {
             project {
               projectId
               projectName
-              status
+              projectStatus{
+                projectStatusId
+              }
               description
               startDate
               dueDate
@@ -89,7 +91,7 @@ function MyProjects() {
     description,
     members
   ) {
-    const status = "INPROGRESS";
+    const projectStatusId = 1; // inprogress
     //! current userID wait for change
     const ownerid = 1;
     const newProject = {
@@ -97,7 +99,7 @@ function MyProjects() {
       startDate: new Date(startDate),
       dueDate: new Date(dueDate),
       description,
-      status,
+      projectStatusId,
       members,
       ownerid,
     };
@@ -108,7 +110,9 @@ function MyProjects() {
             project {
               projectId
               projectName
-              status
+              projectStatus{
+                projectStatusId
+              }
               description
               startDate
               dueDate
