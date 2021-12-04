@@ -82,7 +82,9 @@ export class TaskService {
   //   return savedTask;
   // }
 
-  async create(createTaskInput: CreateTaskInput): Promise<Task> {
+  async create(
+    ownerId:number,
+    createTaskInput: CreateTaskInput): Promise<Task> {
     const alreadyTask = await this.taskRepository.findOne({
       where: { taskName: createTaskInput.taskName },
     });
@@ -91,6 +93,7 @@ export class TaskService {
       throw new ForbiddenError('Task already existed.');
     }
 
+    createTaskInput.onwerId=ownerId;
     //create Task
     const newTask = this.taskRepository.create(createTaskInput);
 
@@ -136,13 +139,13 @@ export class TaskService {
     // return newTask;
     return await this.taskRepository.findOne({
       where: { taskId: newTask.taskId },
-      relations: ['project', 'taskStatusId','assign'],
+      relations: ['project', 'taskStatusId', 'assign'],
     });
   }
 
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find({
-      relations: ['taskStatus'],
+      relations: ['taskStatusId'],
     });
   }
 

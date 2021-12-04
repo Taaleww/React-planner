@@ -30,7 +30,7 @@ scalar DateTime
 type Project {
   projectId: Int!
   projectName: String!
-  ownerid: Int!
+  ownerId: Int!
   projectStatus: ProjectStatus!
   task: [Task!]!
   projectUserRole: [ProjectUserRole!]!
@@ -56,7 +56,7 @@ type Task {
   dueDate: DateTime!
   completeDate: DateTime!
   description: String!
-  reporter: Float!
+  onwerId: Float!
 }
 
 type Assign {
@@ -132,7 +132,7 @@ type Mutation {
 input CreateProjectInput {
   projectName: String!
   projectStatusId: Int!
-  ownerid: Int!
+  ownerId: Int
   description: String!
   startDate: DateTime!
   dueDate: DateTime!
@@ -143,7 +143,7 @@ input CreateProjectInput {
 input UpdateProjectInput {
   projectName: String
   projectStatusId: Int
-  ownerid: Int
+  ownerId: Int
   description: String
   startDate: DateTime
   dueDate: DateTime
@@ -188,7 +188,7 @@ input CreateTaskInput {
   userId: [Int!]!
   taskStatus: Int!
   taskName: String!
-  reporter: Int!
+  onwerId: Int
   startDate: DateTime!
   dueDate: DateTime!
   completeDate: DateTime
@@ -200,7 +200,7 @@ input UpdateTaskInput {
   userId: [Int!]
   taskStatus: Int
   taskName: String
-  reporter: Int
+  onwerId: Int
   startDate: DateTime
   dueDate: DateTime
   completeDate: DateTime

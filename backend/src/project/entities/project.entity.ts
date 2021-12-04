@@ -34,7 +34,7 @@ export class Project {
 
   @Column()
   @Field(() => Int)
-  ownerid:number;
+  ownerId:number;
 
   // @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
   // @Field(() => [ProjectStatus])

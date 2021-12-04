@@ -5,6 +5,8 @@ import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { createParamDecorator, ExecutionContext, Get, UseGuards } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
+import { User } from 'src/user/entities/user.entity';
 
 @Resolver(() => Project)
 export class ProjectResolver {
@@ -12,9 +14,14 @@ export class ProjectResolver {
 
   @Mutation(() => ProjectUserRole)
   createProject(
+    /**current user */
+    @CurrentUser() user: User, 
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
-  ) {    
-    return this.projectService.create(createProjectInput);
+  ) : Promise<ProjectUserRole>{   
+    // เพิ่ท currenct user id เข้าไป  
+    console.log(user);
+    
+    return this.projectService.create(user.email,createProjectInput);
   }
 
   @Query(() => [Project], { name: 'projects' })

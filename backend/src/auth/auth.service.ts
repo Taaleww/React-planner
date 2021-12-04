@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   async login(LoginInput: LoginInput) {
-    const payload = { name: LoginInput.email };
+    const payload = { email: LoginInput.email };
     return this.jwtService.sign(payload);
   }
 }
