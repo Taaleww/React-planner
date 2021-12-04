@@ -78,6 +78,8 @@ type User {
   job: String!
   department: String!
   organization: String!
+  address: String!
+  image: String!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -168,9 +170,6 @@ input CreateUserInput {
   password: String!
   firstName: String!
   lastName: String!
-  job: String!
-  departmant: String!
-  organization: String!
 }
 
 input UpdateUserInput {
@@ -178,9 +177,6 @@ input UpdateUserInput {
   password: String
   firstName: String
   lastName: String
-  job: String
-  departmant: String
-  organization: String
   id: Int!
 }
 
