@@ -57,13 +57,13 @@ export class Task {
   @Field()
   dueDate: Date;
 
-  @Column({ type: 'date' })
+  @Column({nullable: true , type: 'date' })
   @Field()
   completeDate?: Date;
 
   @Column()
   @Field()
-  description?: string;
+  description: string;
 
   @Column()
   @Field()

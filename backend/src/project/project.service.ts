@@ -29,15 +29,15 @@ export class ProjectService {
 
   async create(
     createProjectInput: CreateProjectInput,
-  ): Promise<ProjectUserRole[]> {
-    const project = await this.projectRepository.findOne({
+  ): Promise<ProjectUserRole> {
+    const alreadyProject = await this.projectRepository.findOne({
       where: {
         projectName: createProjectInput.projectName,
       },
     });
 
-    if (!project) {
-      throw new ForbiddenError('Not have this project');
+    if (alreadyProject) {
+      throw new ForbiddenError('Already has this project');
     }
 
     const newProject = this.projectRepository.create(createProjectInput);
@@ -53,6 +53,12 @@ export class ProjectService {
 
     //Relation to status
     status.project.push(newProject);
+    await this.projectRepository.save(newProject);
+
+    const project = await this.projectRepository.findOne({
+      where: { projectId:newProject.projectId},
+      relations: ['projectStatus','projectUserRole']
+    })
 
     await Promise.all(
       createProjectInput.members.map(async (userId) => {
@@ -70,6 +76,8 @@ export class ProjectService {
           role: Role.EMPLOYEE,
         });
 
+        console.log(newProject);
+
         user.projectUserRole.push(newProjectUserRole);
         project.projectUserRole.push(newProjectUserRole);
 
@@ -81,9 +89,9 @@ export class ProjectService {
     await this.projectRepository.save(newProject);
     await this.projectStatusRepository.save(status);
 
-    return await this.projectUserRoleRepository.find({
+    return await this.projectUserRoleRepository.findOne({
       where: { project: project },
-      relations: ['user', 'project'],
+      relations: ['user', 'project','project.projectStatus'],
     });
 
     // return newProject;
@@ -98,7 +106,7 @@ export class ProjectService {
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
       where: { projectId: id },
-      relations: ['task'],
+      relations: ['task','task.taskStatusId','task.assign','projectStatus','projectUserRole'],
     });
   }
   async update(
@@ -107,9 +115,14 @@ export class ProjectService {
   ): Promise<Project> {
     const project = await this.projectRepository.findOneOrFail({
       where: { projectId: id },
-      relations: ['task'],
+      relations: ['task', 'projectStatus'],
     });
 
+    if(updateProjectInput.projectStatusId){
+    project.projectStatus.projectStatusId = updateProjectInput.projectStatusId;
+  }
+
+    
     //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
     if (!updateProjectInput.members) {
       const updateProject = Object.assign(project, updateProjectInput);
@@ -121,7 +134,7 @@ export class ProjectService {
        */
     } else {
       const { members, ...restInput } = updateProjectInput;
-
+      
       const updateProject = Object.assign(project, restInput);
 
       const allMember = await this.projectUserRoleRepository.find({
@@ -130,27 +143,30 @@ export class ProjectService {
         },
         relations: ['user', 'project'],
       });
-
+      
       await Promise.all(
         allMember.map(async (member) => {
           if (!members.includes(member.user.userId.toString())) {
             console.log('Delete member ' + member.user.userId);
             await this.projectUserRoleRepository.delete(
               member.projectUserRoleid,
-            );
-          }
-        }),
-      );
+              );
+            }
+          }),
+          );
       return await this.projectRepository.save(updateProject);
     }
+    // return this.projectRepository.findOne({
+    //   where :{ projectId:project},
+    //   relations:['projectUserRole','projectStatsus']
+    // });
   }
 
-  async remove(id: number): Promise<string> {
+  async remove(id: number): Promise<number> {
     const task = await this.projectRepository.findOne(id);
-    await this.projectRepository.delete(id);
-    return 'Delete Success';
+    const deleted = await this.projectRepository.delete(id);
+    return deleted.affected;
   }
-
 }
 
 @Injectable()
@@ -160,4 +176,3 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     return ctx.getContext().req;
   }
 }
-

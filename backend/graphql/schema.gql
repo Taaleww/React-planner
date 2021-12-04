@@ -105,9 +105,9 @@ type Query {
 }
 
 type Mutation {
-  createProject(createProjectInput: CreateProjectInput!): [ProjectUserRole!]!
+  createProject(createProjectInput: CreateProjectInput!): ProjectUserRole!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
-  removeProject(id: Int!): Project!
+  removeProject(id: Int!): Int!
   addMember(addMemberInput: CreateProjectUserRoleInput!): Project!
   updateproject_user_role(updateproject_user_roleInput: UpdateProjectUserRole!): ProjectUserRole!
   removeproject_user_role(id: Int!): ProjectUserRole!
@@ -178,6 +178,9 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   id: Int!
+  job: String!
+  departmant: String!
+  organization: String!
 }
 
 input CreateTaskInput {
