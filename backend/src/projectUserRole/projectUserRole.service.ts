@@ -22,10 +22,12 @@ export class ProjectUserRoleService {
 
   ) {}
   async create(
+    ownerEmail:String,
     createProjectUserRole: CreateProjectUserRoleInput,
   ): Promise<Project> {
     const { userId, ...toCreate } = createProjectUserRole;
 
+    
     const project = await this.projectRepository.findOne({
       where:{projectId: toCreate.project,},
       relations:['projectUserRole', 'projectStatus']
@@ -33,6 +35,14 @@ export class ProjectUserRoleService {
 
     if (!project) {
       throw new ForbiddenError('Do not have this project.');
+    }
+
+    const owner = await this.userRepository.findOne({
+      where:{ email:ownerEmail},
+    })
+
+    if(owner.userId != project.ownerId){
+      throw new ForbiddenError('Your are not manager');
     }
 
     await Promise.all(
