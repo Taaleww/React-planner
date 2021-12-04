@@ -2,19 +2,19 @@ import { ReactComponent as CompleteSvg } from "../../assets/icons/completeicon.s
 
 function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
   function computeData(taskData){
-    let status = taskData.status
-   if(status === "TODO" ){
-     status = "INPROGRESS"
+    let taskStatus = taskData.taskStatus.taskStatusId
+   if(taskStatus === 1){
+    taskStatus = "INPROGRESS"
    }
-   else if(status === "INPROGRESS"){
-     status = "DONE"
+   else if(taskStatus === 2){
+    taskStatus = "DONE"
    }
-   else if(status === "DONE"){
-     status = "DONE"
+   else if(taskStatus === 3){
+    taskStatus = "DONE"
    }
    return {
      id : taskData.taskId,
-     status
+     taskStatus
    }
      
   }

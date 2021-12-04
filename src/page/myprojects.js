@@ -39,7 +39,7 @@ function MyProjects() {
             project {
               projectId
               projectName
-              projectStatus{
+              projectStatus {
                 projectStatusId
               }
               description
@@ -69,8 +69,8 @@ function MyProjects() {
         mutation updateProject($updateProjectInput: UpdateProjectInput!) {
           updateProject(updateProjectInput: $updateProjectInput) {
             projectId
-            projectStatus{
-              projectstatusId
+            projectStatus {
+              projectStatusId
             }
           }
         }
@@ -109,7 +109,7 @@ function MyProjects() {
             project {
               projectId
               projectName
-              projectStatus{
+              projectStatus {
                 projectStatusId
               }
               description
@@ -122,7 +122,7 @@ function MyProjects() {
       `,
       variables: { createProjectInput: newProject },
     });
-    console.log("created data: ", data.createProject[0].project);
+    // console.log("created data: ", data.createProject[0].project);
     getMyProjects();
     setShowCreateProjectModal(false);
   }
