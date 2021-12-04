@@ -7,21 +7,27 @@ import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.en
 import { createParamDecorator, ExecutionContext, Get, UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { User } from 'src/user/entities/user.entity';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 
 @Resolver(() => Project)
 export class ProjectResolver {
   constructor(private readonly projectService: ProjectService) {}
 
   @Mutation(() => ProjectUserRole)
+  // @UseGuards(GqlAuthGuard)
+
   createProject(
-    /**current user */
-    @CurrentUser() user: User, 
-    @Args('createProjectInput') createProjectInput: CreateProjectInput,
-  ) : Promise<ProjectUserRole>{   
-    // เพิ่ท currenct user id เข้าไป  
-    console.log(user);
     
-    return this.projectService.create(user.email,createProjectInput);
+    // @CurrentUser() user: User, 
+
+    @Args('createProjectInput') createProjectInput: CreateProjectInput,
+  ) 
+  // : Promise<ProjectUserRole>
+  {   
+    // เพิ่ท currenct user id เข้าไป  
+    // console.log(user);
+    
+    return this.projectService.create(createProjectInput);
   }
 
   @Query(() => [Project], { name: 'projects' })
@@ -35,10 +41,18 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
+  // @UseGuards(GqlAuthGuard)
+
   updateProject(
+
+    // @CurrentUser() user: User,
+
     @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
   ) {
     return this.projectService.update(
+
+      // user.email,
+      
       updateProjectInput.id,
       updateProjectInput,
     );

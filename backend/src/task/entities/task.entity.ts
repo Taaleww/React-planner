@@ -65,7 +65,7 @@ export class Task {
   @Field()
   description: string;
 
-  @Column()
+  @Column({nullable: true})
   @Field()
   onwerId: number;
 }

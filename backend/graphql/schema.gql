@@ -8,18 +8,23 @@ type ProjectStatus {
   project: Project!
 }
 
-type ProjectUserRole {
-  projectUserRoleid: Int!
-  user: User!
-  project: Project!
-  role: Role!
-  created_at: DateTime!
-  updated_at: DateTime!
+type TaskStatus {
+  taskStatusId: Int!
+  taskStatus: String!
+  task: [Task!]!
 }
 
-enum Role {
-  MANAGER
-  EMPLOYEE
+type Task {
+  taskId: Int!
+  project: Project!
+  taskStatusId: TaskStatus!
+  taskName: String!
+  assign: [Assign!]!
+  startDate: DateTime!
+  dueDate: DateTime!
+  completeDate: DateTime!
+  description: String!
+  onwerId: Float!
 }
 
 """
@@ -40,23 +45,18 @@ type Project {
   completeDate: DateTime
 }
 
-type TaskStatus {
-  taskStatusId: Int!
-  taskStatus: String!
-  task: [Task!]!
+type ProjectUserRole {
+  projectUserRoleid: Int!
+  user: User!
+  project: Project!
+  role: Role!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
-type Task {
-  taskId: Int!
-  project: Project!
-  taskStatusId: TaskStatus!
-  taskName: String!
-  assign: [Assign!]!
-  startDate: DateTime!
-  dueDate: DateTime!
-  completeDate: DateTime!
-  description: String!
-  onwerId: Float!
+enum Role {
+  MANAGER
+  EMPLOYEE
 }
 
 type Assign {
@@ -98,6 +98,7 @@ type Query {
   task(id: Int!): Task!
   assigns: [Assign!]!
   assign(id: Int!): Assign!
+  findMemberInTask(taskId: Int!): [Assign!]!
   taskStatuses: [TaskStatus!]!
   taskStatus(id: Int!): TaskStatus!
   projectStatuses: [ProjectStatus!]!
@@ -117,7 +118,7 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   updateTask(updateTaskInput: UpdateTaskInput!): Task!
   removeTask(id: Int!): String!
-  newTaskMember(taskMember: CreateAssignInput!): Assign!
+  newTaskMember(taskMember: CreateAssignInput!): [Assign!]!
   updateAssign(updateAssignInput: UpdateAssignInput!): Assign!
   removeAssign(id: Int!): Assign!
   login(loginInput: LoginInput!): String!

@@ -12,9 +12,14 @@ export class TaskResolver {
 
   @Mutation(() => Task)
   createTask(
-    @CurrentUser() user : User,
+    // @CurrentUser() user : User,
+
     @Args('createTaskInput') createTaskInput: CreateTaskInput) : Promise<Task> {
-    return this.taskService.create(user.userId,createTaskInput);
+    return this.taskService.create(
+      
+      // user.userId,
+
+      createTaskInput);
   }
 
   @Query(() => [Task], { name: 'tasks' })

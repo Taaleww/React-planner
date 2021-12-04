@@ -8,7 +8,7 @@ import { UpdateAssignInput } from './dto/update-assign.input';
 export class AssignResolver {
   constructor(private readonly assignService: AssignService) {}
 
-  @Mutation(() => Assign)
+  @Mutation(() => [Assign])
   newTaskMember(@Args('taskMember') createAssignInput: CreateAssignInput) {
     return this.assignService.create(createAssignInput);
   }
@@ -31,5 +31,10 @@ export class AssignResolver {
   @Mutation(() => Assign)
   removeAssign(@Args('id', { type: () => Int }) id: number) {
     return this.assignService.remove(id);
+  }
+
+  @Query(() => [Assign])
+  findMemberInTask(@Args('taskId', { type: () => Int }) id: number) {
+    return this.assignService.findMember(id);
   }
 }
