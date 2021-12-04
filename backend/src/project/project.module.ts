@@ -7,6 +7,7 @@ import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.en
 import { User } from 'src/user/entities/user.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
+import { ProjectUserRoleService } from 'src/projectUserRole/projectUserRole.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Project, ProjectUserRole, User,Task,ProjectStatus])],

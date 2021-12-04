@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ForbiddenError } from 'apollo-server-express';
+import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
 import { Project } from 'src/project/entities/project.entity';
+import { ProjectService } from 'src/project/project.service';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateProjectUserRoleInput } from './dto/create-projectUserRolet.input';
@@ -17,6 +19,7 @@ export class ProjectUserRoleService {
     private userRepository: Repository<User>,
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
+
   ) {}
   async create(
     createProjectUserRole: CreateProjectUserRoleInput,
@@ -78,6 +81,7 @@ export class ProjectUserRoleService {
       where: { project: id },
       relations: ['user', 'project'],
     });
+   
     return member;
   }
 
@@ -98,4 +102,14 @@ export class ProjectUserRoleService {
     await this.projectUserRoleRepository.delete(id);
     return 'Delete Success';
   }
+
+  async findByUser(id: number): Promise<ProjectUserRole[]> {
+    const project = await this.projectUserRoleRepository.find({
+      where: { user: id },
+      relations: ['project', 'user','project.projectStatus'],
+    });
+    return project;
+  }
 }
+
+

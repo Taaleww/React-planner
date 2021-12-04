@@ -95,68 +95,12 @@ export class ProjectService {
     });
   }
 
-  async findByUser(id: number): Promise<ProjectUserRole[]> {
-    const project = await this.projectUserRoleRepository.find({
-      where: { user: id },
-      relations: ['project', 'user'],
-    });
-
-    return project;
-  }
-
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
       where: { projectId: id },
       relations: ['task'],
     });
   }
-
-  // async update(
-  //   id: number,
-  //   updateProjectInput: UpdateProjectInput,
-  // ): Promise<Project> {
-  //   const { members, ...toUpdate } = updateProjectInput;
-
-  //   const project = await this.projectRepository.findOne(id);
-  //   const update = Object.assign(project, toUpdate);
-
-  //   const allUser = await this.projectUserRoleRepository.find({
-  //     where:{ project:id},
-  //     relations:['project']
-  //   })
-
-  //   if (members) {
-  //     await Promise.all(
-  //       allUser.map(async() => {
-  //         const user = await this.projectUserRoleRepository.findOne({
-  //           where: {project: project },
-  //           relations: ['project'],
-  //         });
-  //         members.map(async (newMember) => {
-  //           const updateUser = await this.projectUserRoleRepository.findOne({
-  //             where: { user:newMember, project : project},
-  //             relations:['user', 'project']
-  //           })
-
-  //           if (user.user != updateUser.user) {
-  //             console.log("Kuy");
-
-  //             await this.projectUserRoleRepository.delete(user.projectUserRoleid);
-  //           }
-  //         })
-  //         // const userInProject = await this.projectUserRoleRepository.findOne({
-  //         //   where: { project: project },
-  //         //   relations: ['project'],
-  //         // });
-
-  //       }),
-  //     );
-  //   }
-
-  //    return await this.projectRepository.save(update);
-
-  // }
-
   async update(
     id: number,
     updateProjectInput: UpdateProjectInput,
@@ -206,6 +150,7 @@ export class ProjectService {
     await this.projectRepository.delete(id);
     return 'Delete Success';
   }
+
 }
 
 @Injectable()
@@ -215,6 +160,4 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     return ctx.getContext().req;
   }
 }
-function updateProject(updateProject: any): Project | PromiseLike<Project> {
-  throw new Error('Function not implemented.');
-}
+

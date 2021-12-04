@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { Project } from 'src/project/entities/project.entity';
 import { CreateProjectUserRoleInput } from './dto/create-projectUserRolet.input';
 import { UpdateProjectUserRole } from './dto/update-projectUserRolet.input';
@@ -44,4 +44,13 @@ export class projectUserRoleResvoler {
   findMember(@Args('id', { type: () => Int }) id: number) {
     return this.projectUserRoleService.findMember(id);
   }
+
+  @Query(() => [ProjectUserRole], { name: 'findProjectByUser' })
+  findByUser(@Args('id', { type: () => Int }) id: number) {
+    return this.projectUserRoleService.findByUser(id);
+  }
+
+ 
+
+
 }

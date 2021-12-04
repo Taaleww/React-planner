@@ -85,10 +85,10 @@ type User {
 type Query {
   projects: [Project!]!
   project(id: Int!): Project!
-  findProjectByUser(id: Int!): [ProjectUserRole!]!
   projectUserRoles: [ProjectUserRole!]!
   projectUserRole(id: Int!): ProjectUserRole!
   member(id: Int!): [ProjectUserRole!]!
+  findProjectByUser(id: Int!): [ProjectUserRole!]!
   users: [User!]!
   user(id: Int!): User!
   email(email: String!): User!
