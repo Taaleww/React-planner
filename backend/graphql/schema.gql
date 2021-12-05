@@ -108,7 +108,7 @@ type Query {
 type Mutation {
   createProject(createProjectInput: CreateProjectInput!): ProjectUserRole!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
-  removeProject(id: Int!): Int!
+  removeProject(id: Int!): String!
   addMember(addMemberInput: CreateProjectUserRoleInput!): Project!
   updateproject_user_role(updateproject_user_roleInput: UpdateProjectUserRole!): ProjectUserRole!
   removeproject_user_role(id: Int!): ProjectUserRole!

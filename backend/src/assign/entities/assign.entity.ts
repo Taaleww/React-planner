@@ -12,16 +12,15 @@ import {
 @Entity()
 @ObjectType()
 export class Assign {
-
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
 
-  @ManyToOne(() => Task, (task) => task.assign ,{ onDelete: 'CASCADE'})
+  @ManyToOne(() => Task, (task) => task.assign, { onDelete: 'CASCADE' })
   @Field(() => Task)
   task: Task;
 
-  @ManyToOne(() => User, (user) => user.assign,{ onDelete: 'CASCADE'})
+  @ManyToOne(() => User, (user) => user.assign, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
 
