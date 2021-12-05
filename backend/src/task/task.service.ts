@@ -182,7 +182,11 @@ export class TaskService {
       where: { taskId: id },
       relations: ['project', 'taskStatusId'],
     });;
-
+    
+    //Check if don't have this task
+    if(!task){
+      throw new ForbiddenError('Do not have this task');
+    }
     //Check if that user is Onwer
     const owner = await this.userRepository.findOne({
       where: { email: ownerEmail },
@@ -191,6 +195,7 @@ export class TaskService {
     if (owner.userId != task.onwerId) {
       throw new ForbiddenError('Your are not manager');
     }
+
 
     await this.taskRepository.delete(id);
     return 'Delete Success';
