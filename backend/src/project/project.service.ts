@@ -210,6 +210,11 @@ export class ProjectService {
       relations: ['task', 'projectStatus'],
     });
 
+    //Check if don't have this project
+    if (!project) {
+      throw new ForbiddenError('Do not have this project');
+    }
+
     //Check if that user is Onwer
     const owner = await this.userRepository.findOne({
       where: { email: ownerEmail },
