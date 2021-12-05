@@ -48,25 +48,25 @@ export class User {
   @Field()
   lastName: string;
 
-  @Column()
-  @Field()
-  job: string;
+  @Column({nullable: true})
+  @Field({ nullable: true })
+  job?: string;
 
-  @Column()
-  @Field()
-  department: string;
+  @Column({nullable: true})
+  @Field({ nullable: true })
+  department?: string;
 
-  @Column()
-  @Field()
-  organization: string;
+  @Column({nullable: true})
+  @Field({ nullable: true })
+  organization?: string;
 
-  @Column('text')
-  @Field()
-  address: string;
+  @Column('text',{nullable: true})
+  @Field({ nullable: true })
+  address?: string;
 
-  @Column({default: 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'})
-  @Field()
-  image: string;
+  @Column({default: 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg',nullable: true })
+  @Field({ nullable: true })
+  image?: string;
 
   @CreateDateColumn()
   @Field()

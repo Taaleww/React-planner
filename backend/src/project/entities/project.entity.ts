@@ -11,16 +11,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-// export enum projectStatus {
-//   INPROGRESS = 'inprogress',
-//   DONE = 'done',
-//   LATE = 'late'
-// }
-
-// registerEnumType(projectStatus, {
-//   name: 'projectStatus',
-// });
-
 @Entity()
 @ObjectType()
 export class Project {
@@ -36,22 +26,9 @@ export class Project {
   @Field(() => Int)
   ownerId:number;
 
-  // @OneToMany(() => ProjectStatus, (projectStatus) => projectStatus.project, { eager: true })
-  // @Field(() => [ProjectStatus])
-  // projectStatus: ProjectStatus[];
-
   @ManyToOne(() => ProjectStatus, (projectStatus) => projectStatus.project)
   @Field(() => ProjectStatus)
   projectStatus: ProjectStatus;
-
-
-  // @Column({
-  //   type: 'enum',
-  //   enum: projectStatus,
-  //   default: projectStatus.INPROGRESS,
-  // })
-  // @Field(() => projectStatus)
-  // role: projectStatus;
 
   @OneToMany(() => Task, (task) => task.project, { eager: true })
   @Field(() => [Task])

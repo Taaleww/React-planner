@@ -5,20 +5,20 @@ import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { User } from 'src/user/entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/project/project.service';
 
 @Resolver(() => Task)
 export class TaskResolver {
   constructor(private readonly taskService: TaskService) {}
 
   @Mutation(() => Task)
+  @UseGuards(GqlAuthGuard)
   createTask(
     @CurrentUser() user : User,
-
     @Args('createTaskInput') createTaskInput: CreateTaskInput) : Promise<Task> {
     return this.taskService.create(
-      
-      user.userId,
-
+      user.email,
       createTaskInput);
   }
 
