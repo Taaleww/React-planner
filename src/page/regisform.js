@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import useForm from "./useForm";
+import React from "react";
+import useForm from "./useFormRegis";
 import validate from "./validateInfo";
 
 function Register({ submitForm }) {

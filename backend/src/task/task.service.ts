@@ -83,7 +83,7 @@ export class TaskService {
   // }
 
   async create(
-    // ownerId:number,
+    ownerId:number,
     
     createTaskInput: CreateTaskInput): Promise<Task> {
     const alreadyTask = await this.taskRepository.findOne({
@@ -94,7 +94,7 @@ export class TaskService {
       throw new ForbiddenError('Task already existed.');
     }
 
-    // createTaskInput.onwerId=ownerId;
+    createTaskInput.onwerId=ownerId;
     //create Task
 
     const newTask = this.taskRepository.create(createTaskInput);
@@ -203,7 +203,7 @@ export class TaskService {
       return await this.taskRepository.findOne({
         where: { taskId: updateTask.id },
         relations: ['project', 'assign', 'taskStatusId',],
-      });   
+      });
     }
   }
 

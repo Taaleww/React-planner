@@ -1,5 +1,10 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
+import { userInfo } from 'os';
+import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { Project } from 'src/project/entities/project.entity';
+import { GqlAuthGuard } from 'src/project/project.service';
+import { User } from 'src/user/entities/user.entity';
 import { CreateProjectUserRoleInput } from './dto/create-projectUserRolet.input';
 import { UpdateProjectUserRole } from './dto/update-projectUserRolet.input';
 import { ProjectUserRole } from './entities/projectUserRole.entity';
@@ -12,12 +17,14 @@ export class projectUserRoleResvoler {
   ) {}
 
   @Mutation(() => Project)
+  @UseGuards(GqlAuthGuard)
   addMember(
+    @CurrentUser() user: User,
     @Args('addMemberInput') input: CreateProjectUserRoleInput,
   ) {
     console.log("log 1 ", input);
     
-    return this.projectUserRoleService.create(input);
+    return this.projectUserRoleService.create(user.email,input);
   }
 
   @Query(() => [ProjectUserRole], { name: 'projectUserRoles' })

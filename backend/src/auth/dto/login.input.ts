@@ -4,7 +4,7 @@ import { IsEmail, IsNotEmpty } from "class-validator";
 // input from user when logging in
 @InputType()
 class LoginInput{
-    @IsEmail()
+    
     @Field()
     readonly email?: string;
 

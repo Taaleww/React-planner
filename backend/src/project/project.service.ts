@@ -28,8 +28,7 @@ export class ProjectService {
   ) {}
 
   async create(
-    // ownerEmail:string,
-    
+    ownerEmail:string,
     createProjectInput: CreateProjectInput,
   ): Promise<ProjectUserRole> {
     const alreadyProject = await this.projectRepository.findOne({
@@ -42,11 +41,12 @@ export class ProjectService {
       throw new ForbiddenError('Already has this project');
     }
 
-    // const owner = await this.userRepository.findOne({
-    //   where:{ email:ownerEmail},
-    // })
+    const owner = await this.userRepository.findOne({
+      where:{ email:ownerEmail},
+    })
+    // console.log(ownerEmail)
 
-    // createProjectInput.ownerId= owner.userId;
+    createProjectInput.ownerId= owner.userId;
 
     const newProject = this.projectRepository.create(createProjectInput);
 
@@ -84,8 +84,6 @@ export class ProjectService {
           role: Role.EMPLOYEE,
         });
 
-        console.log(newProject);
-
         user.projectUserRole.push(newProjectUserRole);
         project.projectUserRole.push(newProjectUserRole);
 
@@ -118,8 +116,7 @@ export class ProjectService {
     });
   }
   async update(
-    // ownerEmail:String,
-
+    ownerEmail:String,
     id: number,
     updateProjectInput: UpdateProjectInput,
   ): Promise<Project> {
@@ -128,13 +125,14 @@ export class ProjectService {
       relations: ['task', 'projectStatus'],
     });
 
-    // const owner = await this.userRepository.findOne({
-    //   where:{ email:ownerEmail},
-    // })
+    console.log(ownerEmail)
+    const owner = await this.userRepository.findOne({
+      where:{ email:ownerEmail},
+    })
 
-    // if(owner.userId != project.ownerId){
-    //   throw new ForbiddenError('Not have this user');
-    // }
+    if(owner.userId != project.ownerId){
+      throw new ForbiddenError('Your are not manager');
+    }
 
     if(updateProjectInput.projectStatusId){
     project.projectStatus.projectStatusId = updateProjectInput.projectStatusId;

@@ -18,6 +18,8 @@ export class AuthService {
   async validateUser(LoginInput: LoginInput): Promise<any> {
     const user = await this.usersService.findByEmail(LoginInput.email); //find if recieved email is exists
 
+    // console.log(user);
+    
     const passwordMatch = await bcrypt.compare(
       LoginInput.password,
       user.password,
@@ -33,7 +35,10 @@ export class AuthService {
   }
 
   async login(LoginInput: LoginInput) {
-    const payload = { email: LoginInput.email };
+    const user = await this.validateUser(LoginInput);
+
+    const payload = { email: user.email, sub: user.userId, img: user.image };
+
     return this.jwtService.sign(payload);
   }
 }

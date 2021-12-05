@@ -14,20 +14,19 @@ export class ProjectResolver {
   constructor(private readonly projectService: ProjectService) {}
 
   @Mutation(() => ProjectUserRole)
-  // @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard)
 
   createProject(
     
-    // @CurrentUser() user: User, 
+    @CurrentUser() user: User, 
 
     @Args('createProjectInput') createProjectInput: CreateProjectInput,
   ) 
-  // : Promise<ProjectUserRole>
+  : Promise<ProjectUserRole>
   {   
-    // เพิ่ท currenct user id เข้าไป  
     // console.log(user);
     
-    return this.projectService.create(createProjectInput);
+    return this.projectService.create(user.email,createProjectInput);
   }
 
   @Query(() => [Project], { name: 'projects' })
@@ -41,18 +40,17 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  // @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard)
 
   updateProject(
 
-    // @CurrentUser() user: User,
+    @CurrentUser() user: User,
 
     @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
-  ) {
+  ): Promise<Project>{
     return this.projectService.update(
 
-      // user.email,
-      
+      user.email,
       updateProjectInput.id,
       updateProjectInput,
     );
