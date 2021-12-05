@@ -12,49 +12,35 @@ import NotFound from "./page/notfound";
 import Profile from "./page/profile";
 import ManageAccount from "./page/manageaccount";
 import Home from "./page/home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { AuthProvider } from './context/auth'
-//import AuthRoute from "./util/GuestRoute";
-//import GuestRoute from "./util/GuestRoute";
+// import AuthRoute from "./util/GuestRoute";
+// import GuestRoute from "./util/GuestRoute";
 
 function App() {
   return (
     <AuthProvider>
       <Navbar />
       <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/* <Route exact path='/' element={<GuestRoute/>}>
-            <Route exact path='/login' element={<Login />}/>
-            <Route exact path='/regis' element={<Regis />}/>
-          </Route> */}
-          <Route path="/login" element={ <Login /> } />
-          <Route path="/regis" element={ <Regis /> } />
-          <Route path="/myprojects" element={<MyProjects />} />
-          <Route path="/project/:projectId/tasks" element={<Tasks />} />
-          {/* <Route
-            path="/login"
-            element={
-              <GuestRoute>
-                <Login />
-              </GuestRoute>
-            }
-          /> */}
-          {/* <Route
-            path="/regis"
-            element={
-              <GuestRoute>
-                <Regis />
-              </GuestRoute>
-            }
-          /> */}
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/manage_account" element={<ManageAccount />} />
-          <Route path="/infotask" element={<InfoTask />} />
-
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Switch>
+          <Route exact path="/" component={ Home } />
+          <Route path="/login" component={ Login } />
+          <Route path="/regis" component={ Regis } />
+          <Route path="/myprojects" component={ MyProjects } />
+          <Route path="/project/:projectId/tasks" component={ Tasks } />
+          <Route path="/profile" component={ Profile } />
+          <Route path="/manage_account" component={ ManageAccount } />
+          <Route path="/infotask" component={ InfoTask } />
+          {/* <GuestRoute path="/login" component={ Login } />
+          <GuestRoute path="/regis" component={ Regis } />
+          <AuthRoute path="/myprojects" component={ MyProjects } />
+          <AuthRoute path="/project/:projectId/tasks" component={ Tasks } />
+          <AuthRoute path="/profile" component={ Profile } />
+          <AuthRoute path="/manage_account" component={ ManageAccount } />
+          <AuthRoute path="/infotask" component={ InfoTask } /> */}
+          <Route path="*" component={ NotFound } />
+        </Switch>
       </Router>
       <Footer />
     </AuthProvider>
