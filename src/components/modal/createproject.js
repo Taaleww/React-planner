@@ -1,18 +1,22 @@
 import Proptypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { InMemoryCache } from "apollo-cache-inmemory";
-
-import { createHttpLink } from "apollo-link-http";
-import ApolloClient from "apollo-client";
+import React, { useState, useEffect , useContext} from "react";
 import Select from "react-select";
 import { ReactComponent as CreateSvg } from "../../assets/icons/create.svg";
-
 import gql from "graphql-tag";
+import { AuthContext } from "../../context/auth";
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 //! Set to query data
-const currentUserId = 1;
+
+// const currentUserId = 1;
 
 function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
+  //! Set to query data
+
+  // const currentUserId = 1;
+  const { user } = useContext(AuthContext);
+  const currentUserId = user.sub;
   useEffect(() => {
     getUsers();
   }, []);
@@ -20,11 +24,23 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-  //apollo client setup
-  const client = new ApolloClient({
-    link: httpLink,
-    cache: new InMemoryCache(),
+
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('jwtToken');
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    }
   });
+
+  const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
+});
   // set value project data
   const [values, setValues] = useState({
     projectName: "",
@@ -42,7 +58,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
   const [users, setUsers] = useState([]);
 
   const [errors, setErrors] = useState({});
-  // query user
+  // query All user in DB
   async function getUsers() {
     const { data } = await client.query({
       query: gql`
@@ -54,6 +70,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
         }
       `,
     });
+    // select option user 
     const userOptions = data.users.map((user) => {
       return {
         value: user.userId,
@@ -92,7 +109,6 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
       errors.description = "Please input description";
     }
     setErrors(errors);
-    console.log("error1", errors);
     return errors;
   }
 
@@ -115,7 +131,6 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
     ];
 
     const errors = ValidateCreateProjectInfo();
-    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       addProject(
         values.projectName,
@@ -230,12 +245,14 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
                     isMulti={true}
                   />
                   <div className="p-3  mt-2 text-center space-x-4 md:block">
+                     {/* Cancle Button */}
                     <button
                       className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                       onClick={() => setShowCreateProjectModalFromParent(false)}
                     >
                       Cancel
                     </button>
+                     {/* Submit Button */}
                     <button
                       type="submit"
                       className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"

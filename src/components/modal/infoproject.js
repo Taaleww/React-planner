@@ -3,19 +3,19 @@ import React, { useState, useEffect } from "react";
 import ApolloClient from "apollo-boost";
 
 function StatusTag({ status }) {
-  if (status === 1) {
+  if (status === 1) { // in progress
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         In Progress
       </span>
     );
-  } else if (status === 2) {
+  } else if (status === 2) { // sucess
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
         Success
       </span>
     );
-  } else if (status === 3) {
+  } else if (status === 3) { // late
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
         Late
@@ -118,16 +118,8 @@ function InfoProject({ setShowInfoProjectModalFromParent, projectData }) {
                     })}
                   </p>
                 </div>
-                {/* {getMember.slice(1).map((item) => {
-                  return (
-                    <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
-                      <p className="text-gray-600"> </p>
-                      <p>{item}</p>
-                    </div>
-                  );
-                })} */}
-
                 <div className="p-3  mt-2 text-center space-x-4 md:block">
+                  {/* close Button */}
                   <button
                     className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                     onClick={() => setShowInfoProjectModalFromParent(false)}

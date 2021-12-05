@@ -6,8 +6,8 @@ import { constant } from "../constant";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy){
-  
-    constructor(private readonly userService: UserService){ //validation
+    //constructor for validation
+    constructor(private readonly userService: UserService){ 
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //request and validate it
             ignoreExpiration: false,
@@ -15,13 +15,10 @@ export class JwtStrategy extends PassportStrategy(Strategy){
         });
     }
 
+    //Validate user
+    //return user's information
     async validate(payload: any){
-        console.log(payload);
-        
-        const { password, ...rest } = 
-        await this.userService.findOne(payload.sub);
-        console.log(rest.email);
-        
-      return rest;
+        const { password, ...rest } = await this.userService.findOne(payload.sub);  
+        return rest;
     }
 }

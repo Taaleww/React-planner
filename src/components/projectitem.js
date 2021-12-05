@@ -10,8 +10,9 @@ import DeleteProject from "../components/modal/deleteproject";
 import AddMember from "../components/modal/addmember";
 import CompleteProject from "../components/modal/completeproject";
 import gql from "graphql-tag";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ApolloClient from "apollo-boost";
+import { AuthContext } from "../context/auth";
 
 function dateTranform(date) {
   if (!date) {
@@ -23,7 +24,7 @@ function dateTranform(date) {
 }
 
 function StatusTag({ data }) {
-  console.log("projectStatusId",data.projectStatus.projectStatusId);
+  console.log("projectStatusId", data.projectStatus.projectStatusId);
   if (data.projectStatus.projectStatusId === 1) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
@@ -58,6 +59,9 @@ function ProjectItem({
   editProject,
   addMember,
 }) {
+  const { user } = useContext(AuthContext);
+  const currentuserId = user.sub;
+  const ownerId = projectData.ownerId;
   const client = new ApolloClient({
     uri: "http://localhost:5000/graphql",
   });
@@ -98,7 +102,6 @@ function ProjectItem({
   useEffect(() => {
     getMembers(projectData.projectId);
   }, []);
-
 
   console.log(projectData);
   function changeStateInfoProjectModalFromChild(state) {
@@ -170,14 +173,12 @@ function ProjectItem({
                     <p>{user.name.charAt(0)}</p>
                   </div>
                 );
-              })}  
-              {getMember.length <= 3 ? null : 
-                (
-                  <div className="{'h-7 w-7 mr-2 bg-black text-center rounded-full text-white }">
-                    <p>{`+${getMember.length - 3}`}</p>
-                  </div>
-                )
-              }
+              })}
+              {getMember.length <= 3 ? null : (
+                <div className="{'h-7 w-7 mr-2 bg-black text-center rounded-full text-white }">
+                  <p>{`+${getMember.length - 3}`}</p>
+                </div>
+              )}
             </div>
           </td>
           <td className="py-2 px-6 whitespace-nowrap text-center">
@@ -190,38 +191,42 @@ function ProjectItem({
                   }}
                 />
               </div>
-              <div className="w-4 mr-4 transform hover:text-yellow-500 hover:scale-110">
-                <PenSvg
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowEditProjectModal(true);
-                  }}
-                />
-              </div>
-              <div className="w-4 mr-4 transform hover:text-blue-500 hover:scale-110">
-                <AddmemberSvg
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowAddMemberModal(true);
-                  }}
-                />
-              </div>
-              <div className="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
-                <TrashSvg
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowDeleteProjectModal(true);
-                  }}
-                />
-              </div>
-              <div className="w-4 mr-4 transform hover:text-green-500 hover:scale-110">
-                <CompleteSvg
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowCompleteProjectModal(true);
-                  }}
-                />
-              </div>
+              {currentuserId === ownerId ? (
+                <>
+                  <div className="w-4 mr-4 transform hover:text-yellow-500 hover:scale-110">
+                    <PenSvg
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setShowEditProjectModal(true);
+                      }}
+                    />
+                  </div>
+                  <div className="w-4 mr-4 transform hover:text-blue-500 hover:scale-110">
+                    <AddmemberSvg
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setShowAddMemberModal(true);
+                      }}
+                    />
+                  </div>
+                  <div className="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
+                    <TrashSvg
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setShowDeleteProjectModal(true);
+                      }}
+                    />
+                  </div>
+                  <div className="w-4 mr-4 transform hover:text-green-500 hover:scale-110">
+                    <CompleteSvg
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setShowCompleteProjectModal(true);
+                      }}
+                    />
+                  </div>
+                </>
+              ) : null}
             </div>
           </td>
         </tr>

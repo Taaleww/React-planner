@@ -1,22 +1,44 @@
 import "./myprojects.css";
-import React, { useState, useEffect } from "react";
-import ApolloClient from "apollo-boost";
+import React, { useState, useEffect,useContext } from "react";
+// import ApolloClient from "apollo-boost";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
 import gql from "graphql-tag";
+import { AuthContext } from "../context/auth";
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 function MyProjects() {
+  console.log("useDATA",);
   const [myProjects, setData] = useState([]);
 
   function changeStateCreateModalFromChild(state) {
     setShowCreateProjectModal(state);
   }
 
-  //apollo client setup
-  const client = new ApolloClient({
+  const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
 
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('jwtToken');
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    }
+  });
+
+  const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
+});
+  
+
+  // delete project function
   async function deleteProject(target) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -29,7 +51,10 @@ function MyProjects() {
     getMyProjects();
   }
   //! please change current userid nowwwwwww !!!!!!!!!
-  const userId = 1;
+  const { user } = useContext(AuthContext);
+  const userId = user.sub;
+  // console.log("userId",userId)
+  // const userId = 1;
   async function getMyProjects() {
     setData([]);
     const { data } = await client.query({
@@ -42,6 +67,7 @@ function MyProjects() {
               projectStatus {
                 projectStatusId
               }
+              ownerId
               description
               startDate
               dueDate
@@ -62,7 +88,7 @@ function MyProjects() {
       setData([...data.findProjectByUser]);
     }
   }
-
+  // edit project function
   async function editProject(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -83,6 +109,7 @@ function MyProjects() {
     }
   }
 
+  // create project function
   async function addProject(
     projectName,
     startDate,
@@ -92,7 +119,8 @@ function MyProjects() {
   ) {
     const projectStatusId = 1; // inprogress
     //! current userID wait for change
-    const ownerid = 1;
+    const ownerId = user.sub;
+    // const ownerId = 1;
     const newProject = {
       projectName,
       startDate: new Date(startDate),
@@ -100,7 +128,7 @@ function MyProjects() {
       description,
       projectStatusId,
       members,
-      ownerid,
+      ownerId,
     };
     const { data } = await client.mutate({
       mutation: gql`
@@ -115,18 +143,17 @@ function MyProjects() {
               description
               startDate
               dueDate
-              ownerid
+              ownerId
             }
           }
         }
       `,
       variables: { createProjectInput: newProject },
     });
-    // console.log("created data: ", data.createProject[0].project);
     getMyProjects();
     setShowCreateProjectModal(false);
   }
-
+// add member in project function
   async function addMember(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -226,6 +253,7 @@ function MyProjects() {
                           </div>
                         </td>
                       </tr>
+                       {/* Content In project */}
                     </tbody>
                   ) : (
                     myProjects.map((data, index) => {

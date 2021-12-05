@@ -2,14 +2,37 @@ import { Link, useParams } from "react-router-dom";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
 import gql from "graphql-tag";
-import ApolloClient from "apollo-boost";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../context/auth";
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 function Tasks() {
-  const client = new ApolloClient({
+  //! please change current userid nowwwwwww !!!!!!!!!
+  const { user } = useContext(AuthContext);
+  const onwerId = user.sub;
+
+  const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
+
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('jwtToken');
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    }
+  });
+
+  const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
+});
 
   const params = useParams();
 
@@ -30,7 +53,6 @@ function Tasks() {
   }
 
   async function getMyTasks() {
-    console.log("HERE", projectId);
     setTask([]);
     const { data } = await client.query({
       query: gql`
@@ -45,6 +67,7 @@ function Tasks() {
               taskStatusId{
                 taskStatusId
               }
+              onwerId
               description
               assign {
                 id 
@@ -54,7 +77,6 @@ function Tasks() {
         }
       `,
     });
-    console.log("project", data);
     if (data) {
       await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
@@ -71,7 +93,8 @@ function Tasks() {
   ) {
     const taskStatus = 1; // to do
     //! current userID wait for change
-    const onwerId = 1;
+
+    // const onwerId = 1;
     const newTask = {
       projectId,
       taskName,
@@ -82,7 +105,6 @@ function Tasks() {
       userId,
       onwerId,
     };
-    console.log("new task", newTask);
     const { data } = await client.mutate({
       mutation: gql`
         mutation createTask($createTaskInput: CreateTaskInput!) {
@@ -107,7 +129,6 @@ function Tasks() {
       variables: { createTaskInput: newTask },
     });
     if (data?.createTask) {
-      console.log("tst", data.createTask);
       setTask([data.createTask, ...task]);
       setShowCreateTaskModal(false);
     }
@@ -134,17 +155,12 @@ function Tasks() {
       `,
       variables: { updateTaskInput: newData },
     });
-    console.log("new dat", newData);
-    console.log("dataaaa", data);
     if (data?.updateTask) {
-      console.log("updated", data.updateTask);
-      setTask([])
+      setTask([]);
       setTask([
         data.updateTask,
         ...task.filter((task) => task.taskId !== newData.id),
       ]);
-
-      console.log("task 1", task);
       return true;
     }
     return false;
@@ -189,15 +205,12 @@ function Tasks() {
       `,
       variables: { taskMember: newData },
     });
-    console.log("This is Data here ", data);
-    console.log("TT", task.filter((task) => task.taskId !== newData.taskId))
     if (data?.newTaskMember) {
-      setTask([])
+      setTask([]);
       setTask([
         data.newTaskMember[0].task,
         ...task.filter((task) => task.taskId !== newData.taskId),
       ]);
-      console.log("TEST TASK", task);
       return true;
     }
     return false;

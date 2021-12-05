@@ -1,13 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ReactComponent as EditSvg } from "../../assets/icons/edit.svg";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { createHttpLink } from "apollo-link-http";
-import ApolloClient from "apollo-client";
 import Select from "react-select";
 import gql from "graphql-tag";
-
-//! Set to query data
-const currentUserId = 1; // currentUserId logged in
+import { AuthContext } from "../../context/auth";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 function EditProject({
   setShowEditProjectModalFromParent,
@@ -15,12 +12,30 @@ function EditProject({
   editProject,
   members,
 }) {
+  //! Set to query data
+  // currentUserId logged in
+  const { user } = useContext(AuthContext);
+  const currentUserId = user.sub;
+  // const currentUserId = 1; // currentUserId logged in
+
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-  // set up apollo client
+
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem("jwtToken");
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+
   const client = new ApolloClient({
-    link: httpLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
 
@@ -232,12 +247,14 @@ function EditProject({
                     isMulti={true}
                   />
                   <div className="p-3  mt-2 text-center space-x-4 md:block">
+                    {/* Cancle Button */}
                     <button
                       className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                       onClick={() => setShowEditProjectModalFromParent(false)}
                     >
                       Cancel
                     </button>
+                    {/* Submit Button */}
                     <button
                       type="submit"
                       className="mb-2 md:mb-0 bg-yellow-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-yellow-500"
