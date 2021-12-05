@@ -14,8 +14,9 @@ import AddAssignee from "../components/modal/addassignee";
 import CompleteTask from "../components/modal/completetask";
 import "./base.css";
 import gql from "graphql-tag";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext } from "react";
 import ApolloClient from "apollo-boost";
+import { AuthContext } from "../context/auth";
 
 
 function HeaderIcon({ status }) {
@@ -90,6 +91,11 @@ function TaskItem({ taskData , deleteTask , editTask , projectId, addAssignee}) 
   const [getMember, setData] = useState([]);
 
   const [memberTask,setMemberTask] = useState([]);
+  const { user } = useContext(AuthContext);
+  const currentuserId = user.sub;
+  const ownerId = taskData.onwerId;
+  console.log("ownerid",taskData.onwerId);
+  console.log("currentuseID",currentuserId);
 
   async function getMembers(members) {
     setData([]);
@@ -214,6 +220,7 @@ function TaskItem({ taskData , deleteTask , editTask , projectId, addAssignee}) 
                       }}
                     />
                   </div>
+                  {currentuserId === ownerId ? (
                   <div class="w-4 mr-4 transform hover:text-red-500 hover:scale-110">
                     <TrashSvg
                       className="cursor-pointer"
@@ -222,6 +229,7 @@ function TaskItem({ taskData , deleteTask , editTask , projectId, addAssignee}) 
                       }}
                     />
                   </div>
+                  ): null}
                   <div className="w-4 mr-4 transform hover:text-green-500 hover:scale-110">
                 <CompleteSvg
                   className="cursor-pointer"

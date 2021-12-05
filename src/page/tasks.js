@@ -67,6 +67,7 @@ function Tasks() {
               taskStatusId{
                 taskStatusId
               }
+              onwerId
               description
               assign {
                 id 
