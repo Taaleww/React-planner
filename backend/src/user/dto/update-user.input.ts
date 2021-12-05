@@ -6,21 +6,21 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   @Field(() => Int)
   id: number;
 
-  @Field()
-  oldPassword: string;
+  @Field({nullable: true})
+  oldPassword?: string;
   
-  @Field()
-  job: string;
+  @Field({nullable: true})
+  job?: string;
 
-  @Field()
-  department: string;
+  @Field({nullable: true})
+  department?: string;
 
-  @Field()
-  organization: string;
+  @Field({nullable: true})
+  organization?: string;
 
-  @Field()
-  address: string;
+  @Field({nullable: true})
+  address?: string;
 
-  @Field()
-  image: string;
+  @Field({nullable: true})
+  image?: string;
 }
