@@ -1,8 +1,21 @@
-import React from "react";
+import React, {useContext} from "react";
 import "../components/base.css";
 import "../App.css";
+import { AuthContext } from '../context/auth'
 
+//Home Page
 function Home() {
+
+  //define user to check loged in
+  const user  = useContext(AuthContext);
+  
+  //define path of get start button
+  const path = user? (
+    "/myprojects"
+  ):(
+    "/login"
+  );
+
   return (
     <div className="App">
       <div className="pdbase">
@@ -27,11 +40,11 @@ function Home() {
                 Chigyo Soy Milk software is built for every member of your
                 software team to plan
               </p>
-              {/* Button to login */}
+              {/* Button to move path */}
               <div className="mt-4 space-x-1 sm:mt-6 sm:pt-3 lg:pt-8 font-base">
                 <a
                   className="py-4 px-6 bg-blue-600 hover:bg-blue-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                  href="/login"
+                  href={path}
                 >
                   Get Started
                 </a>

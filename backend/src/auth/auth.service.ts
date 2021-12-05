@@ -16,19 +16,19 @@ export class AuthService {
 
   //validate user
   async validateUser(LoginInput: LoginInput): Promise<any> {
-    const user = await this.usersService.findByEmail(LoginInput.email); //find if recieved email is exists
-
-    // console.log(user);
+    //find if recieved email is exists
+    const user = await this.usersService.findByEmail(LoginInput.email); 
     
+    //compare recieved password with password in DB
     const passwordMatch = await bcrypt.compare(
       LoginInput.password,
       user.password,
-    ); //compare recieved password with password in DB
+    ); 
 
     //then check if it's correct password
     if (user && passwordMatch) {
       const { password, ...rest } = user;
-      return rest; //
+      return rest; //return user's information
     } else {
       throw new ForbiddenError('Incorrect pasword');
     }
