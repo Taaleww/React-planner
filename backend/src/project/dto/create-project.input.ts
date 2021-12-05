@@ -11,7 +11,7 @@ export class CreateProjectInput {
   @Field(() => Int)
   projectStatusId: number;
 
-  @Field(() => Int , {nullable : true})
+  @Field(() => Int, { nullable: true })
   ownerId?: number;
 
   @Field()

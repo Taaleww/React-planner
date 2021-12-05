@@ -6,7 +6,6 @@ import { Task } from './entities/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ForbiddenError } from 'apollo-server-errors';
 import { Project } from 'src/project/entities/project.entity';
-import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Assign } from 'src/assign/entities/assign.entity';
 import { User } from 'src/user/entities/user.entity';
 import { TaskStatus } from 'src/task-status/entities/task-status.entity';
@@ -25,65 +24,19 @@ export class TaskService {
     @InjectRepository(TaskStatus)
     private taskStatusRepository: Repository<TaskStatus>,
   ) {}
-  // async create(createTaskInput: CreateTaskInput): Promise<Task> {
-  //   let task = await this.taskRepository.findOne({
-  //     taskName: createTaskInput.taskName,
-  //   });
-  //   if (task) {
-  //     throw new ForbiddenError('Task already existed.');
-  //   }
 
-  //   const { userId, ...toCreateTask } = createTaskInput;
-
-  //   const newTask = this.taskRepository.create(toCreateTask);
-
-  //   const savedTask = await this.taskRepository.save(newTask);
-  //   task = await this.taskRepository.findOne({
-  //     where: { taskId: savedTask.taskId },
-  //     relations: ['assign', 'project'],
-  //   });
-  //   const project = await this.projectRepository.findOne({
-  //     where: { projectId: createTaskInput.projectId },
-  //     relations: ['task'],
-  //   });
-  //   // console.log(project);
-  //   // console.log(task);
-
-  //   project.task.push(task);
-  //   await this.taskRepository.save(task);
-
-  //   await Promise.all(
-  //     userId.map(async (user) => {
-  //       const userInProject = await this.projectUserRoleRepository.findOne({
-  //         where: { project: createTaskInput.projectId, user: user },
-  //         relations: ['project', 'user'],
-  //       });
-  //       if (!userInProject) {
-  //         throw new ForbiddenError('Not have this user in project');
-  //       }
-
-  //       const newAssign = this.assignRepository.create({
-  //         task: savedTask,
-  //         user: userInProject,
-  //       });
-
-  //       const userInTask = await this.userRepository.findOne(user, {
-  //         relations: ['assign'],
-  //       });
-  //       userInTask.assign.push(newAssign);
-  //       task.assign.push(newAssign);
-
-  //       await this.assignRepository.save(newAssign);
-  //       await this.userRepository.save(userInTask);
-  //     }),
-  //   );
-  //   return savedTask;
-  // }
-
+  /**
+   * For create task
+   *
+   * parameter: ownerEmail
+   * parameter: createTaskInput
+   * returns: Created Task
+   */
   async create(
-    ownerEmail:String,
-    
-    createTaskInput: CreateTaskInput): Promise<Task> {
+    ownerEmail: String,
+    createTaskInput: CreateTaskInput,
+  ): Promise<Task> {
+    //Check for don't have this projectname before
     const alreadyTask = await this.taskRepository.findOne({
       where: { taskName: createTaskInput.taskName },
     });
@@ -92,14 +45,17 @@ export class TaskService {
       throw new ForbiddenError('Task already existed.');
     }
 
+    //find owner from user entity
     const owner = await this.userRepository.findOne({
-      where:{ email:ownerEmail},
-    })
+      where: { email: ownerEmail },
+    });
 
     // console.log(ownerEmail)
-    createTaskInput.onwerId =owner.userId;
-    //create Task
 
+    //save ownerId of this task
+    createTaskInput.onwerId = owner.userId;
+
+    //create Task
     const newTask = this.taskRepository.create(createTaskInput);
 
     //Relation to project
@@ -122,81 +78,89 @@ export class TaskService {
     const task = await this.taskRepository.findOne(newTask);
 
     //Relation to user
+    // .map for addmember in assign entity
     await Promise.all(
       createTaskInput.userId.map(async (user) => {
         const member = await this.userRepository.findOne({
           where: { userId: user },
         });
 
+        //Create Assign
         const newAssign = this.assignRepository.create();
-
-        console.log(task.assign);
+        // console.log(task.assign);
 
         member.assign.push(newAssign);
         task.assign.push(newAssign);
 
+        //save data
         await this.assignRepository.save(newAssign);
         await this.userRepository.save(member);
         await this.taskRepository.save(task);
       }),
     );
 
-    // return newTask;
+    //return task
     return await this.taskRepository.findOne({
       where: { taskId: newTask.taskId },
       relations: ['project', 'taskStatusId', 'assign'],
     });
   }
 
+  //find all task in database
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find({
       relations: ['taskStatusId'],
     });
   }
 
+  //find task with id
   async findOne(id: number): Promise<Task> {
     return await this.taskRepository.findOneOrFail({
       where: { taskId: id },
       relations: ['taskStatusId'],
     });
   }
-
+  /**
+   *
+   * parameter: id
+   * parameter: updateTaskInput
+   * returns: Edited Task
+   */
   async update(id: number, updateTaskInput: UpdateTaskInput): Promise<Task> {
     const task = await this.taskRepository.findOneOrFail({
       where: { taskId: id },
-      relations: ['project', 'taskStatusId',],
+      relations: ['project', 'taskStatusId'],
     });
 
     if (updateTaskInput.taskStatus) {
       task.taskStatusId.taskStatusId = updateTaskInput.taskStatus;
     }
-    //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
+    //check if don't edit member
     if (!updateTaskInput.userId) {
       const updateTask = Object.assign(task, updateTaskInput);
       return await this.taskRepository.save(updateTask);
-      /**
-       * แยก member กับตัวอื่น
-       * หาก member เดิมในโปรเจกต์
-       * เทียบเอาคนที่ไม่ได้ถูกส่งมาออก
-       */
     } else {
       const { userId, ...restInput } = updateTaskInput;
 
       const updateTask = Object.assign(task, restInput);
 
+      //find all member in task
       const allMember = await this.assignRepository.find({
         where: {
           task: task,
         },
-        relations: ['task','user',],
+        relations: ['task', 'user'],
       });
       // console.log(allMember);
-      
 
+      // .map for delete member in task
       await Promise.all(
         allMember.map(async (member) => {
+          //user in task  != member from input
           if (!userId.includes(member.user.userId)) {
-            console.log('Delete member ' + member.user.userId);
+            // console.log('Delete member ' + member.user.userId);
+
+            //delete
             await this.assignRepository.delete(member.id);
           }
         }),
@@ -205,13 +169,29 @@ export class TaskService {
 
       return await this.taskRepository.findOne({
         where: { taskId: updateTask.id },
-        relations: ['project', 'assign', 'taskStatusId',],
+        relations: ['project', 'assign', 'taskStatusId'],
       });
     }
   }
 
-  async remove(id: number): Promise<string> {
-    const task = await this.taskRepository.findOne(id);
+  //remove task with id
+  async remove(
+    ownerEmail:String,
+    id: number): Promise<string> {
+    const task = await this.taskRepository.findOne({
+      where: { taskId: id },
+      relations: ['project', 'taskStatusId'],
+    });;
+
+    //Check if that user is Onwer
+    const owner = await this.userRepository.findOne({
+      where: { email: ownerEmail },
+    });
+
+    if (owner.userId != task.onwerId) {
+      throw new ForbiddenError('Your are not manager');
+    }
+
     await this.taskRepository.delete(id);
     return 'Delete Success';
   }

@@ -3,7 +3,6 @@ import { Project } from 'src/project/entities/project.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   Entity,
   OneToMany,
 } from 'typeorm';
@@ -18,10 +17,6 @@ export class ProjectStatus {
   @Column()
   @Field()
   projectStatus: string;
-
-  // @ManyToOne(() => Project, (project) => project.projectStatus,)
-  // @Field(() => Project)
-  // project: Project;
 
   @OneToMany(() => Project, (project) => project.projectStatus, { eager: true })
   @Field(() => Project)

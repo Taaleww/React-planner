@@ -1,6 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
-import { AuthGuard } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ForbiddenError } from 'apollo-server-errors';
 import { ProjectStatus } from 'src/project-status/entities/project-status.entity';
@@ -27,10 +25,18 @@ export class ProjectService {
     private projectStatusRepository: Repository<ProjectStatus>,
   ) {}
 
+  /**
+   * For Create Project
+   *
+   * parameter: ownerEmail
+   * parameter: createProjectInput
+   * returns: ProjectUserRole
+   */
   async create(
-    ownerEmail:string,
+    ownerEmail: string,
     createProjectInput: CreateProjectInput,
   ): Promise<ProjectUserRole> {
+    //Check for don't have this projectname before
     const alreadyProject = await this.projectRepository.findOne({
       where: {
         projectName: createProjectInput.projectName,
@@ -41,15 +47,19 @@ export class ProjectService {
       throw new ForbiddenError('Already has this project');
     }
 
+    //find owner from user entity
     const owner = await this.userRepository.findOne({
-      where:{ email:ownerEmail},
-    })
+      where: { email: ownerEmail },
+    });
     // console.log(ownerEmail)
 
-    createProjectInput.ownerId= owner.userId;
+    //save ownerId of this project
+    createProjectInput.ownerId = owner.userId;
 
+    //Create Project
     const newProject = this.projectRepository.create(createProjectInput);
 
+    //Check projectStatus
     const status = await this.projectStatusRepository.findOne({
       where: { projectStatusId: createProjectInput.projectStatusId },
       relations: ['project'],
@@ -61,13 +71,16 @@ export class ProjectService {
 
     //Relation to status
     status.project.push(newProject);
+
+    //save Project
     await this.projectRepository.save(newProject);
 
     const project = await this.projectRepository.findOne({
-      where: { projectId:newProject.projectId},
-      relations: ['projectStatus','projectUserRole']
-    })
+      where: { projectId: newProject.projectId },
+      relations: ['projectStatus', 'projectUserRole'],
+    });
 
+    // .map for addmember in projectUserRole Entity
     await Promise.all(
       createProjectInput.members.map(async (userId) => {
         const user = await this.userRepository.findOne({
@@ -78,45 +91,60 @@ export class ProjectService {
           throw new ForbiddenError('Not have this user');
         }
 
+        //Create projectUserRole
         const newProjectUserRole = this.projectUserRoleRepository.create({
           project: project,
           user: user,
           role: Role.EMPLOYEE,
         });
 
+        //push projectUserRole
         user.projectUserRole.push(newProjectUserRole);
         project.projectUserRole.push(newProjectUserRole);
 
+        //save data
         await this.projectUserRoleRepository.save(newProjectUserRole);
         await this.userRepository.save(user);
         await this.projectRepository.save(project);
       }),
     );
+
     await this.projectRepository.save(newProject);
     await this.projectStatusRepository.save(status);
 
+    //return projectUserRoleid
     return await this.projectUserRoleRepository.findOne({
       where: { project: project },
-      relations: ['user', 'project','project.projectStatus'],
+      relations: ['user', 'project', 'project.projectStatus'],
     });
 
     // return newProject;
   }
 
+  //find all project in database
   async findAll(): Promise<Project[]> {
     return await this.projectRepository.find({
       relations: ['projectUserRole', 'projectStatus'],
     });
   }
 
+  //find project with id
   async findOne(id: number): Promise<Project> {
     return await this.projectRepository.findOneOrFail({
       where: { projectId: id },
-      relations: ['task','task.taskStatusId','task.assign','projectStatus','projectUserRole'],
+      relations: [
+        'task',
+        'task.taskStatusId',
+        'task.assign',
+        'projectStatus',
+        'projectUserRole',
+      ],
     });
   }
+
+  //Edit data in project
   async update(
-    ownerEmail:String,
+    ownerEmail: String,
     id: number,
     updateProjectInput: UpdateProjectInput,
   ): Promise<Project> {
@@ -125,70 +153,73 @@ export class ProjectService {
       relations: ['task', 'projectStatus'],
     });
 
-    console.log(ownerEmail)
+    //Check if that user is Onwer
     const owner = await this.userRepository.findOne({
-      where:{ email:ownerEmail},
-    })
+      where: { email: ownerEmail },
+    });
 
-    if(owner.userId != project.ownerId){
+    if (owner.userId != project.ownerId) {
       throw new ForbiddenError('Your are not manager');
     }
 
-    if(updateProjectInput.projectStatusId){
-    project.projectStatus.projectStatusId = updateProjectInput.projectStatusId;
-  }
+    //Edit status in Project
+    if (updateProjectInput.projectStatusId) {
+      project.projectStatus.projectStatusId =
+        updateProjectInput.projectStatusId;
+    }
 
-    
-    //ถ้าไม่แก้ member ให้แก้ด้วยวิธีธรรมดา
+    //if don't edit member
     if (!updateProjectInput.members) {
       const updateProject = Object.assign(project, updateProjectInput);
       return await this.projectRepository.save(updateProject);
-      /**
-       * แยก member กับตัวอื่น
-       * หาก member เดิมในโปรเจกต์
-       * เทียบเอาคนที่ไม่ได้ถูกส่งมาออก
-       */
     } else {
       const { members, ...restInput } = updateProjectInput;
-      
+
       const updateProject = Object.assign(project, restInput);
 
+      //find all member in project
       const allMember = await this.projectUserRoleRepository.find({
         where: {
           project: id,
         },
         relations: ['user', 'project'],
       });
-      
+
+      // .map for delete member in project
       await Promise.all(
         allMember.map(async (member) => {
+          //user in project != member from input
           if (!members.includes(member.user.userId.toString())) {
-            console.log('Delete member ' + member.user.userId);
+            // console.log('Delete member ' + member.user.userId);
+
+            //delete
             await this.projectUserRoleRepository.delete(
               member.projectUserRoleid,
-              );
-            }
-          }),
-          );
+            );
+          }
+        }),
+      );
       return await this.projectRepository.save(updateProject);
     }
-    // return this.projectRepository.findOne({
-    //   where :{ projectId:project},
-    //   relations:['projectUserRole','projectStatsus']
-    // });
   }
 
-  async remove(id: number): Promise<number> {
-    const task = await this.projectRepository.findOne(id);
-    const deleted = await this.projectRepository.delete(id);
-    return deleted.affected;
-  }
-}
+  //remove project with id
+  async remove(ownerEmail: String, id: number): Promise<String> {
+    const project = await this.projectRepository.findOne({
+      where: { projectId: id },
+      relations: ['task', 'projectStatus'],
+    });
 
-@Injectable()
-export class GqlAuthGuard extends AuthGuard('jwt') {
-  getRequest(context: ExecutionContext) {
-    const ctx = GqlExecutionContext.create(context);
-    return ctx.getContext().req;
+    //Check if that user is Onwer
+    const owner = await this.userRepository.findOne({
+      where: { email: ownerEmail },
+    });
+
+    if (owner.userId != project.ownerId) {
+      throw new ForbiddenError('Your are not manager');
+    }
+
+    await this.projectRepository.delete(id);
+    return 'Delete Success';
   }
 }

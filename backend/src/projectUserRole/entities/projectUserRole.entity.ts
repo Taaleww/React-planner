@@ -9,7 +9,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
 
 export enum Role {
@@ -39,11 +38,7 @@ export class ProjectUserRole {
   })
   @Field(() => Project)
   project: Project;
-
-  // @OneToMany(() => Assign, (assign) => assign.user, { eager: true })
-  // @Field(() => [Assign])
-  // assign: Assign[];
-
+  
   @Column({
     type: 'enum',
     enum: Role,
