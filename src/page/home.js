@@ -7,7 +7,7 @@ import { AuthContext } from '../context/auth'
 function Home() {
 
   //define user to check loged in
-  const user  = useContext(AuthContext);
+  const { user }  = useContext(AuthContext);
   
   //define path of get start button
   const path = user? (

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/auth";
-import { Navigate , Route } from 'react-router-dom';
+import { Redirect , Route } from 'react-router-dom';
 
 function GuestRoute({ component: Component, ...rest }) {
     const { user } = useContext(AuthContext);   // determine if authorized, from context or however you're doing it
@@ -11,7 +11,7 @@ function GuestRoute({ component: Component, ...rest }) {
         <Route
             {...rest}
             render={(props) =>
-                user ? <Navigate  to="/" /> : <Component {...props} />}
+                user ? <Redirect  to="/" /> : <Component {...props} />}
         />
     );
 }
