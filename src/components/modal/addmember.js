@@ -12,12 +12,10 @@ function AddMember({
   addMember,
   members,
 }) {
-  console.log("projectData.projectId", projectData.projectId);
   
   //! Set to query data
   const currentUserId = 1;
   useEffect(() => {
-    // getMembers(projectData.projectId);
     getUsers();
   }, []);
 
@@ -77,7 +75,6 @@ function AddMember({
     const role = "EMPLOYEE"
     const addmember = {
       project : projectData.projectId ,
-      // user : selectedOption[0].value,
       userId : members,
       role,
     }
@@ -101,11 +98,7 @@ function AddMember({
                 <label className="block text-gray-700 text-sm font-normal mb-2 ">
                   Email
                 </label>
-                {/* <input
-                  type="text"
-                  placeholder="Email"
-                  className="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300"
-                /> */}
+              
                 <Select
                   placeholder="Members"
                   defaultValue={selectedOption}
@@ -114,7 +107,7 @@ function AddMember({
                   isMulti={true}
                 />
               </div>
-
+               {/* Cancle Button */}
               <div className="p-3  mt-2 text-center space-x-4 md:block">
                 <button
                   className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
@@ -122,6 +115,7 @@ function AddMember({
                 >
                   Cancel
                 </button>
+                 {/* Submit Button */}
                 <button
                   className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500"
                   onClick={onSubmit}

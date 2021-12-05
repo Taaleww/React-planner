@@ -6,14 +6,12 @@ function CompleteProject({
   editProject,
 }) {
   function computeData(projectData) {
-    console.log(projectData.projectStatus.projectStatusId);
     let projectStatusId = 2 // inprogress 
     const today = new Date()
     const dueDate = new Date(projectData.dueDate)
     if (today > dueDate) {
       projectStatusId = 3 // late
     }
-    console.log(projectStatusId);
     return {
       id: projectData.projectId,
       completeDate: today,
@@ -38,6 +36,7 @@ function CompleteProject({
                   project? This process cannot be undone
                 </p>
               </div>
+               {/* Cancle Button */}
               <div className="p-3  mt-2 text-center space-x-4 md:block">
                 <button
                   className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
@@ -45,6 +44,7 @@ function CompleteProject({
                 >
                   Cancel
                 </button>
+                 {/* Submit Button */}
                 <button
                   className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
                   onClick={() => editProject(computeData(projectData))}

@@ -30,7 +30,6 @@ function Tasks() {
   }
 
   async function getMyTasks() {
-    console.log("HERE", projectId);
     setTask([]);
     const { data } = await client.query({
       query: gql`
@@ -54,7 +53,6 @@ function Tasks() {
         }
       `,
     });
-    console.log("project", data);
     if (data) {
       await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
@@ -82,7 +80,6 @@ function Tasks() {
       userId,
       onwerId,
     };
-    console.log("new task", newTask);
     const { data } = await client.mutate({
       mutation: gql`
         mutation createTask($createTaskInput: CreateTaskInput!) {
@@ -107,7 +104,6 @@ function Tasks() {
       variables: { createTaskInput: newTask },
     });
     if (data?.createTask) {
-      console.log("tst", data.createTask);
       setTask([data.createTask, ...task]);
       setShowCreateTaskModal(false);
     }
@@ -134,17 +130,12 @@ function Tasks() {
       `,
       variables: { updateTaskInput: newData },
     });
-    console.log("new dat", newData);
-    console.log("dataaaa", data);
     if (data?.updateTask) {
-      console.log("updated", data.updateTask);
       setTask([])
       setTask([
         data.updateTask,
         ...task.filter((task) => task.taskId !== newData.id),
       ]);
-
-      console.log("task 1", task);
       return true;
     }
     return false;
@@ -189,15 +180,12 @@ function Tasks() {
       `,
       variables: { taskMember: newData },
     });
-    console.log("This is Data here ", data);
-    console.log("TT", task.filter((task) => task.taskId !== newData.taskId))
     if (data?.newTaskMember) {
       setTask([])
       setTask([
         data.newTaskMember[0].task,
         ...task.filter((task) => task.taskId !== newData.taskId),
       ]);
-      console.log("TEST TASK", task);
       return true;
     }
     return false;

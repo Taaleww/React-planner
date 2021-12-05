@@ -8,7 +8,7 @@ import Select from "react-select";
 import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
 
-//! Set to query data currnt user 
+//! Set to query data current user
 const onwerId = 1;
 
 function CreateTask({
@@ -43,7 +43,7 @@ function CreateTask({
   const [errors, setErrors] = useState({});
 
   // query member of project
-  async function getUsers(projectId) { 
+  async function getUsers(projectId) {
     const { data, error } = await client.query({
       query: gql`
         query member {
@@ -71,6 +71,7 @@ function CreateTask({
     getUsers(parseInt(projectId));
   }, []);
 
+  // validate form create task info
   function Validate() {
     let errors = {};
 
@@ -96,7 +97,6 @@ function CreateTask({
       errors.description = "Please input description";
     }
     setErrors(errors);
-    console.log("error1", errors);
     return errors;
   }
 
@@ -116,7 +116,6 @@ function CreateTask({
         return item.value;
       }),
     ];
-      console.log("member task",userId);
     const errors = Validate();
     if (Object.keys(errors).length === 0) {
       addTask(
@@ -234,12 +233,14 @@ function CreateTask({
                     isMulti={true}
                   />
                   <div className="p-3  mt-2 text-center space-x-4 md:block">
+                    {/* Cancle Button */}
                     <button
                       className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                       onClick={() => setShowCreateProjectModalFromParent(false)}
                     >
                       Cancel
                     </button>
+                    {/* Submit Button */}
                     <button
                       type="submit"
                       className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"

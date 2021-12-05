@@ -1,7 +1,6 @@
 import { ReactComponent as DeleteSvg } from "../../assets/icons/delete.svg";
 
 function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, deleteProject }) {
-  console.log("projectData.projectId",projectData.projectId);
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black"></div>
@@ -18,12 +17,14 @@ function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, delet
                 </p>
               </div>
               <div className="p-3  mt-2 text-center space-x-4 md:block">
+                {/* Cancle Button */}
                 <button
                   className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
                   onClick={() => setShowDeleteProjectModalFromParent(false)}
                 >
                   Cancel
                 </button>
+                {/* Submit Button */}
                 <button
                   className="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600"
                   onClick={() => deleteProject(projectData.projectId)}

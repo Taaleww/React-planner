@@ -16,7 +16,6 @@ function EditTask({
   members,
   assignMember,
 }) {
-  console.log("ddd", taskData.taskId);
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
@@ -69,11 +68,8 @@ function EditTask({
         return item.value;
       }),
     ];
-    console.log("selected", selectedOption);
-    console.log("member ", members);
 
     const errors = ValidateCreateTaskInfo();
-    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       const editedTask = {
         id: taskData.taskId,
@@ -175,16 +171,17 @@ function EditTask({
                     }
                     defaultValue={selectedOption}
                     onChange={handleMultiChange}
-                    // options={members.map((member) => member.prop)}
                     isMulti={true}
                   />
                   <div className="p-3  mt-2 text-center space-x-4 md:block">
+                    {/* Cancle Button */}
                     <button
                       className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                       onClick={() => setShowEditTaskModalFromParent(false)}
                     >
                       Cancel
                     </button>
+                    {/* Submit Button */}
                     <button
                       type="submit"
                       className="mb-2 md:mb-0 bg-yellow-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-yellow-500"

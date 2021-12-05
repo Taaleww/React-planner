@@ -17,6 +17,7 @@ function MyProjects() {
     uri: "http://localhost:5000/graphql",
   });
 
+  // delete project function
   async function deleteProject(target) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -62,7 +63,7 @@ function MyProjects() {
       setData([...data.findProjectByUser]);
     }
   }
-
+  // edit project function
   async function editProject(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -83,6 +84,7 @@ function MyProjects() {
     }
   }
 
+  // create project function
   async function addProject(
     projectName,
     startDate,
@@ -92,7 +94,7 @@ function MyProjects() {
   ) {
     const projectStatusId = 1; // inprogress
     //! current userID wait for change
-    const ownerid = 1;
+    const ownerId = 1;
     const newProject = {
       projectName,
       startDate: new Date(startDate),
@@ -100,7 +102,7 @@ function MyProjects() {
       description,
       projectStatusId,
       members,
-      ownerid,
+      ownerId,
     };
     const { data } = await client.mutate({
       mutation: gql`
@@ -115,18 +117,17 @@ function MyProjects() {
               description
               startDate
               dueDate
-              ownerid
+              ownerId
             }
           }
         }
       `,
       variables: { createProjectInput: newProject },
     });
-    // console.log("created data: ", data.createProject[0].project);
     getMyProjects();
     setShowCreateProjectModal(false);
   }
-
+// add member in project function
   async function addMember(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -226,6 +227,7 @@ function MyProjects() {
                           </div>
                         </td>
                       </tr>
+                       {/* Content In project */}
                     </tbody>
                   ) : (
                     myProjects.map((data, index) => {

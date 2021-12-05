@@ -3,13 +3,13 @@ import { ReactComponent as CompleteSvg } from "../../assets/icons/completeicon.s
 function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
   function computeData(taskData){
     let taskStatus = taskData.taskStatusId.taskStatusId
-   if(taskStatus === 1){
+   if(taskStatus === 1){ // to do
     taskStatus = 2
    }
-   else if(taskStatus === 2){
+   else if(taskStatus === 2){ // in progress
     taskStatus = 3
    }
-   else if(taskStatus === 3){
+   else if(taskStatus === 3){ // done
     taskStatus = 3
    }
    return {
@@ -36,12 +36,14 @@ function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
                 </p>
               </div>
               <div className="p-3  mt-2 text-center space-x-4 md:block">
+                 {/* Cancle Button */}
                 <button
                   className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
                   onClick={() => setShowCompleteTaskModalFromParent(false)}
                 >
                   Cancel
                 </button>
+                 {/* Submit Button */}
                 <button
                    className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
                    onClick={() => {
