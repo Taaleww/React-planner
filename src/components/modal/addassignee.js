@@ -1,26 +1,34 @@
 import { ReactComponent as MemberSvg } from "../../assets/icons/member.svg";
 import Select from "react-select";
-import React, { useEffect, useState } from "react";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import gql from "graphql-tag";
-
-import { createHttpLink } from "apollo-link-http";
-import ApolloClient from "apollo-client";
+import React, { useState } from "react";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 function AddAssignee({
   setShowAddAssigneeModalFromParent,
   members,
   assignMember,
   addAssignee,
-  editTask,
   taskId,
 }) {
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
 
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem("jwtToken");
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+
   const client = new ApolloClient({
-    link: httpLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
 

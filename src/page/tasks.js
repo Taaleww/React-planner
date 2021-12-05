@@ -2,14 +2,37 @@ import { Link, useParams } from "react-router-dom";
 import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
 import gql from "graphql-tag";
-import ApolloClient from "apollo-boost";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../context/auth";
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 function Tasks() {
-  const client = new ApolloClient({
+  //! please change current userid nowwwwwww !!!!!!!!!
+  const { user } = useContext(AuthContext);
+  const onwerId = user.sub;
+
+  const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
+
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('jwtToken');
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    }
+  });
+
+  const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
+});
 
   const params = useParams();
 
@@ -69,7 +92,8 @@ function Tasks() {
   ) {
     const taskStatus = 1; // to do
     //! current userID wait for change
-    const onwerId = 1;
+
+    // const onwerId = 1;
     const newTask = {
       projectId,
       taskName,
@@ -131,7 +155,7 @@ function Tasks() {
       variables: { updateTaskInput: newData },
     });
     if (data?.updateTask) {
-      setTask([])
+      setTask([]);
       setTask([
         data.updateTask,
         ...task.filter((task) => task.taskId !== newData.id),
@@ -181,7 +205,7 @@ function Tasks() {
       variables: { taskMember: newData },
     });
     if (data?.newTaskMember) {
-      setTask([])
+      setTask([]);
       setTask([
         data.newTaskMember[0].task,
         ...task.filter((task) => task.taskId !== newData.taskId),

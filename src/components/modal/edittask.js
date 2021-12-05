@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
 import { ReactComponent as EditSvg } from "../../assets/icons/edit.svg";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { createHttpLink } from "apollo-link-http";
-import ApolloClient from "apollo-client";
 import Select from "react-select";
 import gql from "graphql-tag";
+import { AuthContext } from "../../context/auth";
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
-//! Set to query data
-const currentUserId = 1; // currentUserId logged in
+// //! Set to query data
+// const currentUserId = 1; // currentUserId logged in
 
 function EditTask({
   setShowEditTaskModalFromParent,
@@ -16,14 +16,31 @@ function EditTask({
   members,
   assignMember,
 }) {
+  //! Set to query data
+  // currentUserId logged in
+  const { user } = useContext(AuthContext);
+  const currentUserId = user.sub;
+  
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-  // set up apollo client
-  const client = new ApolloClient({
-    link: httpLink,
-    cache: new InMemoryCache(),
+
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('jwtToken');
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      }
+    }
   });
+
+  const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
+});
 
   const [values, setValues] = useState(taskData);
 
