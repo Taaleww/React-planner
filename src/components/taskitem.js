@@ -60,7 +60,7 @@ function dateTranform(date) {
   return completeDate;
 }
 
-function TaskItem({ taskData , deleteTask , editTask , projectId}) {
+function TaskItem({ taskData , deleteTask , editTask , projectId, addAssignee}) {
   console.log("this is data", taskData);
   function changeStateEditModalFromChild(state) {
     setShowEditTaskModal(state);
@@ -88,6 +88,8 @@ function TaskItem({ taskData , deleteTask , editTask , projectId}) {
   });
 
   const [getMember, setData] = useState([]);
+
+  const [memberTask,setMemberTask] = useState([]);
 
   async function getMembers(members) {
     setData([]);
@@ -120,10 +122,43 @@ function TaskItem({ taskData , deleteTask , editTask , projectId}) {
       console.log(completeMembers);
     }
   }
+
+  async function getMembertask(taskId) {
+    setMemberTask([]);
+    const { data } = await client.query({
+      query: gql`
+      query findMemberInTask($taskId: Int!){
+        findMemberInTask(taskId:$taskId){
+          user{
+            firstName
+            userId
+            email
+          }
+        }
+      }
+      `,
+      variables: { taskId: taskId },
+    }); 
+    console.log("data task",data);
+    if (data) {
+      const memberFirstName = data.findMemberInTask.map((member) => {
+        return {
+          name: member.user.firstName,
+          prop: {
+            value: member.user.userId,
+            label: member.user.email
+          }
+        }
+      })
+      await setMemberTask([...memberFirstName]);
+    }
+    console.log("membertawskka",memberTask)
+  }
   useEffect(() => {
     getMembers(parseInt(projectId)); // change string -> int
+    getMembertask(parseInt(taskData.taskId));
   }, []);
-  console.log("ss", projectId);
+  console.log("ss", taskData.taskId);
   
 
   return (
@@ -134,7 +169,6 @@ function TaskItem({ taskData , deleteTask , editTask , projectId}) {
             <HeaderIcon status={taskData.taskStatusId.taskStatusId} />
             <div className="mt-8 ">
               <button
-                className=""
                 onClick={() => {
                   setShowInfoTaskModal(true);
                 }}
@@ -207,6 +241,7 @@ function TaskItem({ taskData , deleteTask , editTask , projectId}) {
               taskData={taskData}
               editTask={editTask}
               members={getMember}
+              assignMember={memberTask}
             />
           ) : null}
           {showDeleteTaskModal ? (
@@ -222,6 +257,11 @@ function TaskItem({ taskData , deleteTask , editTask , projectId}) {
                 setShowAddAssigneeModalFromParent={
                   changeStateAddAssigneeModalFromChild
                 }
+                assignMember={memberTask}
+                members={getMember}
+                editTask={editTask}
+                addAssignee={addAssignee}
+                taskId={taskData.taskId}
               />
             </>
           ) : null}
@@ -229,6 +269,7 @@ function TaskItem({ taskData , deleteTask , editTask , projectId}) {
             <InfoTask
               setShowInfoTaskModalFromParent={changeStateInfoModalFromChild}
               taskData={taskData}
+              assignMember={memberTask}
             />
           ) : null}
         </>

@@ -44,7 +44,11 @@ function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
                 </button>
                 <button
                    className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
-                   onClick={() => editTask(computeData(taskData))}
+                   onClick={() => {
+                     if(editTask(computeData(taskData))) {
+                      setShowCompleteTaskModalFromParent(false)
+                     }
+                    }}
                 >
                   complete
                 </button>

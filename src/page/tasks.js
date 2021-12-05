@@ -29,41 +29,6 @@ function Tasks() {
     setShowCreateTaskModal(state);
   }
 
-  async function addTask(
-    projectId,
-    taskName,
-    startDate,
-    dueDate,
-    description,
-    userId,
-    reporter
-  ) {
-    const taskStatusId = 1;
-    const newTask = {
-      projectId: parseInt(projectId),
-      taskName,
-      startDate: new Date(startDate),
-      dueDate: new Date(dueDate),
-      description,
-      taskStatusId,
-      userId,
-      reporter,
-    };
-    const { data } = await client.mutate({
-      mutation: gql`
-        mutation createTask($createTaskInput: CreateTaskInput!) {
-          createTask(createTaskInput: $createTaskInput) {
-            taskId
-          }
-        }
-      `,
-      variables: { createTaskInput: newTask },
-    });
-    console.log("created data: ", data);
-    getMyTasks();
-    setShowCreateTaskModal(false);
-  }
-
   async function getMyTasks() {
     console.log("HERE", projectId);
     setTask([]);
@@ -75,6 +40,8 @@ function Tasks() {
             task {
               taskId
               taskName
+              startDate
+              dueDate
               taskStatusId{
                 taskStatusId
               }
@@ -91,9 +58,6 @@ function Tasks() {
     if (data) {
       await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
-      // await setTodoData(task.filter((task) => task.status === "TODO"));
-      // await setInProgressData(task.filter((task) => task.status === "INPROGRESS"));
-      // await setSuccessData(task.filter((task) => task.status === "DONE"));
     }
   }
 
@@ -107,7 +71,7 @@ function Tasks() {
   ) {
     const taskStatus = 1; // to do
     //! current userID wait for change
-    const reporter = 1;
+    const onwerId = 1;
     const newTask = {
       projectId,
       taskName,
@@ -116,9 +80,9 @@ function Tasks() {
       description,
       taskStatus,
       userId,
-      reporter,
+      onwerId,
     };
-    console.log("new task",newTask);
+    console.log("new task", newTask);
     const { data } = await client.mutate({
       mutation: gql`
         mutation createTask($createTaskInput: CreateTaskInput!) {
@@ -126,9 +90,13 @@ function Tasks() {
             project {
               projectName
             }
+            taskId
             taskName
             startDate
             dueDate
+            taskStatusId {
+              taskStatusId
+            }
             description
             assign {
               id
@@ -138,9 +106,11 @@ function Tasks() {
       `,
       variables: { createTaskInput: newTask },
     });
-    console.log("newtask", newTask);
-    getMyTasks();
-    setShowCreateTaskModal(false);
+    if (data?.createTask) {
+      console.log("tst", data.createTask);
+      setTask([data.createTask, ...task]);
+      setShowCreateTaskModal(false);
+    }
   }
 
   async function editTask(newData) {
@@ -154,6 +124,8 @@ function Tasks() {
               taskStatusId
             }
             description
+            startDate
+            dueDate
             assign {
               id
             }
@@ -162,12 +134,20 @@ function Tasks() {
       `,
       variables: { updateTaskInput: newData },
     });
+    console.log("new dat", newData);
+    console.log("dataaaa", data);
     if (data?.updateTask) {
+      console.log("updated", data.updateTask);
+      setTask([])
       setTask([
-        ...task.filter((task) => task.taskId !== newData.id),
         data.updateTask,
+        ...task.filter((task) => task.taskId !== newData.id),
       ]);
+
+      console.log("task 1", task);
+      return true;
     }
+    return false;
   }
 
   async function deleteTask(target) {
@@ -181,7 +161,46 @@ function Tasks() {
     });
     if (data.removeTask === "Delete Success") {
       setTask(task.filter((task) => task.taskId !== target));
+      return true;
     }
+    return false;
+  }
+
+  async function addAssignee(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation newTaskMember($taskMember: CreateAssignInput!) {
+          newTaskMember(taskMember: $taskMember) {
+            task {
+              taskId
+              taskName
+              taskStatusId {
+                taskStatusId
+              }
+              description
+              startDate
+              dueDate
+              assign {
+                id
+              }
+            }
+          }
+        }
+      `,
+      variables: { taskMember: newData },
+    });
+    console.log("This is Data here ", data);
+    console.log("TT", task.filter((task) => task.taskId !== newData.taskId))
+    if (data?.newTaskMember) {
+      setTask([])
+      setTask([
+        data.newTaskMember[0].task,
+        ...task.filter((task) => task.taskId !== newData.taskId),
+      ]);
+      console.log("TEST TASK", task);
+      return true;
+    }
+    return false;
   }
 
   useEffect(() => {
@@ -254,6 +273,7 @@ function Tasks() {
                                 editTask={editTask}
                                 addTask={addTask}
                                 projectId={projectId}
+                                addAssignee={addAssignee}
                               />
                             );
                           })}
@@ -271,6 +291,7 @@ function Tasks() {
                                 editTask={editTask}
                                 addTask={addTask}
                                 projectId={projectId}
+                                addAssignee={addAssignee}
                               />
                             );
                           })}
@@ -288,6 +309,7 @@ function Tasks() {
                                 editTask={editTask}
                                 addTask={addTask}
                                 projectId={projectId}
+                                addAssignee={addAssignee}
                               />
                             );
                           })}

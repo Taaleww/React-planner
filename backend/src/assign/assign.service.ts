@@ -65,7 +65,7 @@ export class AssignService {
 
     return this.assignRepository.find({
       where:{ task:task},
-      relations:['task']
+      relations:['task', 'task.taskStatusId']
     });
   }
 

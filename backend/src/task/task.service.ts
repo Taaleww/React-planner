@@ -161,7 +161,7 @@ export class TaskService {
   async update(id: number, updateTaskInput: UpdateTaskInput): Promise<Task> {
     const task = await this.taskRepository.findOneOrFail({
       where: { taskId: id },
-      relations: ['project', 'taskStatusId'],
+      relations: ['project', 'taskStatusId',],
     });
 
     if (updateTaskInput.taskStatus) {
@@ -183,14 +183,16 @@ export class TaskService {
 
       const allMember = await this.assignRepository.find({
         where: {
-          task: id,
+          task: task,
         },
-        relations: ['task', 'projectUserRole'],
+        relations: ['task','user',],
       });
+      // console.log(allMember);
+      
 
       await Promise.all(
         allMember.map(async (member) => {
-          if (!userId) {
+          if (!userId.includes(member.user.userId)) {
             console.log('Delete member ' + member.user.userId);
             await this.assignRepository.delete(member.id);
           }
@@ -200,8 +202,8 @@ export class TaskService {
 
       return await this.taskRepository.findOne({
         where: { taskId: updateTask.id },
-        relations: ['project', 'assign', 'taskStatus'],
-      });
+        relations: ['project', 'assign', 'taskStatusId',],
+      });   
     }
   }
 

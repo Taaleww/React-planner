@@ -80,7 +80,7 @@ function InfoProject({ setShowInfoProjectModalFromParent, projectData }) {
           <div className="min-h-screen flex items-center justify-center px-0 ">
             <div className="max-w-4xl  bg-white w-full rounded-lg shadow-xl ">
               <div className="p-4 border-b">
-                <h2 className="text-2xl ">Information project</h2>
+                <h2 className="text-2xl "> Project Information</h2>
               </div>
               <div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">

@@ -27,7 +27,8 @@ export class ProjectUserRoleService {
     const { userId, ...toCreate } = createProjectUserRole;
 
     const project = await this.projectRepository.findOne({
-      projectId: toCreate.project,
+      where: {projectId: toCreate.project,},
+      relations: ['projectUserRole', 'projectStatus']
     });
 
     if (!project) {

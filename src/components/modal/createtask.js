@@ -9,7 +9,7 @@ import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
 
 //! Set to query data currnt user 
-const reporter = 1;
+const onwerId = 1;
 
 function CreateTask({
   setShowCreateProjectModalFromParent,
@@ -64,11 +64,8 @@ function CreateTask({
         label: item.user.email,
       };
     });
-    const filteredOptions = userOptions.filter(
-      (option) => option.value !== reporter
-    );
 
-    setUsers(filteredOptions);
+    setUsers(userOptions);
   }
   useEffect(() => {
     getUsers(parseInt(projectId));
@@ -115,7 +112,6 @@ function CreateTask({
     event.preventDefault();
 
     const userId = [
-      reporter,
       ...selectedOption.map((item) => {
         return item.value;
       }),
@@ -130,7 +126,7 @@ function CreateTask({
         values.dueDate,
         values.description,
         userId,
-        reporter
+        onwerId
       );
     }
   }
@@ -223,7 +219,7 @@ function CreateTask({
                     )}
                   </small>
                   <label className="block text-gray-700 text-sm font-normal mb-2 mt-2 text-left ">
-                    Members
+                    Assignee
                   </label>
                   <Select
                     placeholder="Members"

@@ -14,6 +14,7 @@ function EditTask({
   taskData,
   editTask,
   members,
+  assignMember,
 }) {
   console.log("ddd", taskData.taskId);
   const httpLink = createHttpLink({
@@ -27,48 +28,16 @@ function EditTask({
 
   const [values, setValues] = useState(taskData);
 
-  useEffect(() => {
-    getUsers();
-  }, []);
-
   const [selectedOption, setSelectedOption] = useState(
-    members
-      .map((item) => item.prop)
-      .filter((item) => item.value !== currentUserId)
+    assignMember.map((item) => item.prop)
   );
-
-  const [users, setUsers] = useState([]);
 
   const [errors, setErrors] = useState({});
 
   function handleMultiChange(option) {
     setSelectedOption(option);
   }
-  // query all user in DB
-  async function getUsers() {
-    const userResponse = await client.query({
-      query: gql`
-        query users {
-          users {
-            userId
-            email
-          }
-        }
-      `,
-    });
-    const userOptions = userResponse.data.users.map((user) => {
-      return {
-        value: user.userId,
-        label: user.email,
-      };
-    });
 
-    const filteredOptions = userOptions.filter(
-      (option) => option.value !== currentUserId
-    );
-
-    setUsers([...filteredOptions]);
-  }
   // validation input data
   function ValidateCreateTaskInfo() {
     let errors = {};
@@ -94,18 +63,17 @@ function EditTask({
     });
   };
 
-  async function onSubmit(event) {
-    event.preventDefault();
-
+  async function onSubmit() {
     const members = [
-      currentUserId.toString(),
       ...selectedOption.map((item) => {
-        return item.value.toString();
+        return item.value;
       }),
     ];
+    console.log("selected", selectedOption);
+    console.log("member ", members);
 
     const errors = ValidateCreateTaskInfo();
-    console.log("error",errors)
+    console.log("error", errors);
     if (Object.keys(errors).length === 0) {
       const editedTask = {
         id: taskData.taskId,
@@ -113,18 +81,18 @@ function EditTask({
         startDate: values.startDate,
         dueDate: values.dueDate,
         description: values.description,
-        // members: members,
+        userId: members,
       };
-      editTask(editedTask);
-      console.log("111", editedTask);
+      return editTask(editedTask);
     }
+    return false;
   }
 
   return (
-    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none">
+    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none z-50">
       <div className="CreateProject font-mono">
-        <div className="absolute bg-black opacity-80 inset-0 z-0 "></div>
-        <div className="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0 ">
+        <div className="absolute bg-black opacity-80 inset-0"></div>
+        <div className="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0">
           <div className="">
             <div className="text-center p-5 flex-auto justify-center ">
               <EditSvg />
@@ -196,9 +164,9 @@ function EditTask({
                     )}
                   </small>
                   <label className="block text-gray-700 text-sm font-normal mb-2 mt-2 text-left ">
-                    Members
+                    Assignee
                   </label>
-                  {/* <Select
+                  <Select
                     placeholder="Members"
                     style={
                       errors.members
@@ -207,9 +175,9 @@ function EditTask({
                     }
                     defaultValue={selectedOption}
                     onChange={handleMultiChange}
-                    options={users}
+                    // options={members.map((member) => member.prop)}
                     isMulti={true}
-                  /> */}
+                  />
                   <div className="p-3  mt-2 text-center space-x-4 md:block">
                     <button
                       className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
@@ -220,8 +188,11 @@ function EditTask({
                     <button
                       type="submit"
                       className="mb-2 md:mb-0 bg-yellow-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-yellow-500"
-                      onClick={onSubmit}
-                      
+                      onClick={() => {
+                        if (onSubmit()) {
+                          setShowEditTaskModalFromParent(false);
+                        }
+                      }}
                     >
                       Edit
                     </button>
