@@ -22,13 +22,22 @@ export const LOGIN_USER = gql`
 export const UPDATE_USER_INFO = gql`
   mutation ($input: UpdateUserInput!) {
     updateUser(updateUserInput: $input) {
-      id
-      email
-      firstname
-      lastname
+      userId
+      firstName
+      lastName
       address
       job
       department
+      organization
+      image
+    }
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation ($input: UpdateUserInput!) {
+    updateUser(updateUserInput: $input) {
+      password
     }
   }
 `;
