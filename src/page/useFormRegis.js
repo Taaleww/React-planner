@@ -2,8 +2,12 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import Swal from 'sweetalert2'
 import { CREATE_USER } from "../Graphql/mutation";
+//import { AuthContext } from "../context/auth";
 
 const UseForm = (callback, validate) => {
+    // const context = useContext(AuthContext);
+
+    // define value
     const [values, setValues] = useState({
         firstName: '',
         lastName: '',
@@ -11,8 +15,11 @@ const UseForm = (callback, validate) => {
         password: '',
         cfpassword: '',
     });
+
+
     const [error, setErrors] = useState({});
 
+    //handle values variable
     const handleChange = (event) => {
         const { name, value } = event.target;
         setValues({
@@ -21,9 +28,10 @@ const UseForm = (callback, validate) => {
         });
     };
 
+    //send user info to backend for creating user
     const [createUser] = useMutation(CREATE_USER, {
-        onCompleted(success) {
-            if (success) {
+        onCompleted(login) {
+            if (login) {
                 Swal.fire({
                     title: "Sign up success!",
                     html: "Press Ok to login page",
@@ -50,6 +58,7 @@ const UseForm = (callback, validate) => {
         },
     });
 
+    //Submit Form
     const handleSubmit = (event) => {
         event.preventDefault();
         setErrors(validate(values));
@@ -63,7 +72,7 @@ const UseForm = (callback, validate) => {
             };
             createUser({
                 variables: { input: param }
-            })
+            });
         }
     };
 
