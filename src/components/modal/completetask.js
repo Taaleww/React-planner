@@ -20,8 +20,8 @@ function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
   }
   return (
     <>
-      <div className="opacity-80 fixed inset-0 z-40 bg-black"></div>
-      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+      <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
+      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
         <div className="relative w-auto my-6 mx-auto max-w-3xl">
           <div className="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0">
             <div className="">

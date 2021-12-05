@@ -143,7 +143,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
   }
 
   return (
-    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none">
+    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none z-40">
       <div className="CreateProject font-mono">
         <div className="absolute bg-black opacity-80 inset-0 z-0 "></div>
         <div className="w-screen  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white mt-0 ">
