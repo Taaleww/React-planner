@@ -1,26 +1,14 @@
-import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Assign } from 'src/assign/entities/assign.entity';
 import { Project } from 'src/project/entities/project.entity';
 import { TaskStatus } from 'src/task-status/entities/task-status.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-
-// export enum taskStatus {
-//   TODO = 'todo',
-//   INPROGRESS = 'inprogress',
-//   DONE = 'done',
-// }
-
-// registerEnumType(taskStatus, {
-//   name: 'taskStatus',
-// });
 
 @Entity()
 @ObjectType()
@@ -57,7 +45,7 @@ export class Task {
   @Field()
   dueDate: Date;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   @Field()
   completeDate?: Date;
 
@@ -65,7 +53,7 @@ export class Task {
   @Field()
   description: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   @Field()
   onwerId: number;
 }

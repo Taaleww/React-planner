@@ -1,11 +1,13 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { TaskStatus } from 'src/task-status/entities/task-status.entity';
 
-
+/**
+ * Input data for service function
+ */
 @InputType()
 export class CreateTaskInput {
   @Field(() => Int)
-  projectId:number;
+  projectId: number;
 
   @Field(() => [Int])
   userId: number[];
@@ -16,26 +18,18 @@ export class CreateTaskInput {
   @Field()
   taskName: string;
 
-  @Field(() => Int,{nullable: true})
+  @Field(() => Int, { nullable: true })
   onwerId: number;
-  
-  // @IsDate(}
+
   @Field()
   startDate: Date;
 
-  // @IsDate()
   @Field()
   dueDate: Date;
 
-  // @IsDate()
-  @Field({nullable: true})
+  @Field({ nullable: true })
   completeDate?: Date;
 
   @Field()
   description?: string;
-
-  
 }
-
-
-

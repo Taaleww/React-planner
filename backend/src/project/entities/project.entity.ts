@@ -24,7 +24,7 @@ export class Project {
 
   @Column()
   @Field(() => Int)
-  ownerId:number;
+  ownerId: number;
 
   @ManyToOne(() => ProjectStatus, (projectStatus) => projectStatus.project)
   @Field(() => ProjectStatus)
@@ -57,8 +57,4 @@ export class Project {
   @Column({ type: 'date', nullable: true })
   @Field({ nullable: true })
   completeDate?: Date;
-  
-  
 }
-
-

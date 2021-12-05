@@ -1,6 +1,9 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { Role } from '../entities/projectUserRole.entity';
 
+/**
+ * Input data for service function
+ */
 @InputType()
 export class CreateProjectUserRoleInput {
   @Field(() => [Int])
@@ -8,9 +11,7 @@ export class CreateProjectUserRoleInput {
 
   @Field(() => Int)
   project: number;
-  
+
   @Field(() => Role)
   role: Role;
-  
-
 }

@@ -11,37 +11,53 @@ export class ProjectStatusService {
   constructor(
     @InjectRepository(ProjectStatus)
     private projectStatusRepository: Repository<ProjectStatus>,
-  ){}
-  async create(createProjectStatusInput: CreateProjectStatusInput,
-    ): Promise<ProjectStatus> {
-      const status = await this.projectStatusRepository.findOne({                                           
-        projectStatus: createProjectStatusInput.projectStatus,
-      });
-      if (status) {
-        throw new ForbiddenError('Status already existed.');
-      }
-      const newProjectStatus = this.projectStatusRepository.create(
-        createProjectStatusInput,
-      );
-      return await this.projectStatusRepository.save(newProjectStatus); 
+  ) {}
+
+  /**
+   * For creat projectStatus
+   *
+   * parametert: createprojectStatusInput
+   * returns: Created ProjectStatus
+   */
+  async create(
+    createProjectStatusInput: CreateProjectStatusInput,
+  ): Promise<ProjectStatus> {
+    //if already has this projectStatus
+    const status = await this.projectStatusRepository.findOne({
+      projectStatus: createProjectStatusInput.projectStatus,
+    });
+    if (status) {
+      throw new ForbiddenError('Status already existed.');
+    }
+    const newProjectStatus = this.projectStatusRepository.create(
+      createProjectStatusInput,
+    );
+    return await this.projectStatusRepository.save(newProjectStatus);
   }
 
+  //find all projectStatus in database
   async findAll(): Promise<ProjectStatus[]> {
     return await this.projectStatusRepository.find();
   }
 
+  //find projectStatus with id
   async findOne(id: number): Promise<ProjectStatus> {
     return await this.projectStatusRepository.findOne({
       where: { projectStatusId: id },
     });
   }
 
-  async update(id: number, updateProjetStatusInput: UpdateProjectStatusInput): Promise<ProjectStatus> {
+  //update data in projectStatus with id
+  async update(
+    id: number,
+    updateProjetStatusInput: UpdateProjectStatusInput,
+  ): Promise<ProjectStatus> {
     const project = await this.projectStatusRepository.findOne(id);
     const update = Object.assign(project, updateProjetStatusInput);
     return await this.projectStatusRepository.save(update);
   }
 
+  //remove projectStatus with id
   async remove(id: number): Promise<string> {
     const task = await this.projectStatusRepository.findOne(id);
     await this.projectStatusRepository.delete(id);
