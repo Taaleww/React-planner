@@ -17,7 +17,8 @@ export class UserResolver {
   }
 
   @Query(() => [User], { name: 'users' })
-  @UseGuards(GqlAuthGuard)
+  //! Uncomment this line in production
+  // @UseGuards(GqlAuthGuard)
   findAll() {
     return this.userService.findAll();
   }

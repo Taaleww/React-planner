@@ -1,6 +1,45 @@
 import { ReactComponent as MemberSvg } from "../../assets/icons/member.svg";
+import Select from "react-select";
+import React, { useEffect, useState } from "react";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import gql from "graphql-tag";
 
-function AddAssignee({ setShowAddAssigneeModalFromParent }) {
+import { createHttpLink } from "apollo-link-http";
+import ApolloClient from "apollo-client";
+
+function AddAssignee({
+  setShowAddAssigneeModalFromParent,
+  members,
+  assignMember,
+  addAssignee,
+  editTask,
+  taskId,
+}) {
+  const httpLink = createHttpLink({
+    uri: "http://localhost:5000/graphql",
+  });
+
+  const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+  });
+
+  const [selectedOption, setSelectedOption] = useState([]);
+
+  function handleMultiChange(option) {
+    setSelectedOption(option);
+  }
+
+  async function onSubmit() {
+    const editedTask = {
+      taskId: taskId,
+      userId: selectedOption.map((member) => member.value),
+    };
+    console.log("editedTask", editedTask);
+    // console.log("TEST MEMER", newAssignMember);
+    // addAssignee(editedTask);
+    return addAssignee(editedTask)
+  }
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -17,10 +56,26 @@ function AddAssignee({ setShowAddAssigneeModalFromParent }) {
                 <label className="block text-gray-700 text-sm font-normal mb-2 ">
                   Email
                 </label>
-                <input
+                {/* <input
                   type="text"
                   placeholder="Email"
                   className="block text-sm py-3 px-4 rounded-lg w-full border outline-none border-gray-300"
+                /> */}
+                <Select
+                  placeholder="Members"
+                  defaultValue={selectedOption}
+                  onChange={handleMultiChange}
+                  options={members
+                    .filter(
+                      (allMemberItem) =>
+                        assignMember.filter((oldMember) => {
+                          return (
+                            allMemberItem.prop.value === oldMember.prop.value
+                          );
+                        }).length === 0
+                    )
+                    .map((member) => member.prop)}
+                  isMulti={true}
                 />
               </div>
 
@@ -31,7 +86,14 @@ function AddAssignee({ setShowAddAssigneeModalFromParent }) {
                 >
                   Cancel
                 </button>
-                <button className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500">
+                <button
+                  className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500"
+                  onClick={() => {
+                    if(onSubmit()) {
+                      setShowAddAssigneeModalFromParent(false)
+                    }
+                  }}
+                >
                   Add
                 </button>
               </div>

@@ -29,41 +29,6 @@ function Tasks() {
     setShowCreateTaskModal(state);
   }
 
-  async function addTask(
-    projectId,
-    taskName,
-    startDate,
-    dueDate,
-    description,
-    userId,
-    reporter
-  ) {
-    const taskStatusId = 1;
-    const newTask = {
-      projectId: parseInt(projectId),
-      taskName,
-      startDate: new Date(startDate),
-      dueDate: new Date(dueDate),
-      description,
-      taskStatusId,
-      userId,
-      reporter,
-    };
-    const { data } = await client.mutate({
-      mutation: gql`
-        mutation createTask($createTaskInput: CreateTaskInput!) {
-          createTask(createTaskInput: $createTaskInput) {
-            taskId
-          }
-        }
-      `,
-      variables: { createTaskInput: newTask },
-    });
-    console.log("created data: ", data);
-    getMyTasks();
-    setShowCreateTaskModal(false);
-  }
-
   async function getMyTasks() {
     console.log("HERE", projectId);
     setTask([]);
@@ -75,29 +40,76 @@ function Tasks() {
             task {
               taskId
               taskName
+              startDate
+              dueDate
               taskStatusId{
                 taskStatusId
               }
               description
               assign {
-                user {
-                  userId
-                  firstName
-                }
+                id 
               }
             }
           }
         }
       `,
     });
-    console.log("project", data.project);
-    console.log("task", task);
+    console.log("project", data);
     if (data) {
       await setProjectName(data.project.projectName);
       await setTask([...data.project.task, ...task]);
-      // await setTodoData(task.filter((task) => task.status === "TODO"));
-      // await setInProgressData(task.filter((task) => task.status === "INPROGRESS"));
-      // await setSuccessData(task.filter((task) => task.status === "DONE"));
+    }
+  }
+
+  async function addTask(
+    projectId,
+    taskName,
+    startDate,
+    dueDate,
+    description,
+    userId
+  ) {
+    const taskStatus = 1; // to do
+    //! current userID wait for change
+    const onwerId = 1;
+    const newTask = {
+      projectId,
+      taskName,
+      startDate: new Date(startDate),
+      dueDate: new Date(dueDate),
+      description,
+      taskStatus,
+      userId,
+      onwerId,
+    };
+    console.log("new task", newTask);
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation createTask($createTaskInput: CreateTaskInput!) {
+          createTask(createTaskInput: $createTaskInput) {
+            project {
+              projectName
+            }
+            taskId
+            taskName
+            startDate
+            dueDate
+            taskStatusId {
+              taskStatusId
+            }
+            description
+            assign {
+              id
+            }
+          }
+        }
+      `,
+      variables: { createTaskInput: newTask },
+    });
+    if (data?.createTask) {
+      console.log("tst", data.createTask);
+      setTask([data.createTask, ...task]);
+      setShowCreateTaskModal(false);
     }
   }
 
@@ -108,25 +120,34 @@ function Tasks() {
           updateTask(updateTaskInput: $updateTaskInput) {
             taskId
             taskName
-            taskStatusId{
+            taskStatusId {
               taskStatusId
             }
             description
+            startDate
+            dueDate
             assign {
-              user {
-                userId
-                firstName
-              }
+              id
             }
           }
         }
       `,
       variables: { updateTaskInput: newData },
     });
-
+    console.log("new dat", newData);
+    console.log("dataaaa", data);
     if (data?.updateTask) {
-      setTask([...task.filter((task) => task.taskId !== newData.id), data.updateTask]);
+      console.log("updated", data.updateTask);
+      setTask([])
+      setTask([
+        data.updateTask,
+        ...task.filter((task) => task.taskId !== newData.id),
+      ]);
+
+      console.log("task 1", task);
+      return true;
     }
+    return false;
   }
 
   async function deleteTask(target) {
@@ -140,7 +161,46 @@ function Tasks() {
     });
     if (data.removeTask === "Delete Success") {
       setTask(task.filter((task) => task.taskId !== target));
+      return true;
     }
+    return false;
+  }
+
+  async function addAssignee(newData) {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation newTaskMember($taskMember: CreateAssignInput!) {
+          newTaskMember(taskMember: $taskMember) {
+            task {
+              taskId
+              taskName
+              taskStatusId {
+                taskStatusId
+              }
+              description
+              startDate
+              dueDate
+              assign {
+                id
+              }
+            }
+          }
+        }
+      `,
+      variables: { taskMember: newData },
+    });
+    console.log("This is Data here ", data);
+    console.log("TT", task.filter((task) => task.taskId !== newData.taskId))
+    if (data?.newTaskMember) {
+      setTask([])
+      setTask([
+        data.newTaskMember[0].task,
+        ...task.filter((task) => task.taskId !== newData.taskId),
+      ]);
+      console.log("TEST TASK", task);
+      return true;
+    }
+    return false;
   }
 
   useEffect(() => {
@@ -169,7 +229,7 @@ function Tasks() {
           </div>
         </div>
 
-        <div className="Titleasks font-mono font-bold px-4">
+        <div className="Titletasks font-mono font-bold px-4">
           <div className="flex flex-col mb-6">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 mt-6">
@@ -202,7 +262,9 @@ function Tasks() {
                     <tr>
                       <td>
                         {task
-                          .filter((task) => task.status === "TODO")
+                          .filter(
+                            (task) => task.taskStatusId.taskStatusId === 1
+                          )
                           .map((data) => {
                             return (
                               <TaskItem
@@ -211,13 +273,16 @@ function Tasks() {
                                 editTask={editTask}
                                 addTask={addTask}
                                 projectId={projectId}
+                                addAssignee={addAssignee}
                               />
                             );
                           })}
                       </td>
                       <td>
                         {task
-                          .filter((task) => task.status === "INPROGRESS")
+                          .filter(
+                            (task) => task.taskStatusId.taskStatusId === 2
+                          )
                           .map((data) => {
                             return (
                               <TaskItem
@@ -226,13 +291,16 @@ function Tasks() {
                                 editTask={editTask}
                                 addTask={addTask}
                                 projectId={projectId}
+                                addAssignee={addAssignee}
                               />
                             );
                           })}
                       </td>
                       <td>
                         {task
-                          .filter((task) => task.status === "DONE")
+                          .filter(
+                            (task) => task.taskStatusId.taskStatusId === 3
+                          )
                           .map((data) => {
                             return (
                               <TaskItem
@@ -241,6 +309,7 @@ function Tasks() {
                                 editTask={editTask}
                                 addTask={addTask}
                                 projectId={projectId}
+                                addAssignee={addAssignee}
                               />
                             );
                           })}

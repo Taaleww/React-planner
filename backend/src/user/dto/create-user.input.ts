@@ -17,15 +17,4 @@ export class CreateUserInput {
   @IsAlpha()
   @Field()
   lastName: string;
-
-  // @Field()
-  // job: string;
-
-  // @Field()
-  // departmant: string;
-
-  // @Field()
-  // organization: string;
-
-
 }

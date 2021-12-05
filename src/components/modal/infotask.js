@@ -1,21 +1,21 @@
 function StatusTag({ status }) {
-  if (status === "TODO") {
+  if (status === 1) {
     return (
       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
         TO DO
       </span>
     );
-  } else if (status === "DONE") {
+  } else if (status === 2) {
     return (
-      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-        SUCESS
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+        IN PROGRESS 
       </span>
     );
   }
-  else if (status === "INPROGRESS") {
+  else if (status === 3) {
     return (
-      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-        IN PROGRESS
+      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+        SUCESS
       </span>
     );
   } else {
@@ -27,7 +27,16 @@ function StatusTag({ status }) {
   }
 }
 
-function InfoTask({setShowInfoTaskModalFromParent,taskData}) {
+function InfoTask({setShowInfoTaskModalFromParent,taskData, assignMember}) {
+  console.log("task dataa",taskData);
+  function dateTranform(date) {
+    if (!date) {
+      return "-";
+    }
+    const newDate = new Date(date).toString().split(" ");
+    const completeDate = newDate[2] + " " + newDate[1] + " " + newDate[3];
+    return completeDate;
+  }
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black "></div>
@@ -37,8 +46,7 @@ function InfoTask({setShowInfoTaskModalFromParent,taskData}) {
           <div className="min-h-screen flex items-center justify-center px-4 ">
             <div className="max-w-4xl  bg-white w-full rounded-lg shadow-xl ">
               <div className="p-4 border-b">
-                <h2 className="text-2xl ">Name Project</h2>
-                <p className="text-sm text-gray-500">Project planner</p>
+                <h2 className="text-2xl "> Task Information</h2>
               </div>
               <div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
@@ -47,16 +55,16 @@ function InfoTask({setShowInfoTaskModalFromParent,taskData}) {
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Date</p>
-                  <p>Product Manager</p>
+                  <p>{dateTranform(taskData.startDate)}</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Due Date</p>
-                  <p>Janedoe@gmail.com</p>
+                  <p>{dateTranform(taskData.dueDate)}</p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
                   <p className="text-gray-600 mr-48">Status</p>
                   <p>
-                    <StatusTag status={taskData.status} />
+                    <StatusTag status={taskData.taskStatusId.taskStatusId} />
                   </p>
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4 border-b">
@@ -65,6 +73,14 @@ function InfoTask({setShowInfoTaskModalFromParent,taskData}) {
                 </div>
                 <div className="md:grid md:grid-cols-2 hover:bg-gray-50 md:space-y-0 space-y-1 p-4">
                   <p className="text-gray-600">Members</p>
+                  <p class="overflow-ellipsis overflow-hidden">
+                    {assignMember.map((member, index) => {
+                      if (index === assignMember.length - 1) {
+                        return `${member.name}`;
+                      }
+                      return `${member.name} ,`;
+                    })}
+                  </p>
                 </div>
                 <div className="p-3  mt-2 text-center space-x-4 md:block">
                   <button className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "

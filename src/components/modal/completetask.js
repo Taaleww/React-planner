@@ -2,15 +2,15 @@ import { ReactComponent as CompleteSvg } from "../../assets/icons/completeicon.s
 
 function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
   function computeData(taskData){
-    let taskStatus = taskData.taskStatus.taskStatusId
+    let taskStatus = taskData.taskStatusId.taskStatusId
    if(taskStatus === 1){
-    taskStatus = "INPROGRESS"
+    taskStatus = 2
    }
    else if(taskStatus === 2){
-    taskStatus = "DONE"
+    taskStatus = 3
    }
    else if(taskStatus === 3){
-    taskStatus = "DONE"
+    taskStatus = 3
    }
    return {
      id : taskData.taskId,
@@ -44,7 +44,11 @@ function CompleteTask({setShowCompleteTaskModalFromParent,taskData,editTask}) {
                 </button>
                 <button
                    className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
-                   onClick={() => editTask(computeData(taskData))}
+                   onClick={() => {
+                     if(editTask(computeData(taskData))) {
+                      setShowCompleteTaskModalFromParent(false)
+                     }
+                    }}
                 >
                   complete
                 </button>

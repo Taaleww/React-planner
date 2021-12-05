@@ -1,18 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import Swal from 'sweetalert2'
-import { CREATE_USER } from "../Graphql/mutation";
+import { LOGIN_USER } from "../Graphql/mutation";
+import { AuthContext } from "../context/auth";
 
+//Function for login
 const UseForm = (callback, validate) => {
+    const context = useContext(AuthContext);
+
     const [values, setValues] = useState({
-        firstName: '',
-        lastName: '',
         email: '',
         password: '',
-        cfpassword: '',
     });
+
     const [error, setErrors] = useState({});
 
+    //handle values variable
     const handleChange = (event) => {
         const { name, value } = event.target;
         setValues({
@@ -21,20 +24,20 @@ const UseForm = (callback, validate) => {
         });
     };
 
-    const [createUser] = useMutation(CREATE_USER, {
-        onCompleted(success) {
-            if (success) {
-                Swal.fire({
-                    title: "Sign up success!",
-                    html: "Press Ok to login page",
-                    icon: "success",
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    didClose: () => {
-                        window.location.replace("/login");
-                    },
-                });
-            }
+    //send login input to backend
+    const [login] = useMutation(LOGIN_USER, {
+        update(_, { data: { login: userData } }) {
+            context.login(userData);
+            Swal.fire({
+                title: "Sign up success!",
+                html: "Press Ok to login page",
+                icon: "success",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didClose: () => {
+                    window.location.replace("/");
+                },
+            });
         },
         onError(errors) {
             if (errors) {
@@ -47,23 +50,29 @@ const UseForm = (callback, validate) => {
                     allowEscapeKey: false,
                 });
             }
-        },
+            console.log("error");
+        }
     });
 
+
+    //Handle submit form
     const handleSubmit = (event) => {
         event.preventDefault();
+        
+        //validate form to find error
         setErrors(validate(values));
+
+        //if no errors go to login function
         if (Object.keys(error).length === 0) {
             console.log('hello');
             const param = {
-                firstName: values.firstName,
-                lastName: values.lastName,
                 email: values.email,
                 password: values.password
             };
-            createUser({
+            console.log(param);
+            login({
                 variables: { input: param }
-            })
+            });
         }
     };
 
