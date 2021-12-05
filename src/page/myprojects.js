@@ -1,5 +1,5 @@
 import "./myprojects.css";
-import React, { useState, useEffect,useContext, useData } from "react";
+import React, { useState, useEffect,useContext } from "react";
 // import ApolloClient from "apollo-boost";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
@@ -67,6 +67,7 @@ function MyProjects() {
               projectStatus {
                 projectStatusId
               }
+              ownerId
               description
               startDate
               dueDate
