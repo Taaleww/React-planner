@@ -16,8 +16,6 @@ export class TaskService {
   constructor(
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
-    @InjectRepository(ProjectUserRole)
-    private projectUserRoleRepository: Repository<ProjectUserRole>,
     @InjectRepository(Assign)
     private assignRepository: Repository<Assign>,
     @InjectRepository(User)
@@ -83,7 +81,7 @@ export class TaskService {
   // }
 
   async create(
-    ownerId:number,
+    ownerEmail:String,
     
     createTaskInput: CreateTaskInput): Promise<Task> {
     const alreadyTask = await this.taskRepository.findOne({
@@ -94,7 +92,12 @@ export class TaskService {
       throw new ForbiddenError('Task already existed.');
     }
 
-    createTaskInput.onwerId=ownerId;
+    const owner = await this.userRepository.findOne({
+      where:{ email:ownerEmail},
+    })
+
+    // console.log(ownerEmail)
+    createTaskInput.onwerId =owner.userId;
     //create Task
 
     const newTask = this.taskRepository.create(createTaskInput);

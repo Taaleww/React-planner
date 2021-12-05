@@ -1,20 +1,18 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class Assign {
+
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
@@ -27,10 +25,9 @@ export class Assign {
   @Field(() => User)
   user: User;
 
-  // @ManyToOne(() => ProjectUserRole, (projectUserRole) => projectUserRole.assign,{ onDelete: 'CASCADE'})
-  // @Field(() => ProjectUserRole)
-  // userInProject: ProjectUserRole;
-
+  /**
+   * for save what time that data has been update
+   */
   @CreateDateColumn()
   @Field()
   created_at: Date;
