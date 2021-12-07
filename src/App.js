@@ -1,13 +1,13 @@
 import "./App.css";
 import React from "react";
-import MyProjects from "./page/myprojects";
-import Tasks from "./page/tasks";
+import MyProjects from "./page/Myprojects/myprojects";
+import Tasks from "./page/Task/tasks";
 import Navbar from "./components/navbar";
 import Login from "./page/Loginpage/login";
 import Regis from "./page/Registerpage/register";
 import InfoTask from "./components/modal/infotask";
 import Footer from "./components/footer";
-import NotFound from "./page/notfound";
+import NotFound from "./page/Notfound/notfound";
 import Profile from "./page/Profilepage/profile";
 import ManageAccount from "./page/ManageAccountpage/manageaccount";
 import Home from "./page/Homepage/home"
