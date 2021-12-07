@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
-import "../components/base.css";
-import "../App.css";
-import { AuthContext } from '../context/auth'
+import "../../components/base.css";
+import "../../App.css";
+import { AuthContext } from '../../context/auth'
 
 //Home Page
 function Home() {
