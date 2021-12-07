@@ -1,9 +1,9 @@
 import "./myprojects.css";
 import React, { useState, useEffect,useContext } from "react";
-import CreateProject from "../components/modal/createproject";
-import ProjectItem from "../components/projectitem";
+import CreateProject from "../../components/modal/createproject";
+import ProjectItem from "../../components/projectitem";
 import gql from "graphql-tag";
-import { AuthContext } from "../context/auth";
+import { AuthContext } from "../../context/auth";
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 

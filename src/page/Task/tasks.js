@@ -1,9 +1,9 @@
 import { Link, useParams } from "react-router-dom";
-import TaskItem from "../components/taskitem";
-import CreateTasks from "../components/modal/createtask";
+import TaskItem from "../../components/taskitem";
+import CreateTasks from "../../components/modal/createtask";
 import gql from "graphql-tag";
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/auth";
+import { AuthContext } from "../../context/auth";
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
