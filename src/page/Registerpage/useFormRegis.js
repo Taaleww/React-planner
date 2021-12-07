@@ -1,17 +1,21 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import Swal from 'sweetalert2'
-import { LOGIN_USER } from "../Graphql/mutation";
-import { AuthContext } from "../context/auth";
+import { CREATE_USER } from "../../Graphql/mutation";
+//import { AuthContext } from "../context/auth";
 
-//Function for login
 const UseForm = (callback, validate) => {
-    const context = useContext(AuthContext);
+    // const context = useContext(AuthContext);
 
+    // define value
     const [values, setValues] = useState({
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
+        cfpassword: '',
     });
+
 
     const [error, setErrors] = useState({});
 
@@ -24,20 +28,21 @@ const UseForm = (callback, validate) => {
         });
     };
 
-    //send login input to backend
-    const [login] = useMutation(LOGIN_USER, {
-        update(_, { data: { login: userData } }) {
-            context.login(userData);
-            Swal.fire({
-                title: "Sign up success!",
-                html: "Press Ok to login page",
-                icon: "success",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didClose: () => {
-                    window.location.replace("/");
-                },
-            });
+    //send user info to backend for creating user
+    const [createUser] = useMutation(CREATE_USER, {
+        onCompleted(login) {
+            if (login) {
+                Swal.fire({
+                    title: "Sign up success!",
+                    html: "Press Ok to login page",
+                    icon: "success",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didClose: () => {
+                        window.location.replace("/login");
+                    },
+                });
+            }
         },
         onError(errors) {
             if (errors) {
@@ -50,27 +55,22 @@ const UseForm = (callback, validate) => {
                     allowEscapeKey: false,
                 });
             }
-            console.log("error");
-        }
+        },
     });
 
-
-    //Handle submit form
+    //Submit Form
     const handleSubmit = (event) => {
         event.preventDefault();
-        
-        //validate form to find error
         setErrors(validate(values));
-
-        //if no errors go to login function
         if (Object.keys(error).length === 0) {
             console.log('hello');
             const param = {
+                firstName: values.firstName,
+                lastName: values.lastName,
                 email: values.email,
                 password: values.password
             };
-            console.log(param);
-            login({
+            createUser({
                 variables: { input: param }
             });
         }

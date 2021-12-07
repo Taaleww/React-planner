@@ -18,10 +18,6 @@ export class UserResolver {
 
   //query all user information
   @Query(() => [User], { name: 'users' })
-<<<<<<< HEAD
-  //! Uncomment this line in production
-=======
->>>>>>> f9701cf14ada6121c5ca8bc780ef037513bf70a5
   @UseGuards(GqlAuthGuard)
   findAll() {
     return this.userService.findAll();

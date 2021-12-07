@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { AuthContext } from "../context/auth";
-import UserInfo from "../components/userinfoitem";
-import { GET_MY_PROJECT, GET_MY_TASK, GET_USER_INFO } from "../Graphql/query";
+import { AuthContext } from "../../context/auth";
+import UserInfo from "../../components/userinfoitem";
+import { GET_MY_PROJECT, GET_MY_TASK, GET_USER_INFO } from "../../Graphql/query";
 
 function Profile() {
   const context = useContext(AuthContext);

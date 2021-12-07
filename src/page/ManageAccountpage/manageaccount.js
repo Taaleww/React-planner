@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useContext, useEffect } from "react";
-import EditProfile from "../components/editprofile";
-import ChangePassword from "../components/changepassword";
-import { GET_USER_INFO } from "../Graphql/query";
+import EditProfile from "../../components/editprofile";
+import ChangePassword from "../../components/changepassword";
+import { GET_USER_INFO } from "../../Graphql/query";
 import { useQuery } from "@apollo/client";
-import { AuthContext } from "../context/auth";
+import { AuthContext } from "../../context/auth";
 
 function ManageAccount() {
     const context = useContext(AuthContext);
