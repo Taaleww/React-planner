@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/auth";
-import { Redirect , Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 function GuestRoute({ component: Component, ...rest }) {
     const { user } = useContext(AuthContext);   // determine if authorized, from context or however you're doing it

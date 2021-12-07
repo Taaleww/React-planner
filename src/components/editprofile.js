@@ -55,7 +55,7 @@ function EditProfile({ infoUser ,userId}) {
     }
 
     //For upload and show image
-    const [selectedImage, setSelectedImage] = useState(values.image);
+    const [selectedImage, setSelectedImage] = useState(infoUser.image);
     const imageChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             //convert image to link url

@@ -42,8 +42,8 @@ function AuthProvider(props) {
 
   function login(userData){
     localStorage.setItem('jwtToken', userData);
-    console.log(userData);
-    console.log("test");
+    // console.log(userData);
+    // console.log("test");
     dispatch({
       type: 'LOGIN',
       payload: jwtDecode(userData)
@@ -51,7 +51,7 @@ function AuthProvider(props) {
   }
 
   function logout() {
-    console.log("Log out");
+    // console.log("Log out");
     localStorage.removeItem('jwtToken');
     dispatch({ type: 'LOGOUT' });
   }

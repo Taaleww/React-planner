@@ -23,6 +23,8 @@ function Profile() {
       setUser(data.user);
     }
   }, [data]);
+
+  //Query project of user
   const { myproject } = useQuery(GET_MY_PROJECT, {
     variables: { input: userId },
   });
@@ -32,16 +34,18 @@ function Profile() {
   //set user varaible to be query data
   useEffect(() => {
     if (myproject) {
-      setProject(myproject.findProjectByUser);
+      setProject([...myproject.findProjectByUser]);
     }
   }, [myproject]);
 
+  console.log(user);
+  console.log("hello");
   console.log(project);
+  console.log(myproject);
 
   const { mytask } = useQuery(GET_MY_TASK, {
     variables: { input: project.projectId },
   });
-  console.log("mytask", mytask);
 
   const [task, setTask] = useState([]);
 
@@ -52,23 +56,6 @@ function Profile() {
     }
   }, [mytask]);
 
-  // const project = [
-  //     {
-  //         name: "Project planer"
-  //     },
-  //     {
-  //         name: "Baebaeboo planer"
-  //     },
-  //     {
-  //         name: "Omsaka planer"
-  //     },
-  //     {
-  //         name: "Project planer"
-  //     },
-  //     {
-  //         name: "Baebaeboo planer"
-  //     },
-  // ];
 
   const friend = [
     {
