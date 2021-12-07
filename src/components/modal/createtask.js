@@ -1,30 +1,31 @@
 import Proptypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ReactComponent as CreateSvg } from "../../assets/icons/create.svg";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import gql from "graphql-tag";
-
 import Select from "react-select";
 import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
-
-//! Set to query data current user
-const onwerId = 1;
+import { AuthContext } from "../../context/auth";
 
 function CreateTask({
   setShowCreateProjectModalFromParent,
   addTask,
   projectId,
 }) {
+  // current userId logged in
+  const { user } = useContext(AuthContext);
+  const onwerId = user.sub;
+
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",
   });
-
+  // set up client 
   const client = new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache(),
   });
-
+  // define value
   const [values, setValues] = useState({
     taskName: "",
     startDate: "",
@@ -74,25 +75,28 @@ function CreateTask({
   // validate form create task info
   function Validate() {
     let errors = {};
-
+    //check all inputs is not null
+    //check taskName is only String
     if (!values.taskName) {
       errors.taskName = "Please input task name";
     } else if (/[^a-zA-Z0-9\s]/.test(values.taskName)) {
       errors.taskName = "Plese input only characters or number";
     }
-
+    //check all inputs is not null
+    //check startDate is only String
     if (!values.startDate) {
       errors.startDate = "Please input start date";
     } else if (/^\d{2}([./-])\d{2}\1\d{4}$/.test(values.startDate)) {
       errors.startDate = "Plese input only date format";
     }
-
+    //check all inputs is not null
+    //check dueDate is only String
     if (!values.dueDate) {
       errors.dueDate = "Please input due date";
     } else if (/^\d{2}([./-])\d{2}\1\d{4}$/.test(values.dueDate)) {
       errors.dueDate = "Plese input only date format";
     }
-
+    //check all inputs is not null
     if (!values.description) {
       errors.description = "Please input description";
     }

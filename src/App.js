@@ -25,21 +25,21 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={ Home } />
-          {/* <Route path="/login" component={ Login } />
+          <Route path="/login" component={ Login } />
           <Route path="/regis" component={ Regis } />
           <Route path="/myprojects" component={ MyProjects } />
           <Route path="/project/:projectId/tasks" component={ Tasks } />
           <Route path="/profile" component={ Profile } />
           <Route path="/manage_account" component={ ManageAccount } />
-          <Route path="/infotask" component={ InfoTask } /> */}
-          <GuestRoute path="/login" component={ Login } />
+          <Route path="/infotask" component={ InfoTask } />
+          {/* <GuestRoute path="/login" component={ Login } />
           <GuestRoute path="/regis" component={ Regis } />
           <AuthRoute exact path="/myprojects" component={ MyProjects } />
           <AuthRoute path="/project/:projectId/tasks" component={ Tasks } />
           <AuthRoute path="/profile" component={ Profile } />
           <AuthRoute path="/manage_account" component={ ManageAccount } />
           <AuthRoute path="/infotask" component={ InfoTask } />
-          <Route path="*" component={ NotFound } />
+          <Route path="*" component={ NotFound } /> */}
         </Switch>
       </Router>
       <Footer />

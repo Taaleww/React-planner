@@ -1,6 +1,5 @@
 import "./myprojects.css";
 import React, { useState, useEffect,useContext } from "react";
-// import ApolloClient from "apollo-boost";
 import CreateProject from "../components/modal/createproject";
 import ProjectItem from "../components/projectitem";
 import gql from "graphql-tag";
@@ -9,7 +8,6 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 function MyProjects() {
-  console.log("useDATA",);
   const [myProjects, setData] = useState([]);
 
   function changeStateCreateModalFromChild(state) {
@@ -50,11 +48,9 @@ function MyProjects() {
     });
     getMyProjects();
   }
-  //! please change current userid nowwwwwww !!!!!!!!!
   const { user } = useContext(AuthContext);
   const userId = user.sub;
-  // console.log("userId",userId)
-  // const userId = 1;
+  // query project informations 
   async function getMyProjects() {
     setData([]);
     const { data } = await client.query({
@@ -88,7 +84,7 @@ function MyProjects() {
       setData([...data.findProjectByUser]);
     }
   }
-  // edit project function
+  // function edit project 
   async function editProject(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -109,7 +105,7 @@ function MyProjects() {
     }
   }
 
-  // create project function
+  // function create project 
   async function addProject(
     projectName,
     startDate,

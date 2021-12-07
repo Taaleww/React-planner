@@ -3,13 +3,12 @@ import TaskItem from "../components/taskitem";
 import CreateTasks from "../components/modal/createtask";
 import gql from "graphql-tag";
 import React, { useState, useEffect, useContext } from "react";
-import { useLocation } from "react-router-dom";
 import { AuthContext } from "../context/auth";
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 function Tasks() {
-  //! please change current userid nowwwwwww !!!!!!!!!
+  // current userId logged in
   const { user } = useContext(AuthContext);
   const onwerId = user.sub;
 
@@ -19,20 +18,20 @@ function Tasks() {
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem("jwtToken");
     // return the headers to the context so httpLink can read them
     return {
       headers: {
         ...headers,
         authorization: token ? `Bearer ${token}` : "",
-      }
-    }
+      },
+    };
   });
 
   const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
-});
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
 
   const params = useParams();
 
@@ -40,18 +39,13 @@ function Tasks() {
   let projectId = params?.projectId;
 
   const [showCreateTaskModal, setShowCreateTaskModal] = React.useState(false);
-
-  const [todoData, setTodoData] = React.useState([]);
-  const [inProgressData, setInProgressData] = React.useState([]);
-  const [successData, setSuccessData] = React.useState([]);
-
   const [task, setTask] = useState([]);
   const [projectName, setProjectName] = useState("");
 
   function changeStateModalFromChild(state) {
     setShowCreateTaskModal(state);
   }
-
+  // query task informations
   async function getMyTasks() {
     setTask([]);
     const { data } = await client.query({
@@ -82,7 +76,7 @@ function Tasks() {
       await setTask([...data.project.task, ...task]);
     }
   }
-
+  // function add task
   async function addTask(
     projectId,
     taskName,
@@ -92,9 +86,6 @@ function Tasks() {
     userId
   ) {
     const taskStatus = 1; // to do
-    //! current userID wait for change
-
-    // const onwerId = 1;
     const newTask = {
       projectId,
       taskName,
@@ -133,7 +124,7 @@ function Tasks() {
       setShowCreateTaskModal(false);
     }
   }
-
+  // function edit task
   async function editTask(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -165,7 +156,7 @@ function Tasks() {
     }
     return false;
   }
-
+  // function delete task
   async function deleteTask(target) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -181,7 +172,7 @@ function Tasks() {
     }
     return false;
   }
-
+  // function add assignee in task
   async function addAssignee(newData) {
     const { data } = await client.mutate({
       mutation: gql`
@@ -215,7 +206,7 @@ function Tasks() {
     }
     return false;
   }
-
+  // use funcction
   useEffect(() => {
     getMyTasks();
   }, []);

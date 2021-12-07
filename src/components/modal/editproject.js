@@ -12,11 +12,9 @@ function EditProject({
   editProject,
   members,
 }) {
-  //! Set to query data
   // currentUserId logged in
   const { user } = useContext(AuthContext);
   const currentUserId = user.sub;
-  // const currentUserId = 1; // currentUserId logged in
 
   const httpLink = createHttpLink({
     uri: "http://localhost:5000/graphql",

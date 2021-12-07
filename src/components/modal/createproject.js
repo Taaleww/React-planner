@@ -1,20 +1,14 @@
 import Proptypes from "prop-types";
-import React, { useState, useEffect , useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import { ReactComponent as CreateSvg } from "../../assets/icons/create.svg";
 import gql from "graphql-tag";
 import { AuthContext } from "../../context/auth";
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-
-//! Set to query data
-
-// const currentUserId = 1;
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
-  //! Set to query data
-
-  // const currentUserId = 1;
+  // current userId logged in
   const { user } = useContext(AuthContext);
   const currentUserId = user.sub;
   useEffect(() => {
@@ -27,20 +21,20 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem("jwtToken");
     // return the headers to the context so httpLink can read them
     return {
       headers: {
         ...headers,
         authorization: token ? `Bearer ${token}` : "",
-      }
-    }
+      },
+    };
   });
 
   const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
-});
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
   // set value project data
   const [values, setValues] = useState({
     projectName: "",
@@ -70,7 +64,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
         }
       `,
     });
-    // select option user 
+    // select option user
     const userOptions = data.users.map((user) => {
       return {
         value: user.userId,
@@ -87,24 +81,28 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
   function ValidateCreateProjectInfo() {
     let errors = {};
 
+    //check all inputs is not null
+    //check projectName is only String
     if (!values.projectName) {
       errors.projectName = "Please input project name";
     } else if (/[^a-zA-Z0-9\s]/.test(values.projectName)) {
       errors.projectName = "Plese input only characters or number";
     }
-
+    //check all inputs is not null
+    //check startDate is only String
     if (!values.startDate) {
       errors.startDate = "Please input start date";
     } else if (/^\d{2}([./-])\d{2}\1\d{4}$/.test(values.startDate)) {
       errors.startDate = "Plese input only date format";
     }
-
+    //check all inputs is not null
+    //check dueDate is only String
     if (!values.dueDate) {
       errors.dueDate = "Please input due date";
     } else if (/^\d{2}([./-])\d{2}\1\d{4}$/.test(values.dueDate)) {
       errors.dueDate = "Plese input only date format";
     }
-
+    //check all inputs is not null
     if (!values.description) {
       errors.description = "Please input description";
     }
@@ -129,7 +127,7 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
         return item.value.toString();
       }),
     ];
-
+    // check errors
     const errors = ValidateCreateProjectInfo();
     if (Object.keys(errors).length === 0) {
       addProject(
@@ -245,14 +243,14 @@ function CreateProject({ setShowCreateProjectModalFromParent, addProject }) {
                     isMulti={true}
                   />
                   <div className="p-3  mt-2 text-center space-x-4 md:block">
-                     {/* Cancle Button */}
+                    {/* Cancle Button */}
                     <button
                       className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 "
                       onClick={() => setShowCreateProjectModalFromParent(false)}
                     >
                       Cancel
                     </button>
-                     {/* Submit Button */}
+                    {/* Submit Button */}
                     <button
                       type="submit"
                       className="mb-2 md:mb-0 bg-green-400  border  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"

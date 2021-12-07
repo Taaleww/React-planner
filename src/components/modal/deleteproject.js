@@ -1,6 +1,10 @@
 import { ReactComponent as DeleteSvg } from "../../assets/icons/delete.svg";
 
-function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, deleteProject }) {
+function DeleteProject({
+  setShowDeleteProjectModalFromParent,
+  projectData,
+  deleteProject,
+}) {
   return (
     <>
       <div className="opacity-80 fixed inset-0 z-40 bg-black"></div>
@@ -12,8 +16,11 @@ function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, delet
                 <DeleteSvg />
                 <h2 className="text-xl font-bold py-4 ">Are you sure?</h2>
                 <p className="text-sm text-gray-500 px-8">
-                  Do you really want to delete <span  style={{ color:"red" }}>'{projectData.projectName}'</span> project? This process cannot
-                  be undone
+                  Do you really want to delete{" "}
+                  <span style={{ color: "red" }}>
+                    '{projectData.projectName}'
+                  </span>{" "}
+                  project? This process cannot be undone
                 </p>
               </div>
               <div className="p-3  mt-2 text-center space-x-4 md:block">
@@ -28,7 +35,6 @@ function DeleteProject({ setShowDeleteProjectModalFromParent, projectData, delet
                 <button
                   className="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600"
                   onClick={() => deleteProject(projectData.projectId)}
-                  
                 >
                   Delete
                 </button>

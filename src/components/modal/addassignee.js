@@ -27,11 +27,6 @@ function AddAssignee({
     };
   });
 
-  const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-  });
-
   const [selectedOption, setSelectedOption] = useState([]);
 
   function handleMultiChange(option) {

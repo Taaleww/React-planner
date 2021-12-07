@@ -2,9 +2,8 @@ import { ReactComponent as MemberSvg } from "../../assets/icons/member.svg";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import gql from "graphql-tag";
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 function AddMember({
   setShowAddMemberModalFromParent,
@@ -12,7 +11,7 @@ function AddMember({
   addMember,
   members,
 }) {
-
+  // use function
   useEffect(() => {
     getUsers();
   }, []);
@@ -23,21 +22,21 @@ function AddMember({
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem("jwtToken");
     // return the headers to the context so httpLink can read them
     return {
       headers: {
         ...headers,
         authorization: token ? `Bearer ${token}` : "",
-      }
-    }
+      },
+    };
   });
-
+  // set up client
   const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
-});
-
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+  // option to select
   const [selectedOption, setSelectedOption] = useState([]);
 
   function handleMultiChange(option) {
@@ -48,7 +47,7 @@ function AddMember({
 
   async function getUsers() {
     const memberUserOptions = members.map((item) => item.prop);
-
+    // query all member in DB
     const userResponse = await client.query({
       query: gql`
         query users {
@@ -67,9 +66,10 @@ function AddMember({
     });
 
     const filteredOptions = userOptions.filter(
-      (allUserItem) => memberUserOptions.filter((memberItem) => {
-        return allUserItem.label === memberItem.label
-      }).length === 0
+      (allUserItem) =>
+        memberUserOptions.filter((memberItem) => {
+          return allUserItem.label === memberItem.label;
+        }).length === 0
     );
 
     setUsers(filteredOptions);
@@ -81,14 +81,13 @@ function AddMember({
     const members = selectedOption.map((item) => {
       return item.value;
     });
-    const role = "EMPLOYEE"
+    const role = "EMPLOYEE";
     const addmember = {
-      project : projectData.projectId ,
-      userId : members,
+      project: projectData.projectId,
+      userId: members,
       role,
-    }
+    };
     addMember(addmember);
-    
   }
 
   return (
@@ -107,7 +106,7 @@ function AddMember({
                 <label className="block text-gray-700 text-sm font-normal mb-2 ">
                   Email
                 </label>
-              
+
                 <Select
                   placeholder="Members"
                   defaultValue={selectedOption}
@@ -116,7 +115,7 @@ function AddMember({
                   isMulti={true}
                 />
               </div>
-               {/* Cancle Button */}
+              {/* Cancle Button */}
               <div className="p-3  mt-2 text-center space-x-4 md:block">
                 <button
                   className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
@@ -124,7 +123,7 @@ function AddMember({
                 >
                   Cancel
                 </button>
-                 {/* Submit Button */}
+                {/* Submit Button */}
                 <button
                   className="mb-2 md:mb-0 bg-blue-400  px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-blue-500"
                   onClick={onSubmit}

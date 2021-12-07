@@ -23,7 +23,6 @@ function Profile() {
       setUser(data.user);
     }
   }, [data]);
-
   const { myproject } = useQuery(GET_MY_PROJECT, {
     variables: { input: userId },
   });
@@ -42,6 +41,7 @@ function Profile() {
   const { mytask } = useQuery(GET_MY_TASK, {
     variables: { input: project.projectId },
   });
+  console.log("mytask", mytask);
 
   const [task, setTask] = useState([]);
 

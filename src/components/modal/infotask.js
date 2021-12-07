@@ -29,6 +29,7 @@ function StatusTag({ status }) {
 
 function InfoTask({setShowInfoTaskModalFromParent,taskData, assignMember}) {
   function dateTranform(date) {
+    // check date not have date return "-"
     if (!date) {
       return "-";
     }
