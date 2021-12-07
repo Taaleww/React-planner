@@ -92,9 +92,11 @@ type Query {
   member(id: Int!): [ProjectUserRole!]!
   findProjectByUser(id: Int!): [ProjectUserRole!]!
   users: [User!]!
+  usersPartner(userId: Int!): [User!]!
   user(id: Int!): User!
   email(email: String!): User!
   tasks: [Task!]!
+  userTasks(userId: Int!): [Task!]!
   task(id: Int!): Task!
   assigns: [Assign!]!
   assign(id: Int!): Assign!

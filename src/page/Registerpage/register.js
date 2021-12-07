@@ -10,7 +10,7 @@ function Register({ submitForm }) {
       );
 
     return (
-        <div className="bg-gray-50 min-w-full min-h-full flex justify-center items-center px-10">
+        <div className="bg-gray-50 min-w-full min-h-screen flex justify-center items-center px-10">
             <div className="flex items-center bg-gray-800 rounded-lg shadow-lg overflow-hidden m-8 w-full sm:max-w-md lg:max-w-5xl">
                 <div className="w-full p-5 hidden lg:block lg:w-1/2 bg-cover">
                     <img

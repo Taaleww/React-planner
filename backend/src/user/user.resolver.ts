@@ -22,6 +22,11 @@ export class UserResolver {
   findAll() {
     return this.userService.findAll();
   }
+  @Query(() => [User], { name: 'usersPartner' })
+  // @UseGuards(GqlAuthGuard)
+  findPartner(@Args('userId' , {type : () => Int} ) id: number) {
+    return this.userService.getPartnerFromUserId(id);
+  }
 
   //query specific user information by id
   @Query(() => User, { name: 'user' })

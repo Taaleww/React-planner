@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { UPDATE_USER_INFO } from "../Graphql/mutation";
 import { useMutation } from "@apollo/client";
 import Swal from 'sweetalert2'
+import axios from "axios";
 
-function EditProfile({ infoUser ,userId}) {
+function EditProfile({ infoUser, userId }) {
 
     // define value
     const [values, setValues] = useState({
@@ -13,11 +14,11 @@ function EditProfile({ infoUser ,userId}) {
         department: '',
         organization: '',
         address: '',
-        image: ''
+        image: infoUser.image
     });
 
     useEffect(() => {
-        if(infoUser){
+        if (infoUser) {
             setValues(infoUser);
         }
     }, [infoUser]);
@@ -53,16 +54,16 @@ function EditProfile({ infoUser ,userId}) {
 
         return errors;
     }
-
     //For upload and show image
-    const [selectedImage, setSelectedImage] = useState(infoUser.image);
+    const [selectedImage, setSelectedImage] = useState("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg");
     const imageChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             //convert image to link url
             setSelectedImage(URL.createObjectURL(e.target.files[0]));
         }
     };
-
+    console.log(infoUser.image);
+    console.log(selectedImage);
     //send user info to backend for change password
     const [updateUser] = useMutation(UPDATE_USER_INFO, {
         onCompleted(success) {
@@ -93,34 +94,75 @@ function EditProfile({ infoUser ,userId}) {
         },
     });
 
+    //Image variable
+    const [pictureFile, setPictureFile] = useState("");
+
     //Handle submit form
     const handleSubmit = (event) => {
         event.preventDefault();
 
         setErrors(validate(values));
 
-        if (Object.keys(error).length === 0) {
-            const param = {
-                id: userId,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                job: values.job,
-                department: values.department,
-                organization: values.organization,
-                address: values.address,
-                image: selectedImage
-            };
-            console.log(param);
-            updateUser({
-                variables: { input: param }
-            });
+        if (pictureFile) {
+            let formdata = new FormData();
+
+            //Upload image convert to URL
+            formdata.append("file", pictureFile, pictureFile.name);
+            axios({
+                url: "http://20.212.81.174/upload",
+                method: "POST",
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                data: formdata,
+            })
+                .then((res) => {
+                    console.log("Enter");
+                    const url = "http://20.212.81.174/";
+                    const picURL = url + res.data.imagePath
+                    if (Object.keys(error).length === 0) {
+                        const param = {
+                            id: userId,
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            job: values.job,
+                            department: values.department,
+                            organization: values.organization,
+                            address: values.address,
+                            image: picURL
+                        };
+                        // console.log(param);
+                        updateUser({
+                            variables: { input: param }
+                        });
+                    }
+                })
         }
+        else{
+            if (Object.keys(error).length === 0) {
+                const param = {
+                    id: userId,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    job: values.job,
+                    department: values.department,
+                    organization: values.organization,
+                    address: values.address,
+                    image: infoUser.image
+                };
+                // console.log(param);
+                updateUser({
+                    variables: { input: param }
+                });
+            }
+        }
+
     };
 
     return (
         <div className="w-8/12 p-12 bg-white rounded-2xl">
             <h1 className="text-2xl font-bold text-center pb-8">Edit Profile</h1>
-            <form onSubmit={handleSubmit}  noValidate>
+            <form onSubmit={handleSubmit} noValidate>
                 <div className="image overflow-hidden text-center">
                     {/* Profile Image */}
                     <img className="h-auto w-3/12 mx-auto rounded-full"
@@ -133,7 +175,11 @@ function EditProfile({ infoUser ,userId}) {
                             htmlFor="img"
                             className="relative cursor-pointer font-semibold text-indigo-600 hover:text-indigo-400 focus-within:outline-none">
                             <span>Upload a file</span>
-                            <input id="img" name="img" accept="image/*" type="file" className="sr-only" onChange={imageChange} />
+                            <input id="img" name="img" accept="image/*" type="file" className="sr-only" 
+                                onChange={(event) => {
+                                    setPictureFile(event.target.files[0]);
+                                    imageChange(event);
+                                }} />
                         </label>
                     </h1>
                 </div>

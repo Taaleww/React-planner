@@ -109,8 +109,24 @@ export class TaskService {
   //find all task in database
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find({
-      relations: ['taskStatusId'],
+      relations: ['taskStatusId','assign','assign.user'],
     });
+  }
+
+  async findAllByUserID(userId: number): Promise<Task[]> {
+    console.log(userId);
+    const assigns = await this.assignRepository.find({
+      where: {
+          user : {
+            userId: userId
+          }
+      },
+      relations: ['task', 'user' , 'task.taskStatusId']
+      // relations: ['taskStatusId','assign','assign.user'],
+    });
+    console.log(assigns);
+    const tasks = assigns.map((assign) => assign.task);
+    return tasks;
   }
 
   //find task with id

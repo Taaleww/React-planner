@@ -12,6 +12,8 @@ function Navbar() {
     return classes.filter(Boolean).join(' ')
   }
 
+  // console.log("URL" + user.img);
+
   const menuBar = !user ? (
     <div>
       <nav className="bg-white ">
@@ -147,8 +149,8 @@ function Navbar() {
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
                       <img
-                        className="h-9 w-9 rounded-full"
-                        src={user.img} alt=""
+                        className="object-cover h-11 w-11 rounded-full "
+                        src="https://i.pinimg.com/736x/d9/76/50/d9765063d67573ad5877bffe56a1e68f.jpg" alt=""
                       />
                     </Menu.Button >
                   </div >

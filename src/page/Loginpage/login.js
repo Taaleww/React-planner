@@ -10,7 +10,7 @@ function Login({ submitForm }) {
       );
 
     return (
-        <div className="bg-gray-50 min-w-full min-h-full flex items-center justify-center px-10 py-14">
+        <div className="bg-gray-50 min-w-full min-h-screen flex items-center justify-center px-10 py-10">
             <div className="flex items-center bg-gray-800 rounded-lg shadow-lg overflow-hidden m-11 w-full sm:max-w-md lg:max-w-4xl">
                 {/* Right Side with image */}
                 <div className="w-full min-h-full hidden lg:block lg:w-1/2">

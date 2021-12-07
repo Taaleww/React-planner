@@ -6,12 +6,15 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { ProjectUserRole } from 'src/projectUserRole/entities/projectUserRole.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(ProjectUserRole)
+    private projectUserRoleRepository: Repository<ProjectUserRole>,
   ) {}
 
   //create user function
@@ -97,5 +100,28 @@ export class UserService {
   async remove(id: number): Promise<string> {
     await this.userRepository.delete(id);
     return 'Delete success';
+  }
+
+  async getPartnerFromUserId(userId: number): Promise<User[]> {
+    const projectUserRoles = await this.projectUserRoleRepository.find({
+      where: {
+        user: {
+          userId: userId,
+        },
+      },
+      relations : ['project' , 'project.projectUserRole' , 'project.projectUserRole.user'],
+    });
+    const projects = projectUserRoles.map((pJuserRole) => pJuserRole.project.projectUserRole);
+    const arr : User[] = [];
+    const pjRolless = projects.forEach(pjRoles => {
+      pjRoles.forEach(pjRole => {
+        arr.push(pjRole.user);
+      })
+    });
+    const users = arr.filter((e, i) => e.userId != userId);
+    const uusers = users.filter((item ,index , self) => index === self.findIndex((u) => u.userId === item.userId))
+
+    return uusers;
+
   }
 }

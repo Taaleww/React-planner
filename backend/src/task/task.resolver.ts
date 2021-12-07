@@ -37,6 +37,15 @@ export class TaskResolver {
     return this.taskService.findAll();
   }
 
+    /**
+   * Query all task by userID
+   * returns: all task in database
+   */
+     @Query(() => [Task], { name: 'userTasks' })
+     findAllByUserId(@Args('userId' , {type : () => Int}) userID : number) {
+       return this.taskService.findAllByUserID(userID);
+     }
+
   /**
    *
    * parameter: id

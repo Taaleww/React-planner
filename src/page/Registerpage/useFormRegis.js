@@ -2,12 +2,9 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import Swal from 'sweetalert2'
 import { CREATE_USER } from "../../Graphql/mutation";
-//import { AuthContext } from "../context/auth";
 
 const UseForm = (callback, validate) => {
-    // const context = useContext(AuthContext);
-
-    // define value
+    
     const [values, setValues] = useState({
         firstName: '',
         lastName: '',

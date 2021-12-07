@@ -35,29 +35,36 @@ export const GET_MY_PROJECT = gql`
               }
           }
           user {
-            firstName
+            firstName 
+            lastName
           }
         }
       }
 `;
 
 export const GET_MY_TASK = gql`
-      query project($input: Int!)  {
-        project(id: $input) {
-          projectName
-          task {
-            taskId
-            taskName
-            startDate
-            dueDate
-            taskStatusId{
-              taskStatusId
-            }
-            description
-            assign {
-              id 
-            }
-          }
-        }
+  query tasks($input: Int!){
+    userTasks(userId: $input) {
+      taskId
+      taskName
+      startDate
+      dueDate
+      taskStatusId {
+        taskStatusId
       }
-    `;
+      description
+    }
+  }
+`;
+
+export const GET_MY_TEAM = gql`
+  query Partner($input: Int!){
+    usersPartner(userId: $input) {
+        userId
+        firstName
+        lastName
+        image
+        email
+    }
+  }
+`;

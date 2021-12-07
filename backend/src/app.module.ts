@@ -14,10 +14,14 @@ import { AuthModule } from './auth/auth.module';
 import { ProjectUserRoleModule } from './projectUserRole/projectUserRole.module';
 import { TaskStatusModule } from './task-status/task-status.module';
 import { ProjectStatusModule } from './project-status/project-status.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
     GraphQLModule.forRoot(graphql_config),
     TypeOrmModule.forRoot(typeorm_config),
     ProjectModule,
